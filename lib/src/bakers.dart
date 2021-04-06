@@ -1,5 +1,6 @@
 part of recipe;
 
+@sealed
 abstract class Baker extends _InbuiltRecipe {
   final Iterable<Recipe> recipes;
 
@@ -13,7 +14,7 @@ abstract class Baker extends _InbuiltRecipe {
   int completedActions = 0;
 
   Baker(this.recipes) {
-    _updateState(BakeState.Ready);
+    _updateState(BakeState.Awaiting);
   }
 
   factory Baker.sequential(Iterable<Recipe> recipes) =>
@@ -49,7 +50,7 @@ class _ParallelBakeController extends Baker {
     final results =
         await Future.wait([for (final recipe in recipes) recipe.bake(context)]);
 
-    return _MultiBakeStateEvaluator.combineFrom(results);
+    return BakeState.combine(results);
   }
 }
 
@@ -82,7 +83,7 @@ class _SequentialBakeController extends Baker {
       }
     }
 
-    return _MultiBakeStateEvaluator.combineFrom(results);
+    return BakeState.combine(results);
   }
 }
 
@@ -104,7 +105,7 @@ class Isolated extends _InbuiltRecipe {
           maskedWith != BakeState.Abortive,
           "Avoid using Isolated to relay ${BakeState.Abortive}."
           "maskedWith: ${BakeState.Abortive} diminishes the intended usage of"
-          "Isolated. Additionally, it adds unwanted state propogation layer.",
+          "Isolated. Additionally, it adds an unnecessary propogation layer.",
         ),
         assert(
           recipe is! Baker,
@@ -117,9 +118,6 @@ class Isolated extends _InbuiltRecipe {
   @override
   Future<BakeState> bake(BakeContext context) async {
     final result = await recipe.bake(context);
-
-    if (result == BakeState.Abortive) return BakeState.CompletedUnsuccessfully;
-
-    return result;
+    return result == BakeState.Abortive ? maskedWith : result;
   }
 }

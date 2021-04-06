@@ -1,19 +1,24 @@
 part of recipe;
 
-enum BakeState {
-  Ready,
-  Running,
-  Paused,
-  Abortive,
-  CompletedSuccesfully,
-  CompletedPartially,
-  CompletedUnsuccessfully,
-}
+@sealed
+class BakeState {
+  final String description;
+  final int _value;
 
-extension _MultiBakeStateEvaluator on BakeState {
-  static BakeState combineFrom(Iterable<BakeState> states) {
-    return BakeState.Ready;
-  }
+  const BakeState._(this.description, this._value);
+
+  static const Awaiting = const BakeState._('Awaiting', 0);
+  static const Baked = const BakeState._('Baked', 1);
+  static const Paused = const BakeState._('Paused', 2);
+  static const PartiallyBaked = const BakeState._('Partially Baked', 3);
+  static const Baking = const BakeState._('Baking', 4);
+  static const Abortive = const BakeState._('Abortive', 5);
+
+  static BakeState combine(Iterable<BakeState> states) =>
+      states.reduce((a, b) => a._value > b._value ? a : b);
+
+  @override
+  String toString() => description;
 }
 
 class BakeContext {
