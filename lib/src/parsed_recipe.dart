@@ -12,6 +12,9 @@ class _ParsedRecipe extends Recipe {
   @JsonKey(defaultValue: r'0.0.0-unknown')
   final String version;
 
+  @JsonKey(defaultValue: '<unknown>')
+  final String author;
+
   @JsonKey(defaultValue: const <RecipeProperty>[])
   final List<RecipeProperty> properties;
 
@@ -22,6 +25,7 @@ class _ParsedRecipe extends Recipe {
     required this.name,
     required this.description,
     required this.version,
+    required this.author,
     required this.properties,
     required this.flows,
   }) {
@@ -35,7 +39,7 @@ class _ParsedRecipe extends Recipe {
   Map<String, dynamic> toJson() => _$_ParsedRecipeToJson(this);
 
   @override
-  Future<BakeResult> bake(BakeContext context) {
+  Future<BakeState> bake(BakeContext context) {
     throw UnimplementedError();
   }
 }

@@ -11,8 +11,11 @@ class ChocolateCake extends Recipe {
   String get version => '';
 
   @override
-  Future<BakeResult> bake(BakeContext context) {
-    return BakeController.parallel([
+  String get author => '';
+
+  @override
+  Future<BakeState> bake(BakeContext context) {
+    return Baker.parallel([
       Batter(),
     ]).bake(context);
   }
@@ -29,7 +32,10 @@ class Batter extends Recipe {
   String get version => '';
 
   @override
-  Future<BakeResult> bake(BakeContext context) {
+  String get author => '';
+
+  @override
+  Future<BakeState> bake(BakeContext context) {
     throw UnimplementedError();
   }
 }
@@ -43,9 +49,10 @@ class Cream extends Recipe {
 
   @override
   String get version => '';
-
   @override
-  Future<BakeResult> bake(BakeContext context) {
+  String get author => '';
+  @override
+  Future<BakeState> bake(BakeContext context) {
     throw UnimplementedError();
   }
 }
@@ -59,18 +66,19 @@ class Cookies extends Recipe {
 
   @override
   String get version => '';
-
   @override
-  Future<BakeResult> bake(BakeContext context) {
+  String get author => '';
+  @override
+  Future<BakeState> bake(BakeContext context) {
     throw UnimplementedError();
   }
 }
 
 void main() {
   bake(
-    BakeController.parallel([
+    Baker.parallel([
       ChocolateCake(),
-      BakeController.sequential([
+      Baker.sequential([
         Cookies(),
         Batter(),
       ]),

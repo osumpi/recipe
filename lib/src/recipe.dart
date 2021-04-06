@@ -3,7 +3,7 @@ part of recipe;
 abstract class Recipe {
   String get name;
 
-  static const _kBuiltInVersion = 'built-in';
+  String get author;
 
   String get version;
 
@@ -24,8 +24,16 @@ abstract class Recipe {
   }
 
   @protected
-  Future<BakeResult> bake(BakeContext context);
+  Future<BakeState> bake(BakeContext context);
 
   @override
   String toString() => 'Instance of Recipe($name $version)';
+}
+
+abstract class _InbuiltRecipe extends Recipe {
+  @nonVirtual
+  String get author => 'bakecode-devs';
+
+  @nonVirtual
+  String get version => 'bakecode:core';
 }
