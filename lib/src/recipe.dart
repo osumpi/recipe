@@ -24,7 +24,7 @@ abstract class Recipe {
   }
 
   @protected
-  Future<BakeState> bake(BakeContext context);
+  Stream<BakeState> bake(BakeContext context);
 
   @override
   String toString() => 'Instance of Recipe($name $version)';

@@ -4,9 +4,7 @@ part of recipe;
 abstract class Baker extends _InbuiltRecipe {
   final Iterable<Recipe> recipes;
 
-  Baker(this.recipes) {
-    _updateState(BakeState.Awaiting);
-  }
+  Baker(this.recipes);
 
   factory Baker.sequential({
     required Iterable<Recipe> bakes,
@@ -16,15 +14,6 @@ abstract class Baker extends _InbuiltRecipe {
 
   factory Baker.simultaneous({required Iterable<Recipe> bakes}) =>
       SimultaneousBaker._(bakes);
-
-  final _currentStateController = StreamController<BakeState>();
-
-  Stream<BakeState> get currentState => _currentStateController.stream;
-
-  BakeState _updateState(BakeState newState) {
-    _currentStateController.sink.add(newState);
-    return newState;
-  }
 
   bool get isConcurrent => this is SimultaneousBaker;
 }
@@ -40,16 +29,14 @@ class SimultaneousBaker extends Baker {
   String get description => 'Baker that bakes recipes concurrently.';
 
   @override
-  Future<BakeState> bake(BakeContext context) async {
-    _updateState(BakeState.Baked);
+  Stream<BakeState> bake(BakeContext context) async* {
+    yield BakeState.Baking;
 
-    final result = BakeState.combine({
+    yield BakeState.combine({
       ...await Future.wait([
-        for (final recipe in recipes) recipe.bake(context),
+        for (final recipe in recipes) recipe.bake(context).last,
       ])
     });
-
-    return _updateState(result);
   }
 }
 
@@ -58,7 +45,7 @@ class SequentialBaker extends Baker {
 
   SequentialBaker._(
     Iterable<Recipe> recipes, {
-    this.isAbortive = true,
+    required this.isAbortive,
   }) : super(recipes);
 
   @override
@@ -68,17 +55,33 @@ class SequentialBaker extends Baker {
   String get description =>
       'Baker that bakes recipes in sequence, one after another.';
 
+  bool _isPaused = false;
+
+  bool get isPaused => _isPaused;
+
+  void pause() => _isPaused = true;
+  void resume() => _isPaused = false;
+
   @override
-  Future<BakeState> bake(BakeContext context) async {
-    BakeState result = BakeState.Awaiting;
+  Stream<BakeState> bake(BakeContext context) async* {
+    yield BakeState.Baking;
+
+    var result = BakeState.Awaiting;
 
     for (final recipe in recipes) {
-      result |= await recipe.bake(context);
+      if (isPaused) {
+        yield BakeState.Paused;
+        await Future.doWhile(() => isPaused);
+
+        yield BakeState.Baking;
+      }
+
+      result |= await recipe.bake(context).last;
 
       if (isAbortive && result == BakeState.Abortive) break;
     }
 
-    return result;
+    yield result;
   }
 }
 
@@ -111,8 +114,9 @@ class Isolated extends _InbuiltRecipe {
         );
 
   @override
-  Future<BakeState> bake(BakeContext context) async {
-    final result = await recipe.bake(context);
-    return result == BakeState.Abortive ? maskedWith : result;
+  Stream<BakeState> bake(BakeContext context) {
+    return recipe
+        .bake(context)
+        .map((event) => event == BakeState.Abortive ? maskedWith : event);
   }
 }

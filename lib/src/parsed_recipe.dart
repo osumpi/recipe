@@ -39,7 +39,7 @@ class _ParsedRecipe extends Recipe {
   Map<String, dynamic> toJson() => _$_ParsedRecipeToJson(this);
 
   @override
-  Future<BakeState> bake(BakeContext context) {
+  Stream<BakeState> bake(BakeContext context) {
     throw UnimplementedError();
   }
 }
