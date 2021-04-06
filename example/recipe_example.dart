@@ -15,7 +15,7 @@ class ChocolateCake extends Recipe {
 
   @override
   Future<BakeState> bake(BakeContext context) {
-    return Baker.parallel([
+    return Baker.simultaneous([
       Batter(),
     ]).bake(context);
   }
@@ -76,13 +76,13 @@ class Cookies extends Recipe {
 
 void main() {
   bake(
-    Baker.parallel([
+    ([
       ChocolateCake(),
       Baker.sequential([
         Cookies(),
         Batter(),
       ]),
       Cookies(),
-    ]),
+    ]).simultaneous,
   );
 }

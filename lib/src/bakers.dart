@@ -4,86 +4,81 @@ part of recipe;
 abstract class Baker extends _InbuiltRecipe {
   final Iterable<Recipe> recipes;
 
-  int get steps => recipes.length;
-
-  int get totalActions =>
-      steps + recipes.whereType<Baker>().fold(0, (p, c) => p + c.totalActions);
-
-  int completedSteps = 0;
-
-  int completedActions = 0;
-
   Baker(this.recipes) {
     _updateState(BakeState.Awaiting);
   }
 
-  factory Baker.sequential(Iterable<Recipe> recipes) =>
-      _SequentialBakeController(recipes);
+  factory Baker.sequential({
+    required Iterable<Recipe> bakes,
+    bool isAbortive = true,
+  }) =>
+      SequentialBaker._(bakes, isAbortive: isAbortive);
 
-  factory Baker.parallel(Iterable<Recipe> recipes) =>
-      _ParallelBakeController(recipes);
+  factory Baker.simultaneous({required Iterable<Recipe> bakes}) =>
+      SimultaneousBaker._(bakes);
 
   final _currentStateController = StreamController<BakeState>();
 
   Stream<BakeState> get currentState => _currentStateController.stream;
 
-  void _updateState(BakeState newState) {
+  BakeState _updateState(BakeState newState) {
     _currentStateController.sink.add(newState);
+    return newState;
   }
 
-  bool get isParallelController => this is _ParallelBakeController;
+  bool get isConcurrent => this is SimultaneousBaker;
 }
 
 @sealed
-class _ParallelBakeController extends Baker {
-  _ParallelBakeController(Iterable<Recipe> recipes) : super(recipes);
+class SimultaneousBaker extends Baker {
+  SimultaneousBaker._(Iterable<Recipe> recipes) : super(recipes);
 
   @override
-  String get name => 'ParallelBakeController';
+  String get name => 'Baker.simultaneous';
 
   @override
-  String get description =>
-      'BakeController that allows recipes to be executed in parallel';
+  String get description => 'Baker that bakes recipes concurrently.';
 
   @override
   Future<BakeState> bake(BakeContext context) async {
-    final results =
-        await Future.wait([for (final recipe in recipes) recipe.bake(context)]);
+    _updateState(BakeState.Baked);
 
-    return BakeState.combine(results);
+    final result = BakeState.combine({
+      ...await Future.wait([
+        for (final recipe in recipes) recipe.bake(context),
+      ])
+    });
+
+    return _updateState(result);
   }
 }
 
-class _SequentialBakeController extends Baker {
-  final bool abortive;
+class SequentialBaker extends Baker {
+  final bool isAbortive;
 
-  _SequentialBakeController(
+  SequentialBaker._(
     Iterable<Recipe> recipes, {
-    this.abortive = true,
+    this.isAbortive = true,
   }) : super(recipes);
 
   @override
-  String get name => 'SequentialBakeController';
+  String get name => 'Baker.sequential';
 
   @override
   String get description =>
-      'BakeController that allows recipes to be executed in sequence, one after another';
+      'Baker that bakes recipes in sequence, one after another.';
 
   @override
   Future<BakeState> bake(BakeContext context) async {
-    Set<BakeState> results = {};
+    BakeState result = BakeState.Awaiting;
 
     for (final recipe in recipes) {
-      final result = await recipe.bake(context);
+      result |= await recipe.bake(context);
 
-      results.add(result);
-
-      if (abortive && result == BakeState.Abortive) {
-        return BakeState.Abortive;
-      }
+      if (isAbortive && result == BakeState.Abortive) break;
     }
 
-    return BakeState.combine(results);
+    return result;
   }
 }
 
