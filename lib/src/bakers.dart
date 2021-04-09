@@ -1,10 +1,31 @@
 part of recipe;
 
+mixin Pausable {
+  bool _isPaused = false;
+
+  bool get isPaused => _isPaused;
+
+  void pause() => _isPaused = true;
+  void resume() => _isPaused = false;
+
+  Stream<BakeState> handlePause(double progress) async* {
+    yield BakeState.paused(progress);
+
+    await Future.doWhile(() => isPaused);
+
+    yield BakeState.baking(progress);
+  }
+}
+
 @sealed
 abstract class Baker extends _InbuiltRecipe {
   final Iterable<Recipe> recipes;
 
-  Baker(this.recipes);
+  Baker(this.recipes)
+      : assert(
+            recipes.isNotEmpty,
+            "Baker's don't grown on trees. "
+            "Avoid using a `Baker` without allocating atleast one recipe to them.");
 
   factory Baker.sequential({
     required Iterable<Recipe> bakes,
@@ -30,7 +51,7 @@ class SimultaneousBaker extends Baker {
 
   @override
   Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.Baking;
+    yield BakeState.baking(0.0);
 
     yield BakeState.combine({
       ...await Future.wait([
@@ -40,7 +61,7 @@ class SimultaneousBaker extends Baker {
   }
 }
 
-class SequentialBaker extends Baker {
+class SequentialBaker extends Baker with Pausable {
   final bool isAbortive;
 
   SequentialBaker._(
@@ -55,33 +76,27 @@ class SequentialBaker extends Baker {
   String get description =>
       'Baker that bakes recipes in sequence, one after another.';
 
-  bool _isPaused = false;
-
-  bool get isPaused => _isPaused;
-
-  void pause() => _isPaused = true;
-  void resume() => _isPaused = false;
-
   @override
   Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.Baking;
+    yield BakeState.awaiting;
 
-    var result = BakeState.Awaiting;
+    bool aborted = false;
+    double progress = 0;
+    final results = <BakeState>[];
 
-    for (final recipe in recipes) {
-      if (isPaused) {
-        yield BakeState.Paused;
-        await Future.doWhile(() => isPaused);
+    for (int i = 0; i < recipes.length; ++i) {
+      progress = i / recipes.length;
 
-        yield BakeState.Baking;
-      }
+      yield BakeState.baking(progress);
 
-      result |= await recipe.bake(context).last;
+      if (isPaused) yield* handlePause(progress);
 
-      if (isAbortive && result == BakeState.Abortive) break;
+      results.add(await recipes.elementAt(i).bake(context).last);
+
+      if (aborted = (isAbortive && results.last.isAbortive)) break;
     }
 
-    yield result;
+    yield aborted ? BakeState.abortive(progress) : BakeState.baked;
   }
 }
 
@@ -100,15 +115,15 @@ class Isolated extends _InbuiltRecipe {
     required this.maskedWith,
     required this.recipe,
   })   : assert(
-          maskedWith != BakeState.Abortive,
-          "Avoid using Isolated to relay ${BakeState.Abortive}."
-          "maskedWith: ${BakeState.Abortive} diminishes the intended usage of"
+          !maskedWith.isAbortive,
+          "Avoid using Isolated to relay abortive bake state."
+          "maskedWith: `BakeState.abortive` diminishes the intended usage of"
           "Isolated. Additionally, it adds an unnecessary propogation layer.",
         ),
         assert(
           recipe is! Baker,
           "Avoid wrapping Baker with Isolated as it has no effect."
-          "Baker.parallel is by nature an isolated recipe. "
+          "Baker.simultaneous is by nature an isolated recipe. "
           "Baker.sequential can be made isolated by setting abortive: false"
           "in it's factory constructor.",
         );
@@ -117,6 +132,6 @@ class Isolated extends _InbuiltRecipe {
   Stream<BakeState> bake(BakeContext context) {
     return recipe
         .bake(context)
-        .map((event) => event == BakeState.Abortive ? maskedWith : event);
+        .map((state) => state.isAbortive ? maskedWith : state);
   }
 }
