@@ -80,23 +80,28 @@ class SequentialBaker extends Baker with Pausable {
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.awaiting;
 
+    int total = recipes.length, completed = 0;
     bool aborted = false;
-    double progress = 0;
-    final results = <BakeState>[];
 
-    for (int i = 0; i < recipes.length; ++i) {
-      progress = i / recipes.length;
+    for (final recipe in recipes) {
+      yield BakeState.baking(completed++ / total);
 
-      yield BakeState.baking(progress);
+      // handle pause
+      if (isPaused) {
+        yield* handlePause(completed / total);
+      }
 
-      if (isPaused) yield* handlePause(progress);
+      // bake the recipe that is to be baked next and store the last state.
+      final bakeResult = await recipe.bake(context).last;
 
-      results.add(await recipes.elementAt(i).bake(context).last);
+      // whether recipe.bake was abortive and baker is abortive.
+      aborted = isAbortive && bakeResult.isAbortive;
 
-      if (aborted = (isAbortive && results.last.isAbortive)) break;
+      // break the firing of subsequent recipes if aborted.
+      if (aborted) break;
     }
 
-    yield aborted ? BakeState.abortive(progress) : BakeState.baked;
+    yield aborted ? BakeState.abortive : BakeState.baked;
   }
 }
 

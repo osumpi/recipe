@@ -2,6 +2,7 @@ library recipe;
 
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
