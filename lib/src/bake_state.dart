@@ -20,7 +20,7 @@ abstract class BakeState {
 
   static BakeState get baked => _Baked.instance;
 
-  factory BakeState.abortive([double progress = 0.0]) => _Abortive(progress);
+  static BakeState get abortive => _Abortive.instance;
 
   bool get isAwaiting => this is _Awaiting;
   bool get isBaking => this is _Baking;
@@ -40,7 +40,7 @@ abstract class BakeState {
 
       if (a.isBaking || b.isBaking) return BakeState.baking(progress);
       if (a.isPaused || b.isPaused) return BakeState.paused(progress);
-      if (a.isAbortive || b.isAbortive) return BakeState.abortive(progress);
+      if (a.isAbortive || b.isAbortive) return BakeState.abortive;
       if (a.isPartiallyBaked || b.isPartiallyBaked)
         return BakeState.partiallyBaked(progress);
 
@@ -110,10 +110,13 @@ class _PartiallyBaked extends BakeState {
 }
 
 class _Abortive extends BakeState {
+  const _Abortive._();
+
+  static const instance = _Abortive._();
+
   @override
   String get description => 'Abortive';
 
-  const _Abortive(this.progress);
-
-  final double progress;
+  @override
+  double get progress => 0.0;
 }
