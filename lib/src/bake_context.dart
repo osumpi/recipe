@@ -1,31 +1,24 @@
 part of recipe;
 
 @sealed
-@immutable
 class BakeContext {
-  // Recipe get recipe;
-
-  const BakeContext();
-
-  // bool get isRoot;
-  // bool get hasAncestor => !isRoot;
-}
-
-class _RootContext extends BakeContext {
-  final Baker recipe;
-
-  const _RootContext(this.recipe);
-
-  @override
-  bool get isRoot => true;
-}
-
-class _InheritedContext extends BakeContext {
   final Recipe recipe;
 
-  final BakeContext ancestor;
+  BakeState state = BakeState.awaiting();
 
-  const _InheritedContext(this.ancestor, this.recipe);
+  final BakeContext? ancestor;
 
-  bool get isRoot => false;
+  List<BakeContext> descendants = List<BakeContext>.empty(growable: true);
+
+  BakeContext._for(this.recipe, {required this.ancestor});
+
+  BakeContext adopt(Recipe recipe) {
+    final context = BakeContext._for(recipe, ancestor: this);
+    descendants.add(context);
+    return context;
+  }
+
+  bool get isRoot => ancestor == null;
+  bool get hasAncestor => !isRoot;
+  bool get hasDescendants => descendants.isNotEmpty;
 }
