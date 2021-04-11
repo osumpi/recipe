@@ -9,10 +9,7 @@ class RecipeDriver {
     final context = _ancestorContext.adopt(recipe);
 
     await for (final state in recipe.bake(context)) {
-      context.state = state;
-      yield state;
+      yield context.state = state;
     }
-
-    yield* recipe.bake(_ancestorContext.adopt(recipe));
   }
 }
