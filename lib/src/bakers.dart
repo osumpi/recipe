@@ -68,6 +68,8 @@ class SequentialBaker extends Baker with Pausable {
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.awaiting();
 
+    final driver = RecipeDriver.of(context);
+
     bool aborted = false;
     double progress = computeProgress();
 
@@ -77,7 +79,7 @@ class SequentialBaker extends Baker with Pausable {
         yield* handlePause(progress);
       }
 
-      await for (final state in recipe.bake(context)) {
+      await for (final state in driver.drive(recipe)) {
         _recipeStates[recipe] = state;
 
         progress = computeProgress();
@@ -111,9 +113,11 @@ class SimultaneousBaker extends Baker {
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.baking(0.0);
 
+    final driver = RecipeDriver.of(context);
+
     yield BakeState.combine({
       ...await Future.wait([
-        for (final recipe in recipes) recipe.bake(context).last,
+        for (final recipe in recipes) driver.drive(recipe).last,
       ])
     });
   }
