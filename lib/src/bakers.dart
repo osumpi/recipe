@@ -21,12 +21,6 @@ mixin Pausable {
 abstract class Baker extends _InbuiltRecipe {
   final Map<Recipe, BakeState> _recipeStates;
 
-  static Map<Recipe, BakeState> _transformRecipeStates(
-      Iterable<Recipe> recipes) {
-    return Map.fromIterable(recipes,
-        key: (r) => r, value: (_) => BakeState.awaiting);
-  }
-
   Iterable<Recipe> get recipes => _recipeStates.keys;
 
   Baker(Iterable<Recipe> recipes)
@@ -34,7 +28,7 @@ abstract class Baker extends _InbuiltRecipe {
             recipes.isNotEmpty,
             "Baker's don't grown on trees. "
             "Avoid using a `Baker` without allocating atleast one recipe to them."),
-        _recipeStates = _transformRecipeStates(recipes);
+        _recipeStates = {for (final r in recipes) r: BakeState.awaiting()};
 
   factory Baker.sequential(
     Iterable<Recipe> bakes, {
@@ -42,36 +36,16 @@ abstract class Baker extends _InbuiltRecipe {
   }) =>
       SequentialBaker._(bakes, isAbortive: isAbortive);
 
-  factory Baker.simultaneous(Iterable<Recipe> bakes) =>
-      SimultaneousBaker._(bakes);
+  factory Baker.simultaneous(
+    Iterable<Recipe> bakes,
+  ) =>
+      SimultaneousBaker(bakes);
 
   bool get isConcurrent => this is SimultaneousBaker;
 
   double computeProgress() {
     return _recipeStates.values.fold<double>(0.0, (p, e) => p + e.progress) /
         _recipeStates.length;
-  }
-}
-
-@sealed
-class SimultaneousBaker extends Baker {
-  SimultaneousBaker._(Iterable<Recipe> recipes) : super(recipes);
-
-  @override
-  String get name => 'Baker.simultaneous';
-
-  @override
-  String get description => 'Baker that bakes recipes concurrently.';
-
-  @override
-  Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.baking(0.0);
-
-    yield BakeState.combine({
-      ...await Future.wait([
-        for (final recipe in recipes) recipe.bake(context).last,
-      ])
-    });
   }
 }
 
@@ -84,7 +58,7 @@ class SequentialBaker extends Baker with Pausable {
   }) : super(recipes);
 
   @override
-  String get name => 'Baker.sequential';
+  String get name => 'SequentialBaker';
 
   @override
   String get description =>
@@ -92,7 +66,7 @@ class SequentialBaker extends Baker with Pausable {
 
   @override
   Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.awaiting;
+    yield BakeState.awaiting();
 
     bool aborted = false;
     double progress = computeProgress();
@@ -117,7 +91,31 @@ class SequentialBaker extends Baker with Pausable {
       if (aborted &= isAbortive) break;
     }
 
-    yield aborted ? BakeState.abortive : BakeState.baked;
+    yield aborted ? BakeState.abortive() : BakeState.baked();
+  }
+}
+
+@sealed
+class SimultaneousBaker extends Baker {
+  SimultaneousBaker(
+    Iterable<Recipe> recipes,
+  ) : super(recipes);
+
+  @override
+  String get name => 'SimultaneousBaker';
+
+  @override
+  String get description => 'Baker that bakes recipes concurrently.';
+
+  @override
+  Stream<BakeState> bake(BakeContext context) async* {
+    yield BakeState.baking(0.0);
+
+    yield BakeState.combine({
+      ...await Future.wait([
+        for (final recipe in recipes) recipe.bake(context).last,
+      ])
+    });
   }
 }
 

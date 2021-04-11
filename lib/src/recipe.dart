@@ -31,6 +31,8 @@ abstract class Recipe {
 }
 
 abstract class _InbuiltRecipe extends Recipe {
+  const _InbuiltRecipe();
+
   @nonVirtual
   String get author => 'bakecode-devs';
 

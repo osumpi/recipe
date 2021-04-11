@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+part of recipe;
 
 @sealed
 @immutable
@@ -9,7 +9,7 @@ abstract class BakeState {
 
   const BakeState();
 
-  static BakeState get awaiting => _Awaiting.instance;
+  factory BakeState.awaiting() => _Awaiting.instance;
 
   factory BakeState.baking(double progress) => _Baking(progress);
 
@@ -18,9 +18,9 @@ abstract class BakeState {
   factory BakeState.partiallyBaked(double progress) =>
       _PartiallyBaked(progress);
 
-  static BakeState get baked => _Baked.instance;
+  factory BakeState.baked() => _Baked.instance;
 
-  static BakeState get abortive => _Abortive.instance;
+  factory BakeState.abortive() => _Abortive.instance;
 
   bool get isAwaiting => this is _Awaiting;
   bool get isBaking => this is _Baking;
@@ -40,7 +40,7 @@ abstract class BakeState {
 
       if (a.isBaking || b.isBaking) return BakeState.baking(progress);
       if (a.isPaused || b.isPaused) return BakeState.paused(progress);
-      if (a.isAbortive || b.isAbortive) return BakeState.abortive;
+      if (a.isAbortive || b.isAbortive) return BakeState.abortive();
       if (a.isPartiallyBaked || b.isPartiallyBaked)
         return BakeState.partiallyBaked(progress);
 
