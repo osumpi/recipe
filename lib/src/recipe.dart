@@ -23,7 +23,7 @@ abstract class Recipe {
     return checkedYamlDecode(source, fromMap, sourceUrl: url, allowNull: true);
   }
 
-  @protected
+  // @protected
   Stream<BakeState> bake(BakeContext context);
 
   @override

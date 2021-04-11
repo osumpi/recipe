@@ -2,13 +2,13 @@ part of recipe;
 
 @sealed
 @immutable
-abstract class BakeContext {
-  Recipe get recipe;
+class BakeContext {
+  // Recipe get recipe;
 
   const BakeContext();
 
-  bool get isRoot;
-  bool get hasAncestor => !isRoot;
+  // bool get isRoot;
+  // bool get hasAncestor => !isRoot;
 }
 
 class _RootContext extends BakeContext {

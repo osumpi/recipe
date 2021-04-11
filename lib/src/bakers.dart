@@ -19,24 +19,38 @@ mixin Pausable {
 
 @sealed
 abstract class Baker extends _InbuiltRecipe {
-  final Iterable<Recipe> recipes;
+  final Map<Recipe, BakeState> _recipeStates;
 
-  Baker(this.recipes)
+  static Map<Recipe, BakeState> _transformRecipeStates(
+      Iterable<Recipe> recipes) {
+    return Map.fromIterable(recipes,
+        key: (r) => r, value: (_) => BakeState.awaiting);
+  }
+
+  Iterable<Recipe> get recipes => _recipeStates.keys;
+
+  Baker(Iterable<Recipe> recipes)
       : assert(
             recipes.isNotEmpty,
             "Baker's don't grown on trees. "
-            "Avoid using a `Baker` without allocating atleast one recipe to them.");
+            "Avoid using a `Baker` without allocating atleast one recipe to them."),
+        _recipeStates = _transformRecipeStates(recipes);
 
-  factory Baker.sequential({
-    required Iterable<Recipe> bakes,
+  factory Baker.sequential(
+    Iterable<Recipe> bakes, {
     bool isAbortive = true,
   }) =>
       SequentialBaker._(bakes, isAbortive: isAbortive);
 
-  factory Baker.simultaneous({required Iterable<Recipe> bakes}) =>
+  factory Baker.simultaneous(Iterable<Recipe> bakes) =>
       SimultaneousBaker._(bakes);
 
   bool get isConcurrent => this is SimultaneousBaker;
+
+  double computeProgress() {
+    return _recipeStates.values.fold<double>(0.0, (p, e) => p + e.progress) /
+        _recipeStates.length;
+  }
 }
 
 @sealed
@@ -80,25 +94,27 @@ class SequentialBaker extends Baker with Pausable {
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.awaiting;
 
-    int total = recipes.length, completed = 0;
     bool aborted = false;
+    double progress = computeProgress();
 
     for (final recipe in recipes) {
-      yield BakeState.baking(completed++ / total);
-
       // handle pause
       if (isPaused) {
-        yield* handlePause(completed / total);
+        yield* handlePause(progress);
       }
 
-      // bake the recipe that is to be baked next and store the last state.
-      final bakeResult = await recipe.bake(context).last;
+      await for (final state in recipe.bake(context)) {
+        _recipeStates[recipe] = state;
 
-      // whether recipe.bake was abortive and baker is abortive.
-      aborted = isAbortive && bakeResult.isAbortive;
+        progress = computeProgress();
 
-      // break the firing of subsequent recipes if aborted.
-      if (aborted) break;
+        yield BakeState.baking(progress);
+
+        // whether recipe.bake was abortive and baker is abortive.
+        aborted = state.isAbortive;
+      }
+
+      if (aborted &= isAbortive) break;
     }
 
     yield aborted ? BakeState.abortive : BakeState.baked;
