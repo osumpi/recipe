@@ -14,5 +14,6 @@ part 'src/bake_context.dart';
 part 'src/bake_event.dart';
 part 'src/bakers.dart';
 part 'src/utils.dart';
+part 'src/provider.dart';
 
 part 'recipe.g.dart';
