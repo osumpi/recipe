@@ -27,7 +27,17 @@ class BakeContext {
 
   List<BakeContext> descendants = List<BakeContext>.empty(growable: true);
 
-  BakeContext._for(this.recipe, {required this.ancestor});
+  final String path;
+
+  static String _initializePath(Recipe recipe, BakeContext? ancestor) {
+    return [
+      if (ancestor != null) ancestor.path,
+      recipe.name,
+    ].join('/');
+  }
+
+  BakeContext._for(this.recipe, {required this.ancestor})
+      : path = _initializePath(recipe, ancestor);
 
   BakeContext adopt(Recipe recipe) {
     final context = BakeContext._for(recipe, ancestor: this);
