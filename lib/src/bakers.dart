@@ -34,12 +34,12 @@ abstract class Baker extends _InbuiltRecipe {
     Iterable<Recipe> bakes, {
     bool isAbortive = true,
   }) =>
-      SequentialBaker._(bakes, isAbortive: isAbortive);
+      SequentialBaker(recipes: bakes, isAbortive: isAbortive);
 
   factory Baker.simultaneous(
     Iterable<Recipe> bakes,
   ) =>
-      SimultaneousBaker(bakes);
+      SimultaneousBaker(recipes: bakes);
 
   bool get isConcurrent => this is SimultaneousBaker;
 
@@ -52,8 +52,8 @@ abstract class Baker extends _InbuiltRecipe {
 class SequentialBaker extends Baker with Pausable {
   final bool isAbortive;
 
-  SequentialBaker._(
-    Iterable<Recipe> recipes, {
+  SequentialBaker({
+    required Iterable<Recipe> recipes,
     required this.isAbortive,
   }) : super(recipes);
 
@@ -99,9 +99,9 @@ class SequentialBaker extends Baker with Pausable {
 
 @sealed
 class SimultaneousBaker extends Baker {
-  SimultaneousBaker(
-    Iterable<Recipe> recipes,
-  ) : super(recipes);
+  SimultaneousBaker({
+    required Iterable<Recipe> recipes,
+  }) : super(recipes);
 
   @override
   String get name => 'SimultaneousBaker';
