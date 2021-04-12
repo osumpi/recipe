@@ -17,8 +17,8 @@ class ChocolateCake extends Recipe {
 
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.baking(0);
-    await Future.delayed(const Duration(milliseconds: 100));
-    yield BakeState.baked;
+    await Future.delayed(const Duration(milliseconds: 1000));
+    yield BakeState.baked();
   }
 }
 
@@ -35,11 +35,11 @@ void main() async {
   ]);
 
   bool completed = false;
-  BakeState state = BakeState.awaiting;
+  BakeState state = BakeState.awaiting();
 
-  recipe.bake(BakeContext()).listen((_) {
-    state = _;
-    completed = _.isBaked;
+  RecipeDriver().drive(recipe).listen((event) {
+    state = event;
+    completed = event.isBaked;
   });
 
   final frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
