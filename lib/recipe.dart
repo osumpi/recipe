@@ -13,7 +13,7 @@ part 'src/parsed_recipe.dart';
 part 'src/bake_context.dart';
 part 'src/bake_event.dart';
 part 'src/bakers.dart';
-part 'src/utils.dart';
 part 'src/provider.dart';
+part 'src/utils.dart';
 
 part 'recipe.g.dart';
