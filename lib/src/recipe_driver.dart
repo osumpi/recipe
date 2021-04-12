@@ -1,20 +1,5 @@
 part of recipe;
 
-class _RecipeDriverWithAncestor extends RecipeDriver {
-  final BakeContext _ancestorContext;
-
-  const _RecipeDriverWithAncestor(BakeContext context)
-      : _ancestorContext = context;
-
-  Stream<BakeState> drive(Recipe recipe) async* {
-    final context = _ancestorContext.adopt(recipe);
-
-    await for (final state in recipe.bake(context)) {
-      yield context.state = state;
-    }
-  }
-}
-
 class RecipeDriver {
   const RecipeDriver();
 
@@ -23,6 +8,21 @@ class RecipeDriver {
 
   Stream<BakeState> drive(Recipe recipe) async* {
     final context = BakeContext._for(recipe, ancestor: null);
+
+    await for (final state in recipe.bake(context)) {
+      yield context.state = state;
+    }
+  }
+}
+
+class _RecipeDriverWithAncestor extends RecipeDriver {
+  final BakeContext _ancestorContext;
+
+  const _RecipeDriverWithAncestor(BakeContext context)
+      : _ancestorContext = context;
+
+  Stream<BakeState> drive(Recipe recipe) async* {
+    final context = _ancestorContext.adopt(recipe);
 
     await for (final state in recipe.bake(context)) {
       yield context.state = state;
