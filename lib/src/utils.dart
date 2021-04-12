@@ -1,6 +1,23 @@
 part of recipe;
 
-extension RecipeListExtension on Iterable<Recipe> {
-  Baker get simultaneous => Baker.simultaneous(this);
-  Baker get sequential => Baker.sequential(this);
+/// [_InbuiltRecipe] shall not be extended by outside this library.
+///
+/// [Recipe]'s implemented in this library may extend this class so as to avoid
+/// redefining [Recipe.author] and [Recipe.version].
+abstract class _InbuiltRecipe extends Recipe {
+  const _InbuiltRecipe();
+
+  /// The author of this [Recipe].
+  /// Pre-defined as this [Recipe] is derived from [_InbuiltRecipe].
+  ///
+  /// Value: `bakecode-devs`
+  @nonVirtual
+  String get author => 'bakecode-devs';
+
+  /// The version of this [Recipe].
+  /// Pre-defined as this [Recipe] is derived from [_InbuiltRecipe].
+  ///
+  /// Value: `bakecode:core`
+  @nonVirtual
+  String get version => 'bakecode:core';
 }
