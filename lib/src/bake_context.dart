@@ -4,7 +4,24 @@ part of recipe;
 class BakeContext {
   final Recipe recipe;
 
-  BakeState state = BakeState.awaiting();
+  List<BakeEvent> events = List<BakeEvent>.empty(growable: true);
+
+  BakeState _state = BakeState.awaiting();
+
+  BakeState get state => _state;
+
+  set state(BakeState value) {
+    if (_state == value) return;
+
+    _state = value;
+
+    final event = BakeEvent<BakeState>(
+      event: value,
+      occuredOn: DateTime.now(),
+    );
+
+    events.add(event);
+  }
 
   final BakeContext? ancestor;
 
