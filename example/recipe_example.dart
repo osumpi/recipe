@@ -22,22 +22,61 @@ class ChocolateCake extends Recipe {
   }
 }
 
+class DebugPrintQuantityRecipe extends Recipe {
+  @override
+  String get name => 'DebugPrintQuantityRecipe';
+
+  @override
+  String get description => 'DebugPrintQuantityRecipe';
+
+  @override
+  String get author => 'Me';
+
+  @override
+  String get version => 'Test';
+
+  Stream<BakeState> bake(BakeContext context) async* {
+    yield BakeState.baking(0);
+
+    final map = Provider.of<Map<String, int>>(context);
+
+    if (map != null) {
+      print("\n\n${map["quantity"]}\n\n");
+    }
+
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    yield BakeState.baked();
+  }
+}
+
 void main() async {
-  final recipe = Baker.sequential([
-    ChocolateCake(),
-    ChocolateCake(),
-    ChocolateCake(),
-    Baker.simultaneous([
-      ChocolateCake(),
-      ChocolateCake(),
-    ]),
-    ChocolateCake(),
-  ]);
+  Map<String, int> args = {"quantity": 10};
 
   bool completed = false;
   BakeState state = BakeState.awaiting();
 
-  RecipeDriver().drive(recipe).listen((event) {
+  RecipeDriver()
+      .drive(
+    Baker.sequential(
+      [
+        ChocolateCake(),
+        Provider.value(
+          args,
+          recipe: Baker.sequential([
+            ChocolateCake(),
+            DebugPrintQuantityRecipe(),
+          ]),
+        ),
+        Baker.simultaneous([
+          ChocolateCake(),
+          ChocolateCake(),
+        ]),
+        ChocolateCake(),
+      ],
+    ),
+  )
+      .listen((event) {
     state = event;
     completed = event.isBaked;
   });
