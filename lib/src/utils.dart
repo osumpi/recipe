@@ -21,3 +21,17 @@ abstract class _InbuiltRecipe extends Recipe {
   @nonVirtual
   String get version => 'bakecode:core';
 }
+
+Stream<BakeState> bake(Recipe recipe) {
+  var specifications = ZoneSpecification(
+    print: (self, parent, zone, line) {
+      // TOOD: do mqtt stuff
+      parent.print(zone, line);
+    },
+  );
+
+  return runZoned<Stream<BakeState>>(
+    () => RecipeDriver().drive(recipe),
+    zoneSpecification: specifications,
+  );
+}

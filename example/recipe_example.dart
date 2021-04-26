@@ -38,12 +38,6 @@ class DebugPrintQuantityRecipe extends Recipe {
   Stream<BakeState> bake(BakeContext context) async* {
     yield BakeState.baking(0);
 
-    final map = Provider.of<Map<String, int>>(context);
-
-    if (map != null) {
-      print("\n\n${map["quantity"]}\n\n");
-    }
-
     await Future.delayed(const Duration(milliseconds: 1000));
 
     yield BakeState.baked();
@@ -56,27 +50,25 @@ void main() async {
   bool completed = false;
   BakeState state = BakeState.awaiting();
 
-  RecipeDriver()
-      .drive(
-    Baker.sequential(
-      [
-        ChocolateCake(),
-        Provider.value(
-          args,
-          recipe: Baker.sequential([
-            ChocolateCake(),
-            DebugPrintQuantityRecipe(),
-          ]),
-        ),
-        Baker.simultaneous([
+  var recipe = Baker.sequential(
+    [
+      ChocolateCake(),
+      Provider.value(
+        args,
+        recipe: Baker.sequential([
           ChocolateCake(),
-          ChocolateCake(),
+          DebugPrintQuantityRecipe(),
         ]),
+      ),
+      Baker.simultaneous([
         ChocolateCake(),
-      ],
-    ),
-  )
-      .listen((event) {
+        ChocolateCake(),
+      ]),
+      ChocolateCake(),
+    ],
+  );
+
+  bake(recipe).listen((event) {
     state = event;
     completed = event.isBaked;
   });
