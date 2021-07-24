@@ -1,51 +1,50 @@
 part of recipe;
 
 @sealed
-class BakeContext {
-  final Recipe recipe;
+abstract class BakeContext {
+  /// The current configuration of the [Recipe] that is this [BakeContext].
+  Recipe get recipe;
 
-  List<BakeEvent> events = List<BakeEvent>.empty(growable: true);
+  /// The [Baker] for this context. The [Baker] is in charge of managing the
+  /// execution pipeline for this context.
+  Baker get baker;
 
-  BakeState _state = BakeState.awaiting();
+  /// The [BakeContext] of the parent [Recipe] of [recipe].
+  BakeContext? get _parent;
 
-  BakeState get state => _state;
+  String get path;
 
-  set state(BakeState value) {
-    if (_state == value) return;
+  bool get hasParent => _parent != null;
 
-    _state = value;
+  RecipeStream bake(Recipe child) => Baker(child, this).run();
 
-    final event = BakeEvent<BakeState>(
-      event: value,
-      occuredOn: DateTime.now(),
-    );
+  toString() => 'BakeContext of $recipe';
+}
 
-    events.add(event);
+class Baker extends BakeContext {
+  Baker(this.recipe, this._parent) : path = _findPath(recipe, _parent);
+
+  final recipe, _parent, path;
+
+  get baker => this;
+
+  /// Finds the path to [recipe] with respect to [parent].
+  static String _findPath(Recipe recipe, BakeContext? parent) {
+    if (parent == null) {
+      return '${recipe.name}';
+    } else {
+      return '${parent.recipe.name}/${recipe.name}';
+    }
   }
 
-  final BakeContext? ancestor;
+  toString() => 'Baker of $recipe';
 
-  List<BakeContext> descendants = List<BakeContext>.empty(growable: true);
+  @protected
+  RecipeStream run() async* {
+    // recipe.initState();
 
-  final String path;
+    yield* recipe.bake(this);
 
-  static String _initializePath(Recipe recipe, BakeContext? ancestor) {
-    return [
-      if (ancestor != null) ancestor.path,
-      recipe.name,
-    ].join('/');
+    // recipe.dispose();
   }
-
-  BakeContext._for(this.recipe, {required this.ancestor})
-      : path = _initializePath(recipe, ancestor);
-
-  BakeContext adopt(Recipe recipe) {
-    final context = BakeContext._for(recipe, ancestor: this);
-    descendants.add(context);
-    return context;
-  }
-
-  bool get isRoot => ancestor == null;
-  bool get hasAncestor => !isRoot;
-  bool get hasDescendants => descendants.isNotEmpty;
 }

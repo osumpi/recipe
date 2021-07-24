@@ -1,89 +1,35 @@
-import 'dart:io';
-
 import 'package:recipe/recipe.dart';
 
-class ChocolateCake extends Recipe {
-  @override
-  String get name => 'Cake';
+main() => bake(Coffee());
 
-  @override
-  String get description => 'Cake';
+@PublicRecipe(name: 'Coffee')
+class Coffee extends Recipe {
+  bake(context) async* {
+    yield Provider.value(
+      // Wait until you get a coffee cup
+      await CoffeeCup.request(),
 
-  @override
-  String get author => 'Me';
-
-  @override
-  String get version => 'Test';
-
-  Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.baking(0);
-    await Future.delayed(const Duration(milliseconds: 1000));
-    yield BakeState.baked();
-  }
-}
-
-class DebugPrintQuantityRecipe extends Recipe {
-  @override
-  String get name => 'DebugPrintQuantityRecipe';
-
-  @override
-  String get description => 'DebugPrintQuantityRecipe';
-
-  @override
-  String get author => 'Me';
-
-  @override
-  String get version => 'Test';
-
-  Stream<BakeState> bake(BakeContext context) async* {
-    yield BakeState.baking(0);
-
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    yield BakeState.baked();
-  }
-}
-
-void main() async {
-  Map<String, int> args = {"quantity": 10};
-
-  bool completed = false;
-  BakeState state = BakeState.awaiting();
-
-  var recipe = Baker.sequential(
-    [
-      ChocolateCake(),
-      Provider.value(
-        args,
-        recipe: Baker.sequential([
-          ChocolateCake(),
-          DebugPrintQuantityRecipe(),
-        ]),
-      ),
-      Baker.simultaneous([
-        ChocolateCake(),
-        ChocolateCake(),
+      // then runs the following.
+      recipe: Parallel([
+        DispenseSugar('2 teaspoon'),
+        DispenseCoffeePowder('1 teaspoon'),
       ]),
-      ChocolateCake(),
-    ],
-  );
-
-  bake(recipe).listen((event) {
-    state = event;
-    completed = event.isBaked;
-  });
-
-  final frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
-
-  int i = 0;
-
-  while (true) {
-    stdout.write('\x1B[2K\x1B[1G'); // Clear line and put cursor at col 1.
-    i = (i + 1) % frames.length;
-    stdout.write('$state \t ${frames[i]}');
-    if (completed) break;
-    await Future.delayed(const Duration(milliseconds: 80));
+      // TODO: add builder and recipe
+    );
   }
+}
 
-  print("");
+class CoffeeCup {
+  static Future<CoffeeCup> request() async => CoffeeCup();
+}
+
+class DispenseSugar extends Recipe {
+  const DispenseSugar(String qty);
+
+  bake(context) async* {}
+}
+
+class DispenseCoffeePowder extends Recipe {
+  const DispenseCoffeePowder(String qty);
+  bake(context) async* {}
 }

@@ -1,28 +1,56 @@
 part of recipe;
 
+typedef RecipeStream = Stream<Recipe>;
+
+/// Annotate a recipe with this class to be used as a constructable recipe
+/// inside OsumPie's recipe maker. Shall be annoted only on [IRecipe]
+/// implementations.
+///
+/// Example:
+/// TODO: Write Recipe meta usage example.
+/// ```
+@immutable
+class PublicRecipe {
+  /// Name of the [Recipe] that will be shown in OsumPie's recipe editor.
+  /// All public recipe's shall define this with a meaningful name.
+  final String name;
+
+  /// The authors of [Recipe].
+  final String description;
+
+  /// The description of the [Recipe].
+  final Iterable<String> authors;
+
+  /// Annotate a recipe with this class to be used as a constructable recipe
+  /// inside OsumPie's recipe maker. Shall be annoted only on [Recipe]
+  /// implementations.
+  const PublicRecipe({
+    this.name = 'No name',
+    this.description = 'No description',
+    this.authors = const [],
+  });
+
+  const PublicRecipe._core({
+    required this.name,
+    required this.description,
+  }) : this.authors = _coreAuthors;
+
+  static const _coreAuthors = ['BakeCode Core'];
+}
+
 /// This class implements the abstract model of [Recipe].
 ///
 /// In BakeCode, a custom [Recipe] may be implemented using one more [Recpie]s.
 /// [Recipe] provides the required abstraction for performing [Recipe.bake]
-/// while being able to work with the BakeCode Ecosystem.
+/// in the BakeCode Ecosystem.
 abstract class Recipe {
-  /// The name of this [Recipe].
-  String get name;
-
-  /// The author of this [Recipe].
-  String get author;
-
-  /// The version of this [Recipe].
-  String get version;
-
-  /// The description of this [Recipe].
-  String get description;
+  String get name => '$runtimeType';
 
   const Recipe();
 
-  /// Parse [Recipe] from YAML source.
+  /// Parse [Recipe] from a YAML source.
   factory Recipe.parse(String source, {Uri? url}) {
-    Recipe fromMap(map) {
+    Recipe _fromMap(map) {
       if (map == null) {
         throw NullThrownError();
       } else {
@@ -30,7 +58,7 @@ abstract class Recipe {
       }
     }
 
-    return checkedYamlDecode(source, fromMap, sourceUrl: url, allowNull: true);
+    return checkedYamlDecode(source, _fromMap, sourceUrl: url, allowNull: true);
   }
 
   /// Bake's the [Recipe].
@@ -38,14 +66,7 @@ abstract class Recipe {
   ///
   /// [bake] shall not be invoked, other than by [RecipeDriver].
   ///
-  /// **Returns**
-  /// [Stream] of [BakeState].
+  /// Returns [RecipeStream] that may yield multiple, single or no recipes.
   @protected
-  Stream<BakeState> bake(BakeContext context);
-
-  /// The string representation of the [Recipe] instance.
-  ///
-  /// Format: `Recipe($name $version)`
-  @override
-  String toString() => 'Recipe($name $version)';
+  RecipeStream bake(BakeContext context);
 }
