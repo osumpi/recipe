@@ -1,9 +1,6 @@
 # VSCode Configurations
 .vscode/
 
-# Auto-generated files using build_runner
-*.g.*
-
 # Files and directories created by pub
 .dart_tool/
 .packages
