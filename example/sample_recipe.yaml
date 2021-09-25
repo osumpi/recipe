@@ -1,0 +1,47 @@
+name: toggle_led
+version: 0.0.1-alpha
+
+requires:
+
+  delay:
+    type: duration
+    default: 0s
+    description: How much to delay before toggling the led bulb
+
+  address:
+    type: address
+    description: Address of the LED Bulb
+
+bake:
+
+  delay:
+    for: $duration
+
+  let:
+    led_state: get led_state --of $address
+
+  if: led_state == 'on'
+    bake: turn_on
+    else: turn_off
+
+recipes:
+
+  turn_on:
+    description: Turns on the LED Bulb
+    requires:
+      - address
+
+    runs:
+      send:
+        to: $address
+        message: led on
+
+  turn_off:
+    description: Turns off the LED Bulb
+    requires:
+      - address
+
+    runs:
+      send:
+        to: $address
+        message: led off
