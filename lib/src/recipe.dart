@@ -48,19 +48,6 @@ abstract class Recipe {
 
   const Recipe();
 
-  /// Parse [Recipe] from a YAML source.
-  factory Recipe.parse(String source, {Uri? url}) {
-    Recipe _fromMap(map) {
-      if (map == null) {
-        throw NullThrownError();
-      } else {
-        return _ParsedRecipe.fromMap(map);
-      }
-    }
-
-    return checkedYamlDecode(source, _fromMap, sourceUrl: url, allowNull: true);
-  }
-
   /// Bake's the [Recipe].
   /// [context] is the [BakeContext] provided by [RecipeDriver.drive] method.
   ///
