@@ -7,9 +7,8 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  meta: ^1.7.0
-  checked_yaml: ^2.0.1
   fhir_yaml: ^0.5.1
 
 dev_dependencies:
+  meta: ^1.7.0
   build_runner: ^1.12.2
