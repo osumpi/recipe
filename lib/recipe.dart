@@ -1,12 +1,7 @@
 library recipe;
 
-import 'dart:async';
-
-import 'package:checked_yaml/checked_yaml.dart';
-import 'package:meta/meta.dart';
-
-part 'src/recipe.dart';
-part 'src/bake_context.dart';
-part 'src/bakers.dart';
-part 'src/provider.dart';
-part 'src/utils.dart';
+export 'package:recipe/src/ports/ports.dart' show InputPort, OutputPort;
+export 'package:recipe/src/bake_context.dart' show BakeContext;
+export 'package:recipe/src/recipe.dart' show Recipe;
+export 'package:recipe/src/io_mixins.dart' show InputMixin, OutputMixin;
+export 'package:recipe/src/sketch_registry.dart' show SketchRegistry;
