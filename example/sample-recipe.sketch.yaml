@@ -1,0 +1,42 @@
+# Map<String, List>
+recipes:
+  # Map<String, dynamic>
+  - recipe: RecipeA # Value: the name of the recipe, eg: Chocolate Cake, Home Night Mode. (string)
+    input port: 763284678 # Value: the hashcode reference of the input port. (ref, int)
+    output port: 308885330 # Value: the hashcode reference of the output port. (ref, int)
+
+    # Map<String, dynamic>
+  - recipe: RecipeB
+    input port: 153514993
+    output port: 348471480
+
+# Map<String, Map>
+ports:
+  # Map<ref, Map<String, String>>
+  763284678: # Key: hashcode reference of the port. (ref, int)
+    name: input of A # Value: Label / Name of the port (string)
+    type: "MultiInboundInputPort<MyContext>" # Value: Port Type <Context Type> of the port (string)
+
+  # Map<ref, Map<String, String>>
+  308885330:
+    name: output of A
+    type: "OutputPort<BakeContext>"
+
+  # Map<ref, Map<String, String>>
+  153514993:
+    name: input of B
+    type: "MultiInboundInputPort<BakeContext>"
+
+  # Map<ref, Map<String, String>>
+  348471480:
+    name: output of B
+    type: "OutputPort<BakeContext>"
+
+# Map<String, Map>
+connections:
+  # Map<ref, Map<String, dynamic>>
+  667098356: # Key: hashcode reference of the connection (ref, int)
+    from: 308885330 # Value: hashcode reference of the port that may write to the connection. (ref, int)
+    to: 153514993 # Value: hashcode reference of the port that may read from the connection. (ref, int)
+    is wireless: true # Value: Whether the connection is wireless or not. (bool)
+    context type: BakeContext # Value: The type of the context. (Type extends BakeContext).
