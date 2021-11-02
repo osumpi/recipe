@@ -2,17 +2,14 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:fhir_yaml/fhir_yaml.dart';
-
-import 'recipe.dart';
-import 'ports/ports.dart';
-import 'utils.dart';
+import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/recipe.dart';
+import 'package:recipe/src/ports/ports.dart';
+import 'package:recipe/src/utils.dart';
 
 @sealed
 @immutable
-class SketchRegistry {
-  /// This class is not intended to be instantiated.
-  const SketchRegistry._();
-
+abstract class SketchRegistry {
   @internal
   static final recipes = <Recipe>{};
 
@@ -70,6 +67,14 @@ class SketchRegistry {
 
     return File('${exportDirectory.path}/$recipeName.sketch.yaml')
         .writeAsString(exportToYaml());
+  }
+
+  static void initializeAllRecipes() {
+    recipes.forEach((recipe) => recipe.initialize());
+  }
+
+  static void disposeAllRecipes() {
+    recipes.forEach((recipe) => recipe.dispose());
   }
 }
 
