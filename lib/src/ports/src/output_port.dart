@@ -8,8 +8,20 @@ class OutputPort<T extends BakeContext> extends Port<T> {
   final outboundConnections = <Connection<T>>{};
 
   Connection<T>? connectTo(InputPort<T> inputPort, {bool wireless = false}) {
-    return inputPort.connectFrom(this, wireless: wireless);
+    final connection = inputPort.connectFrom(this, wireless: wireless);
+
+    if (connection == null) {
+      error('failed to connect to $inputPort');
+    } else {
+      verbose('connected to $inputPort');
+      outboundConnections.add(connection);
+    }
+
+    return connection;
   }
 
-  void write(T context) => connections.forEach((e) => e.write(context));
+  void write(T context) {
+    verbose('writing context to ${connections.length} connection(s).');
+    connections.forEach((e) => e.write(context));
+  }
 }
