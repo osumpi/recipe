@@ -1,7 +1,9 @@
 part of recipe.ports;
 
 abstract class Port<T extends BakeContext> with FrameworkEntity {
-  const Port(this.name);
+  Port(this.name) {
+    register();
+  }
 
   final String name;
 
