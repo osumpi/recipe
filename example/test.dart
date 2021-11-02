@@ -1,11 +1,14 @@
-import 'dart:async';
-
 import 'package:recipe/recipe.dart';
 
 void main() async {
-  RecipeA().outputPort.connectTo(RecipeB().inputPort, wireless: true);
+  final a = RecipeA(), b = RecipeB();
+  a.outputPort.connectTo(b.inputPort, wireless: true);
 
-  await SketchRegistry.exportToSketchFile(recipeName: 'my_recipe');
+  // await SketchRegistry.exportToSketchFile(recipeName: 'my_recipe');
+
+  SketchRegistry.initializeAllRecipes();
+
+  a.inputPort.events.sink.add(MyContext());
 }
 
 class MyContext extends BakeContext {}
@@ -16,8 +19,9 @@ class RecipeA extends Recipe<MyContext, BakeContext> {
   final outputPort = OutputPort('output of A');
 
   @override
-  Stream<BakeContext> bake(MyContext context) {
-    throw UnimplementedError();
+  Stream<BakeContext> bake(MyContext context) async* {
+    print('$name baked!');
+    yield BakeContext();
   }
 }
 
@@ -27,7 +31,8 @@ class RecipeB extends Recipe {
   final outputPort = OutputPort('output of B');
 
   @override
-  Stream<BakeContext> bake(BakeContext context) {
-    throw UnimplementedError();
+  Stream<BakeContext> bake(BakeContext context) async* {
+    print('$name baked!');
+    yield BakeContext();
   }
 }
