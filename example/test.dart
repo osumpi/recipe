@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:recipe/recipe.dart';
 
 void main() {
-  final a = RecipeA()..initialize(), b = RecipeB()..initialize();
-
-  final connection = a.outputPort.connectTo(b.inputPort, wireless: true);
-  print(connection);
+  RecipeA().outputPort.connectTo(RecipeB().inputPort, wireless: true);
 
   final sketch = SketchRegistry.exportToYaml();
 
