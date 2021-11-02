@@ -13,9 +13,7 @@ abstract class Recipe<I extends BakeContext, O extends BakeContext>
 
   /// Initializes the recipe.
   @mustCallSuper
-  void initialize({
-    bool allowMultipleInputs = true,
-  }) {
+  void initialize() {
     if (isInitialized) {
       warn('Already initialized');
     }
