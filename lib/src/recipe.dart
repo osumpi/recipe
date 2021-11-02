@@ -15,16 +15,6 @@ abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
     register();
   }
 
-  /// Initializes the recipe.
-  // @mustCallSuper
-  // void initialize() {
-  //   if (isInitialized) {
-  //     warn('Already initialized');
-  //   }
-
-  //   isInitialized = true;
-  // }
-
   @protected
   Stream<Output> bake(Input context);
 
