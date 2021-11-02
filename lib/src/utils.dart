@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fhir_yaml/fhir_yaml.dart';
 import 'package:meta/meta.dart';
 
 mixin FrameworkEntity {
@@ -25,6 +26,10 @@ mixin FrameworkEntity {
   void verbose(String message) => log(message, level: 'V');
 
   JsonMap toJson();
+
+  String toYaml() {
+    return json2yaml(toJson());
+  }
 }
 
 typedef JsonMap = Map<String, dynamic>;
