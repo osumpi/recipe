@@ -1,10 +1,10 @@
 recipes:
   - recipe: RecipeA
-    input port: 640276029
-    output port: 984921258
+    input port: 97281982
+    output port: 30659364
   - recipe: RecipeB
-    input port: 865166437
-    output port: 117510834
+    input port: 487008352
+    output port: 896529778
 ports:
   - name: input of A
     type: "MultiInboundInputPort<MyContext>"
@@ -15,7 +15,7 @@ ports:
   - name: output of B
     type: "OutputPort<BakeContext>"
 connections:
-  - from: 984921258
-    to: 865166437
+  - from: 30659364
+    to: 487008352
     is wireless: true
     context type: BakeContext
