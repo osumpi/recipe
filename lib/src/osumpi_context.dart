@@ -4,10 +4,13 @@ import 'package:recipe/src/utils.dart';
 
 @immutable
 class OsumPiContext with FrameworkEntity {
+  
   const OsumPiContext._(this._data);
 
+  @internal
   const factory OsumPiContext.fromJson(JsonMap json) = OsumPiContext._;
 
+  @internal
   OsumPiContext({
     required int x,
     required int y,
