@@ -18,9 +18,7 @@ class Connection<T extends BakeContext> with FrameworkEntity {
 
   final isWireless = false;
 
-  void write(T context) {
-    to.events.add(context);
-  }
+  void write(T context) => to.events.add(context);
 
   @override
   JsonMap toJson() {
