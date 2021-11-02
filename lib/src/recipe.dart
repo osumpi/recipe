@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:recipe/src/utils.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/ports/ports.dart';
+import 'package:recipe/src/framework_entity.dart';
 
 abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
     with FrameworkEntity {
@@ -15,22 +16,27 @@ abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
     register();
   }
 
-  StreamSubscription<Output>? _subscription;
+  StreamSubscription<Input>? _subscription;
 
   void initialize() {
     if (_subscription != null) {
       return error('Failed to initialize recipe $name.');
     }
 
-    _subscription = inputPort.events.stream.map(bake).listen(outputPort.write);
+    _subscription = inputPort.events.stream.listen((context) {
+      bake(context).listen(outputPort.write);
+    });
+
+    verbose('Recipe "$name" initialized.');
   }
 
   void dispose() {
     _subscription?.cancel();
+    verbose('Recipe "$name" diposed');
   }
 
   @protected
-  Output bake(Input context);
+  Stream<Output> bake(Input context);
 
   @override
   JsonMap toJson() {
