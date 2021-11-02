@@ -2,7 +2,7 @@ library recipe.ports;
 
 import 'dart:async';
 
-import 'package:recipe/src/sketch_registry.dart';
+import 'package:meta/meta.dart';
 import 'package:recipe/src/utils.dart';
 import 'package:recipe/src/bake_context.dart';
 
