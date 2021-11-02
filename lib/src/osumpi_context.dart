@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 
+import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/utils.dart';
 
 @immutable
 class OsumPiContext with FrameworkEntity {
-  
   const OsumPiContext._(this._data);
 
   @internal
