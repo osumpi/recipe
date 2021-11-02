@@ -8,20 +8,20 @@ mixin FrameworkEntity {
   String get name => runtimeType.toString();
 
   @protected
-  void log(String message, {String level = 'I'}) =>
+  void log(String message, {LogLevel level = LogLevels.info}) =>
       FrameworkUtils.log(message, module: '$name#$hashCode', level: level);
 
   @protected
-  void warn(String message) => log(message, level: 'W');
+  void warn(String message) => log(message, level: LogLevels.warning);
 
   @protected
-  void error(String message) => log(message, level: 'E');
+  void error(String message) => log(message, level: LogLevels.error);
 
   @protected
-  void info(String message) => log(message, level: 'I');
+  void info(String message) => log(message, level: LogLevels.info);
 
   @protected
-  void verbose(String message) => log(message, level: 'V');
+  void verbose(String message) => log(message, level: LogLevels.verbose);
 
   JsonMap toJson();
 
