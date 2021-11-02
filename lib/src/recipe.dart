@@ -11,8 +11,6 @@ abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
   InputPort<Input> get inputPort;
   OutputPort<Output> get outputPort;
 
-  bool isInitialized = false;
-
   Recipe() {
     register();
   }
