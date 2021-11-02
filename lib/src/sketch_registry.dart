@@ -1,27 +1,31 @@
+import 'package:meta/meta.dart';
 import 'package:fhir_yaml/fhir_yaml.dart';
 
 import 'recipe.dart';
 import 'ports/ports.dart';
 import 'utils.dart';
 
+@sealed
+@immutable
 class SketchRegistry {
+  /// This class is not intended to be instantiated.
+  const SketchRegistry._();
+
+  @internal
   static final recipes = <Recipe>{};
+
+  @internal
   static final ports = <Port>{};
+
+  @internal
   static final connections = <Connection>{};
 
-  static void registerRecipe(Recipe recipe) {
-    recipes.add(recipe);
-  }
-
-  static void _visitPorts() {
+  @internal
+  static void ensureAllPortsIncluded() {
     for (final recipe in recipes) {
       ports.add(recipe.inputPort);
       ports.add(recipe.outputPort);
     }
-  }
-
-  static void registerConnection(Connection connection) {
-    connections.add(connection);
   }
 
   static JsonMap exportToJsonMap({
@@ -29,7 +33,7 @@ class SketchRegistry {
     bool includePorts = true,
     bool includeConnections = true,
   }) {
-    _visitPorts();
+    ensureAllPortsIncluded();
 
     return {
       if (includeRecipes) 'recipes': recipes.sketchEntryGroup(),
@@ -53,27 +57,11 @@ class SketchRegistry {
   }
 }
 
-extension on Set<Recipe> {
+extension on Set<FrameworkEntity> {
+  @internal
   List<JsonMap> sketchEntryGroup() {
     return [
-      for (final recipe in this) recipe.toJson(),
+      for (final element in this) element.toJson(),
     ];
-  }
-}
-
-extension on Set<Port> {
-  JsonMap sketchEntryGroup() {
-    return {
-      for (final port in this) '${port.hashCode}': port.toJson(),
-    };
-  }
-}
-
-extension on Set<Connection> {
-  JsonMap sketchEntryGroup() {
-    return {
-      for (final connection in this)
-        '${connection.hashCode}': connection.toJson(),
-    };
   }
 }
