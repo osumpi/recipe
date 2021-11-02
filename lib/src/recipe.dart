@@ -4,27 +4,31 @@ import 'package:meta/meta.dart';
 
 import 'package:recipe/src/utils.dart';
 import 'package:recipe/src/bake_context.dart';
-import 'package:recipe/src/io_mixins.dart';
-import 'package:recipe/src/sketch_registry.dart';
+import 'package:recipe/src/ports/ports.dart';
 
-abstract class Recipe<I extends BakeContext, O extends BakeContext>
-    with FrameworkEntity, InputMixin<I>, OutputMixin<O> {
+abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
+    with FrameworkEntity {
+  InputPort<Input> get inputPort;
+  OutputPort<Output> get outputPort;
+
   bool isInitialized = false;
 
-  /// Initializes the recipe.
-  @mustCallSuper
-  void initialize() {
-    if (isInitialized) {
-      warn('Already initialized');
-    }
-
-    SketchRegistry.registerRecipe(this);
-
-    isInitialized = true;
+  Recipe() {
+    register();
   }
 
+  /// Initializes the recipe.
+  // @mustCallSuper
+  // void initialize() {
+  //   if (isInitialized) {
+  //     warn('Already initialized');
+  //   }
+
+  //   isInitialized = true;
+  // }
+
   @protected
-  Stream<O> bake(I context);
+  Stream<Output> bake(Input context);
 
   @override
   JsonMap toJson() {
