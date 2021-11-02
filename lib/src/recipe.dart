@@ -15,8 +15,22 @@ abstract class Recipe<Input extends BakeContext, Output extends BakeContext>
     register();
   }
 
+  StreamSubscription<Output>? _subscription;
+
+  void initialize() {
+    if (_subscription != null) {
+      return error('Failed to initialize recipe $name.');
+    }
+
+    _subscription = inputPort.events.stream.map(bake).listen(outputPort.write);
+  }
+
+  void dispose() {
+    _subscription?.cancel();
+  }
+
   @protected
-  Stream<Output> bake(Input context);
+  Output bake(Input context);
 
   @override
   JsonMap toJson() {
