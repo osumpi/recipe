@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:recipe/recipe.dart';
 
-void main() {
+void main() async {
   RecipeA().outputPort.connectTo(RecipeB().inputPort, wireless: true);
 
-  final sketch = SketchRegistry.exportToYaml();
-
-  print(sketch);
+  await SketchRegistry.exportToSketchFile(recipeName: 'my_recipe');
 }
 
 class MyContext extends BakeContext {}
