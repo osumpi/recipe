@@ -5,7 +5,7 @@ class Connection<T extends BakeContext> with FrameworkEntity {
     required this.from,
     required this.to,
   }) {
-    SketchRegistry.registerConnection(this);
+    register();
   }
 
   factory Connection.wireless({
@@ -32,6 +32,7 @@ class Connection<T extends BakeContext> with FrameworkEntity {
     };
   }
 
+  @useResult
   Connection<T> get asWirelessConnection =>
       Connection.wireless(from: from, to: to);
 }
@@ -42,6 +43,8 @@ class WirelessConnection<T extends BakeContext> extends Connection<T> {
     required InputPort<T> to,
   }) : super(from: from, to: to);
 
+  @nonVirtual
+  @override
   final isWireless = true;
 
   @override
