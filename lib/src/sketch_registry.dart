@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:fhir_yaml/fhir_yaml.dart';
 
@@ -54,6 +56,20 @@ class SketchRegistry {
     );
 
     return json2yaml(json);
+  }
+
+  static Future<File> exportToSketchFile({
+    required String recipeName,
+    Directory? exportDirectory,
+  }) async {
+    exportDirectory ??= Directory.current;
+
+    if (await exportDirectory.exists() == false) {
+      throw FileSystemException('Directory ${exportDirectory} does not exist');
+    }
+
+    return File('${exportDirectory.path}/$recipeName.sketch.yaml')
+        .writeAsString(exportToYaml());
   }
 }
 
