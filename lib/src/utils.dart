@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:tint/tint.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/recipe.dart';
 
@@ -50,16 +51,26 @@ abstract class LogLevels {
 
 @sealed
 abstract class FrameworkUtils {
-  static LogLevel loggingLevel = LogLevels.all;
+  static LogLevel _loggingLevel = LogLevels.all;
+
+  static void setLoggingLevel(LogLevel level) {
+    _loggingLevel = level;
+  }
 
   static void log(
     String message, {
     required String module,
     LogLevel level = LogLevels.info,
   }) {
-    if (level.value < loggingLevel.value) return;
+    if (level.value < _loggingLevel.value) return;
 
-    stdout.writeln('${level.name[0]}/$module: $message');
+    message = '${level.name[0].toUpperCase()}/$module: $message';
+
+    if (level.value < LogLevels.debug.value) {
+      message = message.red();
+    }
+
+    stdout.writeln(message);
   }
 
   static void warn(String message, {required String module}) =>
