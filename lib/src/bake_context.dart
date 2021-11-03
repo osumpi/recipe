@@ -16,7 +16,7 @@ class BakeContext {
 
   late final path = _findPath();
 
-  late final parents = _computeAncestorTree();
+  late final ancestors = _computeAncestorTree();
 
   String _findPath() {
     return parentContext == null
