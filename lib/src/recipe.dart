@@ -19,3 +19,15 @@ abstract class Recipe<In extends BakeContext, Out extends BakeContext>
     };
   }
 }
+
+class Baker {
+  const Baker.of(BakeContext context) : parentContext = context;
+
+  final BakeContext parentContext;
+
+  Stream bake(Recipe recipe) async* {
+    final childContext = BakeContext(recipe, parentContext);
+
+    yield* recipe.bake(childContext);
+  }
+}
