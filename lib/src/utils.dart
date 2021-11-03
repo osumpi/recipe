@@ -67,7 +67,7 @@ abstract class FrameworkUtils {
     message = '${level.name[0].toUpperCase()}/$module: $message';
 
     if (level.value < LogLevels.debug.value) {
-      message = message.red();
+      message = message.dim();
     }
 
     stdout.writeln(message);
