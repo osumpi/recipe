@@ -1,15 +1,16 @@
 import 'package:recipe/recipe.dart';
 
 void main() async {
-  bake(RecipeA()).listen((event) {
-    print(event);
-  });
+  FrameworkUtils.setLoggingLevel(LogLevels.verbose);
+
+  bake(MyRecipe()).listen((_) {});
 }
 
-class RecipeA extends Recipe {
+class MyRecipe extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    print('baking A');
+    info(
+        "oh! I'm running??? Okay, basic things didn't break if this is being printed.");
 
     yield* Baker.of(context).bake(
       DecoratedDelay(
@@ -32,9 +33,7 @@ class Delayed extends Recipe {
 
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    print('starting delay for $duration');
     await Future.delayed(duration);
-    print('$duration over');
 
     yield* Baker.of(context).bake(child);
   }
@@ -48,8 +47,6 @@ class DecoratedDelay extends Delayed {
 
   @override
   Stream<BakeContext> bake(BakeContext context) {
-    print('some extra decoration');
-
     return super.bake(context);
   }
 }
@@ -57,7 +54,7 @@ class DecoratedDelay extends Delayed {
 class RecipeB extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    print('baking B');
-    print('visitation route: ${context.ancestors.reversed.join(' -> ')}');
+    info(
+        'visitation route: ${context.ancestors.reversed.map((r) => r.runtimeType).join(' -> ')}');
   }
 }

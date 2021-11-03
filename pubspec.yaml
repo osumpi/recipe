@@ -3,11 +3,15 @@ description: Implementation of BakeCode Recipe.
 version: 0.0.1-alpha
 repository: https://github.com/bakecode-devs/recipe
 
+publish_to: none
+
 environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   fhir_yaml: ^0.5.1
+  tint:
+    git: https://github.com/rithviknishad/tint.git
 
 dev_dependencies:
   meta: ^1.7.0
