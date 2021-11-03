@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:recipe/src/bake_context.dart';
+import 'package:recipe/src/recipe.dart';
 
 @internal
 @immutable
@@ -71,6 +73,10 @@ abstract class FrameworkUtils {
 
   static void verbose(String message, {required String module}) =>
       log(message, module: module, level: LogLevels.verbose);
+}
+
+Stream<BakeContext> bake(Recipe recipe) {
+  return Baker.of(null).bake(recipe);
 }
 
 typedef JsonMap = Map<String, dynamic>;
