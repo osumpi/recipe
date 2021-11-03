@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:recipe/recipe.dart';
 import 'package:tint/tint.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/recipe.dart';
@@ -27,11 +28,11 @@ class LogLevel implements Comparable<LogLevel> {
 @sealed
 abstract class LogLevels {
   static const off = LogLevel('off', 100);
-  static const fatal = LogLevel('fatal', 70);
-  static const error = LogLevel('error', 60);
-  static const warning = LogLevel('warning', 50);
+  static const fatal = LogLevel('fatal', 80);
+  static const error = LogLevel('error', 70);
+  static const warning = LogLevel('warning', 60);
+  static const status = LogLevel('status', 50);
   static const info = LogLevel('info', 40);
-  static const debug = LogLevel('debug', 30);
   static const verbose = LogLevel('verbose', 20);
   static const trace = LogLevel('trace', 10);
   static const all = LogLevel('all', 0);
@@ -41,8 +42,8 @@ abstract class LogLevels {
     fatal,
     error,
     warning,
+    status,
     info,
-    debug,
     verbose,
     trace,
     all,
@@ -66,8 +67,25 @@ abstract class FrameworkUtils {
 
     message = '${level.name[0].toUpperCase()}/$module: $message';
 
-    if (level.value < LogLevels.debug.value) {
+    if (level.value <= LogLevels.verbose.value) {
       message = message.dim();
+    }
+
+    switch (level) {
+      case LogLevels.fatal:
+        message = message.brightRed().bold();
+        break;
+      case LogLevels.error:
+        message = message.red();
+        break;
+      case LogLevels.warning:
+        message = message.yellow();
+        break;
+      case LogLevels.status:
+        message = message.green().bold();
+        break;
+      case LogLevels.trace:
+        message = message.italic();
     }
 
     stdout.writeln(message);
