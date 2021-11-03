@@ -47,9 +47,16 @@ mixin FrameworkEntity {
 }
 
 mixin EntityLogging on FrameworkEntity {
+  static bool _shouldIncludeHash = false;
+
+  static showHashCodeOfEntities() => _shouldIncludeHash = true;
+  static hideHashCodeOfEntities() => _shouldIncludeHash = false;
+
   @protected
   void log(String message, {LogLevel level = LogLevels.info}) {
-    FrameworkUtils.log(message, module: '$name#$hashCode', level: level);
+    final moduleName = _shouldIncludeHash ? '$name#$hashCode' : name;
+
+    FrameworkUtils.log(message, module: moduleName, level: level);
   }
 
   @protected
