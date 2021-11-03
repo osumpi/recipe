@@ -1,12 +1,19 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:recipe/src/bake_context.dart';
+import 'package:recipe/src/recipe.dart';
 
+@internal
+@immutable
 class LogLevel implements Comparable<LogLevel> {
   @internal
+  @literal
   const LogLevel(this.name, this.value);
 
+  @internal
   final int value;
+
   final String name;
 
   @override
@@ -27,6 +34,18 @@ abstract class LogLevels {
   static const verbose = LogLevel('verbose', 20);
   static const trace = LogLevel('trace', 10);
   static const all = LogLevel('all', 0);
+
+  static const values = [
+    off,
+    fatal,
+    error,
+    warning,
+    info,
+    debug,
+    verbose,
+    trace,
+    all,
+  ];
 }
 
 @sealed
@@ -54,6 +73,10 @@ abstract class FrameworkUtils {
 
   static void verbose(String message, {required String module}) =>
       log(message, module: module, level: LogLevels.verbose);
+}
+
+Stream<BakeContext> bake(Recipe recipe) {
+  return Baker.of(null).bake(recipe);
 }
 
 typedef JsonMap = Map<String, dynamic>;

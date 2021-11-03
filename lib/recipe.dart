@@ -1,6 +1,5 @@
 library recipe;
 
-export 'package:recipe/src/ports/ports.dart' show InputPort, OutputPort;
-export 'package:recipe/src/bake_context.dart' show BakeContext;
-export 'package:recipe/src/recipe.dart' show Recipe;
-export 'package:recipe/src/sketch_registry.dart' show SketchRegistry;
+export 'src/bake_context.dart' show BakeContext;
+export 'src/recipe.dart' show Recipe, Baker;
+export 'src/utils.dart' show FrameworkUtils, LogLevels, bake;
