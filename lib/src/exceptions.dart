@@ -2,8 +2,11 @@ import 'package:meta/meta.dart';
 
 import 'package:recipe/src/recipe.dart' show Recipe;
 
+/// Recipe of type [T] was not found in the [visitedRecipes].
 @immutable
 class RecipeNotFound<T extends Recipe> implements Exception {
+  /// The recipes that were visited and checked against if it was of type [T].
+  /// This shall include all the recipes passed by the requester.
   final List<Recipe> visitedRecipes;
 
   const RecipeNotFound(this.visitedRecipes);
