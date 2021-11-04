@@ -59,12 +59,25 @@ abstract class FrameworkUtils {
     Object? obj, {
     String? module,
     LogLevel level = LogLevels.info,
+    Statuses? status,
   }) {
-    module ??= 'Anonymous';
-
     if (level.value < loggingLevel.value) return;
 
-    var message = '${level.name[0].toUpperCase()}/$module: $obj';
+    assert(
+      (level == LogLevels.status && status == null) == false,
+      "Specify status, when using `LogLevels.status` as the logging level. Consider using `status(...)` or `FrameworkUtils.status(...)`.",
+    );
+
+    module ??= 'Anonymous';
+
+    String message = obj.toString();
+
+    if (level == LogLevels.status) {
+      status ??= Statuses.successful;
+      message = status.format(message);
+    }
+
+    message = '${level.name[0].toUpperCase()}/$module: $message';
 
     if (level.value <= LogLevels.verbose.value) {
       message = message.dim();
@@ -80,9 +93,6 @@ abstract class FrameworkUtils {
         break;
       case LogLevels.warning:
         message = message.yellow();
-        break;
-      case LogLevels.status:
-        message = message.green().bold();
         break;
       case LogLevels.trace:
         message = message.italic();
@@ -107,8 +117,9 @@ abstract class FrameworkUtils {
   static void info(String message, {String? module}) =>
       log(message, module: module);
 
-  static void status(String message, {String? module}) =>
-      log(message, module: module, level: LogLevels.status);
+  static void status(String message,
+          {String? module, required Statuses status}) =>
+      log(message, module: module, level: LogLevels.status, status: status);
 
   static void verbose(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.verbose);
@@ -122,3 +133,21 @@ Stream<BakeContext> bake(Recipe recipe) {
 }
 
 typedef JsonMap = Map<String, dynamic>;
+
+@immutable
+class Statuses {
+  const Statuses._(this.prefix, this._format);
+
+  final String prefix;
+  final String Function(String message) _format;
+
+  static const successful = Statuses._('✓', _successfulFormatter);
+  static const failed = Statuses._('✗', _failedFormatter);
+  static final warning = Statuses._('!', _warningFormatter);
+
+  static String _successfulFormatter(String message) => message.green();
+  static String _failedFormatter(String message) => message.red();
+  static String _warningFormatter(String message) => message.yellow();
+
+  String format(String message) => _format('$prefix $message');
+}
