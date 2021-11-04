@@ -60,7 +60,7 @@ abstract class FrameworkUtils {
     String? module,
     LogLevel level = LogLevels.info,
   }) {
-    module ??= '(anonymous)';
+    module ??= 'Anonymous';
 
     if (level.value < loggingLevel.value) return;
 
