@@ -1,25 +1,14 @@
 import 'package:recipe/recipe.dart';
 
 void main() async {
-  FrameworkUtils.setLoggingLevel(LogLevels.all);
+  FrameworkUtils.setLoggingLevel(LogLevels.verbose);
 
-  FrameworkUtils.log('fatal', module: 'RECIPE', level: LogLevels.fatal);
-  FrameworkUtils.log('error', module: 'RECIPE', level: LogLevels.error);
-  FrameworkUtils.log('warning', module: 'RECIPE', level: LogLevels.warning);
-  FrameworkUtils.log('status', module: 'RECIPE', level: LogLevels.status);
-  FrameworkUtils.log('info', module: 'RECIPE', level: LogLevels.info);
-  FrameworkUtils.log('verbose', module: 'RECIPE', level: LogLevels.verbose);
-  FrameworkUtils.log('trace', module: 'RECIPE', level: LogLevels.trace);
-
-  // bake(MyRecipe()).listen((_) {});
+  bake(MyRecipe()).listen((_) {});
 }
 
 class MyRecipe extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    info(
-        "oh! I'm running??? Okay, basic things didn't break if this is being printed.");
-
     yield* Baker.of(context).bake(
       DecoratedDelay(
         RecipeB(),
@@ -41,6 +30,8 @@ class Delayed extends Recipe {
 
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
+    final result = context.findNearestRecipeOfExactType<MyRecipe>();
+    print('got >> $result');
     await Future.delayed(duration);
 
     yield* Baker.of(context).bake(child);
