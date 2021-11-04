@@ -1,6 +1,4 @@
 import 'package:recipe/recipe.dart';
-import 'package:recipe/src/recipe.dart';
-import 'package:recipe/src/utils.dart';
 
 void main() async {
   FrameworkUtils.loggingLevel = LogLevels.verbose;
