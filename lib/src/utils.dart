@@ -85,8 +85,8 @@ abstract class FrameworkUtils {
 
     switch (level) {
       case LogLevels.fatal:
+        FrameworkUtils.beep();
         message = message.brightRed().bold();
-        stdout.writeCharCode(0x07);
         break;
       case LogLevels.error:
         message = message.red();
@@ -126,6 +126,8 @@ abstract class FrameworkUtils {
 
   static void trace(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.trace);
+
+  static void beep() => stdout.writeCharCode(0x07);
 }
 
 Stream<BakeContext> bake(Recipe recipe) {
@@ -149,8 +151,10 @@ class Statuses {
   static String _successfulFormatter(String message) => message.green();
   static String _failedFormatter(String message) => message.red();
   static String _warningFormatter(String message) => message.yellow();
-  static String _fatalFormatter(String message) =>
-      '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
+  static String _fatalFormatter(String message) {
+    FrameworkUtils.beep();
+    return '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
+  }
 
   String format(String message) => _format('$prefix $message');
 }
