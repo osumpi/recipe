@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:meta/meta.dart';
 import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/recipe.dart';
+import 'package:recipe/src/recipe.dart' show Recipe;
+import 'package:recipe/src/exceptions.dart';
 
 @immutable
 class BakeContext with FrameworkEntity, EntityLogging {
@@ -27,19 +26,21 @@ class BakeContext with FrameworkEntity, EntityLogging {
         : '${parentContext?.path}/${recipe.name}';
   }
 
-  T getRecipeOfExactTypeFromAncestors<T>() {
-    for (var recipe in ancestors) {
+  T findNearestRecipeOfExactType<T extends Recipe>({
+    T Function()? onNotFound,
+  }) {
+    for (final recipe in ancestors) {
       if (recipe is T) {
-        return recipe as T;
+        return recipe;
       }
     }
 
-    if (null is T) {
-      return null as T;
+    if (onNotFound == null) {
+      error("Could not find $T in $ancestors");
+      throw RecipeNotFound<T>(ancestors);
     }
 
-    error("There's no recipe of type $T in $ancestors");
-    throw RecipeOfTypeNotFound<T>(ancestors);
+    return onNotFound();
   }
 
   List<Recipe> _getVisitationRouteFromRoot() {
@@ -53,24 +54,5 @@ class BakeContext with FrameworkEntity, EntityLogging {
     }
 
     return result;
-  }
-}
-
-@immutable
-class RecipeOfTypeNotFound<T> implements Exception {
-  final List<Recipe> ancestors;
-
-  const RecipeOfTypeNotFound(this.ancestors);
-
-  @override
-  String toString() {
-    return """
-Recipe of type "$T" not found in ancestors.
-Visited: ${ancestors.join(' -> ')}
-
-This is possibly because there was no recipe of the specified type that was 
-executed before the recipe that requested it. Try adding the recipe of type 
-$T between the above mentioned visitation route, or by allowing null type to 
-handle missing case by yourself.""";
   }
 }
