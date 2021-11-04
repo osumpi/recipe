@@ -60,12 +60,13 @@ abstract class FrameworkUtils {
 
   static void log(
     String message, {
-    required String module,
+    String? module,
     LogLevel level = LogLevels.info,
   }) {
     if (level.value < _loggingLevel.value) return;
 
-    message = '${level.name[0].toUpperCase()}/$module: $message';
+    message =
+        '${level.name[0].toUpperCase()}${module == null ? '' : '/$module:'} $message';
 
     if (level.value <= LogLevels.verbose.value) {
       message = message.dim();
@@ -91,25 +92,25 @@ abstract class FrameworkUtils {
     stdout.writeln(message);
   }
 
-  static void fatal(String message, {required String module}) =>
+  static void fatal(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.fatal);
 
-  static void error(String message, {required String module}) =>
+  static void error(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.error);
 
-  static void warn(String message, {required String module}) =>
+  static void warn(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.warning);
 
-  static void info(String message, {required String module}) =>
+  static void info(String message, {String? module}) =>
       log(message, module: module);
 
-  static void status(String message, {required String module}) =>
+  static void status(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.status);
 
-  static void verbose(String message, {required String module}) =>
+  static void verbose(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.verbose);
 
-  static void trace(String message, {required String module}) =>
+  static void trace(String message, {String? module}) =>
       log(message, module: module, level: LogLevels.trace);
 }
 
