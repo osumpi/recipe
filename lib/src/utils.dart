@@ -91,17 +91,26 @@ abstract class FrameworkUtils {
     stdout.writeln(message);
   }
 
-  static void warn(String message, {required String module}) =>
-      log(message, module: module, level: LogLevels.warning);
+  static void fatal(String message, {required String module}) =>
+      log(message, module: module, level: LogLevels.fatal);
 
   static void error(String message, {required String module}) =>
       log(message, module: module, level: LogLevels.error);
 
+  static void warn(String message, {required String module}) =>
+      log(message, module: module, level: LogLevels.warning);
+
   static void info(String message, {required String module}) =>
       log(message, module: module);
 
+  static void status(String message, {required String module}) =>
+      log(message, module: module, level: LogLevels.status);
+
   static void verbose(String message, {required String module}) =>
       log(message, module: module, level: LogLevels.verbose);
+
+  static void trace(String message, {required String module}) =>
+      log(message, module: module, level: LogLevels.trace);
 }
 
 Stream<BakeContext> bake(Recipe recipe) {
