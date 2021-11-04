@@ -40,12 +40,16 @@ class Baker with FrameworkEntity, EntityLogging {
     final indexedRecipes = recipes.asMap().entries;
 
     if (strategy == BakeStrategy.sequential) {
+      var context = parentContext;
+
       for (final indexedRecipe in indexedRecipes) {
         final pos = indexedRecipe.key + 1;
         final recipe = indexedRecipe.value;
 
+        context = BakeContext(recipe, context);
+
         verbose('Baking $pos/$total: $recipe, strategy=$strategy');
-        yield* bake(recipe);
+        yield* recipe.bake(context);
       }
     } else if (strategy == BakeStrategy.parallel) {
       bakeAsFuture(MapEntry<int, Recipe> indexedRecipe) async {
