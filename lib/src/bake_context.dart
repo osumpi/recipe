@@ -55,4 +55,7 @@ class BakeContext with FrameworkEntity, EntityLogging {
 
     return result;
   }
+
+  @override
+  String toString() => ancestors.reversed.join(' -> ');
 }
