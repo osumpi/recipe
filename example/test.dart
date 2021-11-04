@@ -2,7 +2,8 @@ import 'package:recipe/recipe.dart';
 import 'package:recipe/src/recipe.dart';
 
 void main() async {
-  FrameworkUtils.setLoggingLevel(LogLevels.all);
+  FrameworkUtils.loggingLevel = LogLevels.verbose;
+  FrameworkUtils.showTimestampInLogs = false;
 
   bake(MyRecipe()).listen(FrameworkUtils.log);
 }
