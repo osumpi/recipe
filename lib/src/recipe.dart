@@ -57,10 +57,19 @@ class Baker with FrameworkEntity, EntityLogging {
         final recipe = indexedRecipe.value;
 
         verbose('Baking $pos/$total: $recipe, strategy=$strategy');
-        return await bake(recipe);
+        return await bake(recipe).length;
       }
 
       await Future.wait(indexedRecipes.map(bakeAsFuture));
+
+      final context = recipes.fold<BakeContext?>(
+          parentContext, (context, recipe) => BakeContext(recipe, context));
+
+      if (context != null) {
+        verbose(
+            'Baked $total/$total recipes with strategy=$strategy. Yields context: $context');
+        yield context;
+      }
     }
   }
 }
