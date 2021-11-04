@@ -26,22 +26,29 @@ class Baker with FrameworkEntity, EntityLogging {
   final BakeContext? parentContext;
 
   Stream<BakeContext> bake(Recipe recipe) async* {
-    verbose('Baking 1/1: $recipe');
-    final childContext = BakeContext(recipe, parentContext);
+    verbose('Baking $recipe');
+    final startsAt = DateTime.now();
 
-    yield* recipe.bake(childContext);
+    final context = BakeContext(recipe, parentContext);
+    yield* recipe.bake(context);
+
+    final duration = DateTime.now().difference(startsAt);
+    verbose('Baked $recipe in ${duration.inMilliseconds} ms');
   }
 
   Stream<BakeContext> bakeAll(
     List<Recipe> recipes, {
     BakeStrategy strategy = BakeStrategy.sequential,
   }) async* {
+    trace('Baking $recipes');
+    final startsAt = DateTime.now();
+
     final total = recipes.length;
     final indexedRecipes = recipes.asMap().entries;
 
-    if (strategy == BakeStrategy.sequential) {
-      var context = parentContext;
+    var context = parentContext;
 
+    if (strategy == BakeStrategy.sequential) {
       for (final indexedRecipe in indexedRecipes) {
         final pos = indexedRecipe.key + 1;
         final recipe = indexedRecipe.value;
@@ -62,15 +69,18 @@ class Baker with FrameworkEntity, EntityLogging {
 
       await Future.wait(indexedRecipes.map(bakeAsFuture));
 
-      final context = recipes.fold<BakeContext?>(
-          parentContext, (context, recipe) => BakeContext(recipe, context));
+      context =
+          recipes.fold<BakeContext?>(context, (c, r) => BakeContext(r, c));
 
       if (context != null) {
-        verbose(
-            'Baked $total/$total recipes with strategy=$strategy. Yields context: $context');
         yield context;
       }
     }
+
+    final duration = DateTime.now().difference(startsAt);
+
+    verbose(
+        'Baked $total/$total recipes in ${duration.inMilliseconds} ms, using strategy=$strategy. Yields context: $context');
   }
 }
 
