@@ -1,7 +1,8 @@
 import 'package:recipe/recipe.dart';
+import 'package:recipe/src/recipe.dart';
 
 void main() async {
-  FrameworkUtils.setLoggingLevel(LogLevels.verbose);
+  FrameworkUtils.setLoggingLevel(LogLevels.all);
 
   bake(MyRecipe()).listen((_) {});
 }
@@ -9,11 +10,33 @@ void main() async {
 class MyRecipe extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    yield* Baker.of(context).bake(
-      DecoratedDelay(
+    // Demonstrating sequential and parallel execution of recipes.
+
+    final baker = Baker.of(context);
+
+    status('Just one recipe.');
+    yield* baker.bake(RecipeB());
+
+    status('Multiple recipes one by one (sequential)');
+    yield* baker.bake(RecipeB());
+    yield* baker.bake(Delayed(RecipeB(), duration: const Duration(seconds: 1)));
+    yield* baker.bake(RecipeB());
+
+    status('Multiple recipes in sequential using Baker and BakeStrategy');
+    yield* baker.bakeAll([
+      RecipeB(),
+      Delayed(RecipeB(), duration: const Duration(seconds: 1)),
+      RecipeB(),
+    ]);
+
+    status('Multiple recipes in parallel using Baker and BakeStrategy');
+    yield* baker.bakeAll(
+      [
         RecipeB(),
-        duration: Duration(seconds: 2),
-      ),
+        Delayed(RecipeB(), duration: const Duration(seconds: 1)),
+        RecipeB(),
+      ],
+      strategy: BakeStrategy.parallel,
     );
   }
 }
@@ -31,7 +54,7 @@ class Delayed extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
     final result = context.findNearestRecipeOfExactType<MyRecipe>();
-    print('got >> $result');
+    trace('got >> $result');
     await Future.delayed(duration);
 
     yield* Baker.of(context).bake(child);
@@ -53,7 +76,7 @@ class DecoratedDelay extends Delayed {
 class RecipeB extends Recipe {
   @override
   Stream<BakeContext> bake(BakeContext context) async* {
-    info(
+    trace(
         'visitation route: ${context.ancestors.reversed.map((r) => r.runtimeType).join(' -> ')}');
   }
 }
