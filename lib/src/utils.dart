@@ -52,20 +52,17 @@ abstract class LogLevels {
 
 @sealed
 abstract class FrameworkUtils {
-  static LogLevel _loggingLevel = LogLevels.all;
-
-  static void setLoggingLevel(LogLevel level) {
-    _loggingLevel = level;
-  }
+  static var loggingLevel = LogLevels.all;
+  static var showTimestampInLogs = true;
 
   static void log(
     Object? obj, {
     String? module,
     LogLevel level = LogLevels.info,
   }) {
-    module ??= '(unknown-module)';
+    module ??= '(anonymous)';
 
-    if (level.value < _loggingLevel.value) return;
+    if (level.value < loggingLevel.value) return;
 
     var message = '${level.name[0].toUpperCase()}/$module: $obj';
 
@@ -88,6 +85,10 @@ abstract class FrameworkUtils {
         break;
       case LogLevels.trace:
         message = message.italic();
+    }
+
+    if (showTimestampInLogs) {
+      message = '${'[${DateTime.now()}]'.dim()} $message';
     }
 
     stdout.writeln(message);
