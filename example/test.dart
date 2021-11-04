@@ -4,7 +4,7 @@ import 'package:recipe/src/recipe.dart';
 void main() async {
   FrameworkUtils.setLoggingLevel(LogLevels.all);
 
-  bake(MyRecipe()).listen((_) {});
+  bake(MyRecipe()).listen(FrameworkUtils.log);
 }
 
 class MyRecipe extends Recipe {

@@ -29,10 +29,10 @@ mixin EntityLogging on FrameworkEntity {
   static hideHashCodeOfEntities() => _shouldIncludeHash = false;
 
   @protected
-  void log(String message, {LogLevel level = LogLevels.info}) {
+  void log(Object? object, {LogLevel level = LogLevels.info}) {
     final moduleName = _shouldIncludeHash ? '$name#$hashCode' : name;
 
-    FrameworkUtils.log(message, module: moduleName, level: level);
+    FrameworkUtils.log(object, module: moduleName, level: level);
   }
 
   @protected
