@@ -18,30 +18,6 @@ mixin FrameworkEntity {
   @nonVirtual
   String toYaml() => json2yaml(toJson());
 
-  // @protected
-  // @mustCallSuper
-  // bool register() {
-  //   final entity = this;
-
-  //   if (entity is Recipe) {
-  //     verbose('registering as recipe');
-  //     return SketchRegistry.recipes.add(entity);
-  //   }
-
-  //   if (entity is Port) {
-  //     verbose('registering as port');
-  //     return SketchRegistry.ports.add(entity);
-  //   }
-
-  //   if (entity is Connection) {
-  //     verbose('registering as connection');
-  //     return SketchRegistry.connections.add(entity);
-  //   }
-
-  //   throw UnsupportedError(
-  //       '${this.runtimeType} is not a supported type that can be registered.');
-  // }
-
   @override
   String toString() => '$runtimeType';
 }
