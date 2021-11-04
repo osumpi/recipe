@@ -72,12 +72,23 @@ mixin FrameworkEntity {
 /// * [verbose] to log using [LogLevels.verbose].
 /// * [trace] to log using [LogLevels.trace].
 mixin EntityLogging on FrameworkEntity {
+  /// Whether [hashCode] should be included in the `moduleName` when logging.
+  /// Set to `true` to include [hashCode].
+  /// Set to `false` to exclude [hashCode].
+  ///
+  /// Is `false` by default.
   static bool _shouldIncludeHashCode = false;
 
+  /// Includes [hashCode] in the `moduleName` of upcoming logs.
+  /// See [hideHashCodeOfEntities] to exclude [hashCode].
   static showHashCodeOfEntities() => _shouldIncludeHashCode = true;
+
+  /// Excludes [hashCode] in the `moduleName` of upcoming logs.
+  /// See [showHashCodeOfEntities] to exclude [hashCode].
   static hideHashCodeOfEntities() => _shouldIncludeHashCode = false;
 
   /// Whether [hashCode] should be included in the `moduleName` when logging.
+  /// Is `false` by default.
   ///
   /// To hide [hashCode] of entities of future logs:
   /// ```dart
