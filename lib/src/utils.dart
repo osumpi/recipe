@@ -63,10 +63,11 @@ abstract class FrameworkUtils {
     String? module,
     LogLevel level = LogLevels.info,
   }) {
+    module ??= '(unknown-module)';
+
     if (level.value < _loggingLevel.value) return;
 
-    var message =
-        '${level.name[0].toUpperCase()}${module == null ? '' : '/$module:'} $obj';
+    var message = '${level.name[0].toUpperCase()}/$module: $obj';
 
     if (level.value <= LogLevels.verbose.value) {
       message = message.dim();
