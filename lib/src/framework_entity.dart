@@ -36,14 +36,23 @@ mixin EntityLogging on FrameworkEntity {
   }
 
   @protected
-  void warn(String message) => log(message, level: LogLevels.warning);
+  void fatal(String message) => log(message, level: LogLevels.fatal);
 
   @protected
   void error(String message) => log(message, level: LogLevels.error);
+
+  @protected
+  void warn(String message) => log(message, level: LogLevels.warning);
+
+  @protected
+  void status(String message) => log(message, level: LogLevels.status);
 
   @protected
   void info(String message) => log(message, level: LogLevels.info);
 
   @protected
   void verbose(String message) => log(message, level: LogLevels.verbose);
+
+  @protected
+  void trace(String message) => log(message, level: LogLevels.trace);
 }
