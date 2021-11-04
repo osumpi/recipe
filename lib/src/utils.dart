@@ -73,6 +73,7 @@ abstract class FrameworkUtils {
     switch (level) {
       case LogLevels.fatal:
         message = message.brightRed().bold();
+        stdout.writeCharCode(0x07);
         break;
       case LogLevels.error:
         message = message.red();
