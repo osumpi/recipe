@@ -143,11 +143,14 @@ class Statuses {
 
   static const successful = Statuses._('✓', _successfulFormatter);
   static const failed = Statuses._('✗', _failedFormatter);
-  static final warning = Statuses._('!', _warningFormatter);
+  static const warning = Statuses._('!', _warningFormatter);
+  static const fatal = Statuses._('✗', _fatalFormatter);
 
   static String _successfulFormatter(String message) => message.green();
   static String _failedFormatter(String message) => message.red();
   static String _warningFormatter(String message) => message.yellow();
+  static String _fatalFormatter(String message) =>
+      '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
 
   String format(String message) => _format('$prefix $message');
 }
