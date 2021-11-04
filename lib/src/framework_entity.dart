@@ -43,7 +43,7 @@ mixin FrameworkEntity {
   // }
 
   @override
-  String toString() => '$runtimeType#$hashCode';
+  String toString() => '$runtimeType';
 }
 
 mixin EntityLogging on FrameworkEntity {
