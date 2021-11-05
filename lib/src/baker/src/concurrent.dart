@@ -8,13 +8,14 @@ mixin _ConcurrentBakeHandler on Baker {
   final Map<String, DateTime> bakesInProgress = {};
 
   @override
-  Stream<BakeContext> bake(BakeContext inputContext) async* {
+  Future<BakeReport> bake(BakeContext inputContext) async {
     uptimeStopwatch.start();
 
     final key = uuid.v4();
     bakesInProgress[key] = DateTime.now();
 
-    yield* recipe.bake(inputContext);
+    // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
+    await recipe.bake(inputContext);
 
     final report = BakeReport(
       bakeId: key,
@@ -29,6 +30,8 @@ mixin _ConcurrentBakeHandler on Baker {
     if (bakesInProgress.isEmpty) {
       uptimeStopwatch.stop();
     }
+
+    return report;
   }
 
   @override
