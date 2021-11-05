@@ -43,4 +43,6 @@ abstract class Baker {
   Stream<BakeContext> bake(BakeContext inputContext);
 
   void requestBake(BakeContext inputContext);
+
+  Type get bakerType => runtimeType;
 }
