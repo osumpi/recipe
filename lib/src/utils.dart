@@ -5,6 +5,7 @@ import 'package:recipe/recipe.dart';
 import 'package:tint/tint.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/recipe.dart';
+import 'package:uuid/uuid.dart';
 
 @internal
 @immutable
@@ -52,6 +53,8 @@ abstract class LogLevels {
 
 @sealed
 abstract class FrameworkUtils {
+  static const uuid = Uuid();
+
   static var loggingLevel = LogLevels.all;
   static var showTimestampInLogs = true;
 
@@ -132,7 +135,8 @@ abstract class FrameworkUtils {
 }
 
 Stream<BakeContext> bake(Recipe recipe) {
-  return Baker.of(null).bake(recipe);
+  throw UnimplementedError();
+  // return Baker.of(null).bake(recipe);
 }
 
 typedef JsonMap = Map<String, dynamic>;
