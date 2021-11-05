@@ -4,13 +4,14 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   final requests = ListQueue<BakeContext>();
 
   @override
-  Stream<BakeContext> bake(BakeContext inputContext) async* {
+  Future<BakeReport> bake(BakeContext inputContext) async {
     uptimeStopwatch.start();
 
     final startedOn = DateTime.now();
     final key = uuid.v4();
 
-    yield* recipe.bake(inputContext);
+    // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
+    await recipe.bake(inputContext);
 
     final report = BakeReport(
       bakeId: key,
@@ -25,6 +26,8 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
     uptimeStopwatch.stop();
 
     tryCompletePendingRequests();
+
+    return report;
   }
 
   @override
