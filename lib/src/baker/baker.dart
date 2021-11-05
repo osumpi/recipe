@@ -1,6 +1,6 @@
 library recipe.baker;
 
-import 'dart:collection';
+import 'dart:collection' show ListQueue;
 
 import 'package:meta/meta.dart';
 
