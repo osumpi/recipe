@@ -36,7 +36,7 @@ abstract class Baker {
   bool get canBake;
 
   @protected
-  Stream<BakeContext> bake(BakeContext inputContext);
+  Future<BakeReport> bake(BakeContext inputContext);
 
   void requestBake(BakeContext inputContext);
 
