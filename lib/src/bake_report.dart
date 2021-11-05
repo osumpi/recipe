@@ -1,10 +1,9 @@
 import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_context.dart';
-import 'package:recipe/src/framework_entity.dart';
 
 @immutable
-class BakeReport with FrameworkEntity {
+class BakeReport {
   BakeReport({
     required this.startedOn,
     required this.stoppedOn,
@@ -18,4 +17,12 @@ class BakeReport with FrameworkEntity {
   Duration get duration => stoppedOn.difference(startedOn);
 
   final BakeContext inputContext;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'started on': startedOn,
+      'stopped on': stoppedOn,
+      'input context': inputContext,
+    };
+  }
 }
