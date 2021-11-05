@@ -5,24 +5,29 @@ mixin _ConcurrentBakeHandler on Baker {
   @nonVirtual
   final concurrencyAllowed = true;
 
-  final Map<String, DateTime> beingBaked = {};
+  final Map<String, DateTime> bakesInProgress = {};
 
   @override
   Stream<BakeContext> bake(BakeContext inputContext) async* {
     uptimeStopwatch.start();
 
     final key = uuid.v4();
-    beingBaked[key] = DateTime.now();
+    bakesInProgress[key] = DateTime.now();
 
     yield* recipe.bake(inputContext);
 
     final report = BakeReport(
-      startedOn: beingBaked.remove(key)!,
+      bakeId: key,
+      startedOn: bakesInProgress.remove(key)!,
       stoppedOn: DateTime.now(),
       inputContext: inputContext,
     );
 
     bakeLog.add(report);
+
+    if (bakesInProgress.isEmpty) {
+      uptimeStopwatch.stop();
+    }
   }
 
   @override
