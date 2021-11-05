@@ -86,7 +86,8 @@ abstract class FrameworkUtils {
     switch (level) {
       case LogLevels.fatal:
         FrameworkUtils.beep();
-        message = message.brightRed().bold();
+        message =
+            '${message.brightRed().bold()} ${' FATAL '.bold().white().onRed().blink()}';
         break;
       case LogLevels.error:
         message = message.red();

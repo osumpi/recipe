@@ -4,6 +4,8 @@ void main() async {
   FrameworkUtils.loggingLevel = LogLevels.verbose;
   FrameworkUtils.showTimestampInLogs = true;
 
+  FrameworkUtils.fatal('THIS IS A FATAL MESSAGE');
+
   bake(MyRecipe()).listen(FrameworkUtils.log);
 }
 
@@ -14,7 +16,7 @@ class MyRecipe extends Recipe {
 
     final baker = Baker.of(context);
 
-    status('Just one recipe.', status: Statuses.successful);
+    status('Just one recipe.', status: Statuses.fatal);
     yield* baker.bake(RecipeB());
 
     status('Multiple recipes one by one (sequential)', status: Statuses.failed);
