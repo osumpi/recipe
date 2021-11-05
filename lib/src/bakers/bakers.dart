@@ -2,6 +2,7 @@ library recipe.bakers;
 
 import 'package:meta/meta.dart';
 
+import 'package:recipe/src/bake_report.dart' show BakeReport;
 import 'package:recipe/src/baker.dart' show Baker;
 import 'package:recipe/src/bake_context.dart' show BakeContext;
 import 'package:recipe/src/utils.dart' show uuid;
