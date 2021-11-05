@@ -35,7 +35,7 @@ abstract class Baker {
   bool get isIdle => status == BakerStatus.idle;
 
   @nonVirtual
-  Duration get totalUptime => uptimeStopwatch.elapsed;
+  Duration get uptime => uptimeStopwatch.elapsed;
 
   bool get canBake;
 
