@@ -66,7 +66,7 @@ mixin FrameworkEntity {
 /// available [LogLevel]s.
 /// * [error] to log errors.
 /// * [warn] to log warnings.
-/// * [status] to log status updates. See [Statuses] for various available
+/// * [statusUpdate] to log status updates. See [Statuses] for various available
 /// status.
 /// * [info] to log using [LogLevels.info]
 /// * [verbose] to log using [LogLevels.verbose].
@@ -131,7 +131,7 @@ mixin EntityLogging on FrameworkEntity {
   void warn(String message) => log(message, level: LogLevels.warning);
 
   @protected
-  void status(String message, {required Statuses status}) =>
+  void statusUpdate(String message, {required Statuses status}) =>
       log(message, level: LogLevels.status, status: status);
 
   @protected

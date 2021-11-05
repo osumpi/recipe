@@ -5,6 +5,7 @@ import 'package:recipe/recipe.dart';
 import 'package:tint/tint.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/recipe.dart';
+import 'package:uuid/uuid.dart';
 
 @internal
 @immutable
@@ -49,6 +50,8 @@ abstract class LogLevels {
     all,
   ];
 }
+
+const uuid = Uuid();
 
 @sealed
 abstract class FrameworkUtils {
@@ -118,8 +121,11 @@ abstract class FrameworkUtils {
   static void info(String message, {String? module}) =>
       log(message, module: module);
 
-  static void status(String message,
-          {String? module, required Statuses status}) =>
+  static void statusUpdate(
+    String message, {
+    String? module,
+    required Statuses status,
+  }) =>
       log(message, module: module, level: LogLevels.status, status: status);
 
   static void verbose(String message, {String? module}) =>
@@ -132,7 +138,8 @@ abstract class FrameworkUtils {
 }
 
 Stream<BakeContext> bake(Recipe recipe) {
-  return Baker.of(null).bake(recipe);
+  throw UnimplementedError();
+  // return Baker.of(null).bake(recipe);
 }
 
 typedef JsonMap = Map<String, dynamic>;
