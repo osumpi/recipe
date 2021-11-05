@@ -35,7 +35,13 @@ mixin _ConcurrentBakeHandler on Baker {
 
   @override
   void requestBake(BakeContext inputContext) {
-    bake(inputContext);
+    if (canBake) {
+      bake(inputContext);
+    } else {
+      throw UnimplementedError(
+        '[$runtimeType.canBake] was evaluated to false. However no implementation was given to handle this condition.',
+      );
+    }
   }
 }
 
