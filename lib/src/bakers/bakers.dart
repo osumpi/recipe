@@ -8,9 +8,12 @@ import 'package:recipe/src/bake_context.dart' show BakeContext;
 import 'package:recipe/src/utils.dart' show uuid;
 
 part 'src/concurrent.dart';
+part 'src/non_concurrent.dart';
 
 class ConcurrentBaker = Baker with _ConcurrentBakeHandler;
+
 abstract class NonConcurrentBaker = Baker with _NonConcurrentBakerMixin;
+
 // class FirstInFirstOutBaker = NonConcurrentBaker with _FIFOBakeHandler;
 // class AngryBaker = NonConcurrentBaker with _AngryBakeHandler;
 // class SingleRunBaker = NonConcurrentBaker with _SingleRunBakeHandler;
