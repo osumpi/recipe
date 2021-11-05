@@ -11,9 +11,12 @@ import 'package:recipe/src/utils.dart' show uuid;
 
 part 'src/baker.dart';
 
+part 'src/single_run.dart';
 part 'src/concurrent.dart';
 part 'src/non_concurrent.dart';
 part 'src/fifo.dart';
+
+class SingleRunBaker = Baker with _SingleRunBakeHandler;
 
 class ConcurrentBaker = Baker with _ConcurrentBakeHandler;
 
@@ -21,7 +24,6 @@ abstract class NonConcurrentBaker = Baker with _NonConcurrentBakerMixin;
 
 class FirstInFirstOutBaker = NonConcurrentBaker with _FIFOBakeHandler;
 // class AngryBaker = NonConcurrentBaker with _AngryBakeHandler;
-// class SingleRunBaker = NonConcurrentBaker with _SingleRunBakeHandler;
 // class IncapacitatedConcurrentBaker = ConcurrentBaker with IncapacitatedBaker;
 // class IncapacitatedFIFOBaker = FirstInFirstOutBaker with IncapacitatedBaker;
 // class LazyBaker = FirstInFirstOutBaker with _LazyBakeHandler;
