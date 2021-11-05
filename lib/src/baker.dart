@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:recipe/src/bake_report.dart' show BakeReport;
 import 'package:recipe/src/recipe.dart' show Recipe;
 import 'package:recipe/src/bake_context.dart' show BakeContext;
-import 'package:recipe/src/utils.dart';
 
 // TODO: export
 enum BakerStatus { baking, idle }
