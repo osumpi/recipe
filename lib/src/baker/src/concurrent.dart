@@ -18,6 +18,7 @@ mixin _ConcurrentBakeHandler on Baker {
 
     final report = BakeReport(
       bakeId: key,
+      bakedBy: this,
       startedOn: bakesInProgress.remove(key)!,
       stoppedOn: DateTime.now(),
       inputContext: inputContext,
