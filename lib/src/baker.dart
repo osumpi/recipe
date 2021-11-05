@@ -4,7 +4,6 @@ import 'package:recipe/src/bake_report.dart' show BakeReport;
 import 'package:recipe/src/recipe.dart' show Recipe;
 import 'package:recipe/src/bake_context.dart' show BakeContext;
 
-// TODO: export
 enum BakerStatus { baking, idle }
 
 abstract class Baker {
