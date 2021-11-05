@@ -5,10 +5,13 @@ import 'package:recipe/src/bake_context.dart';
 @immutable
 class BakeReport {
   BakeReport({
+    required this.bakeId,
     required this.startedOn,
     required this.stoppedOn,
     required this.inputContext,
   });
+
+  final String bakeId;
 
   final DateTime startedOn;
 
@@ -20,8 +23,10 @@ class BakeReport {
 
   Map<String, dynamic> toJson() {
     return {
+      'bake id': bakeId,
       'started on': startedOn,
       'stopped on': stoppedOn,
+      'duration': duration,
       'input context': inputContext,
     };
   }
