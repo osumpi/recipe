@@ -121,8 +121,11 @@ abstract class FrameworkUtils {
   static void info(String message, {String? module}) =>
       log(message, module: module);
 
-  static void status(String message,
-          {String? module, required Statuses status}) =>
+  static void statusUpdate(
+    String message, {
+    String? module,
+    required Statuses status,
+  }) =>
       log(message, module: module, level: LogLevels.status, status: status);
 
   static void verbose(String message, {String? module}) =>
