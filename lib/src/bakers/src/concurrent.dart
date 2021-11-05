@@ -45,12 +45,6 @@ mixin _ConcurrentBakeHandler on Baker {
   }
 }
 
-mixin _NonConcurrentBakerMixin on Baker {
-  @override
-  @nonVirtual
-  final concurrencyAllowed = false;
-}
-
 // mixin _LazyBakeHandler on FirstInFirstOutBaker {}
 // mixin _RandomBakeHandler on NonConcurrentBaker {}
 
