@@ -14,6 +14,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
 
     final report = BakeReport(
       bakeId: key,
+      bakedBy: this,
       startedOn: startedOn,
       stoppedOn: DateTime.now(),
       inputContext: inputContext,
