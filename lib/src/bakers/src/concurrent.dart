@@ -16,7 +16,13 @@ mixin _ConcurrentBakeHandler on Baker {
 
     yield* recipe.bake(inputContext);
 
-    beingBaked.remove(key)!;
+    final report = BakeReport(
+      startedOn: beingBaked.remove(key)!,
+      stoppedOn: DateTime.now(),
+      inputContext: inputContext,
+    );
+
+    bakeLog.add(report);
   }
 
   @override
