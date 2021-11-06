@@ -8,10 +8,10 @@ abstract class Connection<T extends Object> with FrameworkEntity {
   });
 
   @nonVirtual
-  final OutputPort from;
+  final OutputPort<T> from;
 
   @nonVirtual
-  final InputPort to;
+  final InputPort<T> to;
 
   void write(BakeContext<T> context) {
     to.events.add(context);
