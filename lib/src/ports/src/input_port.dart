@@ -1,6 +1,6 @@
 part of recipe.ports;
 
-abstract class InputPort extends Port {
+abstract class InputPort<T extends Object> extends Port<T> {
   // ignore: unused_element
   InputPort._(String name) : super(name);
 
@@ -9,52 +9,55 @@ abstract class InputPort extends Port {
     bool allowMultipleConnections = true,
   }) =>
       allowMultipleConnections
-          ? MultiInboundInputPort._(name)
-          : SingleInboundInputPort._(name);
+          ? MultiInboundInputPort<T>._(name)
+          : SingleInboundInputPort<T>._(name);
 
   bool get allowMultipleInboundConnections;
 
-  Connection? connectFrom(OutputPort outputPort, {bool wireless});
+  Connection<T>? connectFrom(OutputPort<T> outputPort, {bool wireless});
 
-  final events = StreamController<BakeContext>();
+  final events = StreamController<BakeContext<T>>();
 }
 
-mixin _SingleInboundInputPortHandler<T extends BakeContext> on InputPort {
+mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   final allowMultipleInboundConnections = false;
 
-  Connection? inboundConnection;
+  Connection<T>? inboundConnection;
 
-  Set<Connection> get connections =>
+  Set<Connection<T>> get connections =>
       {if (inboundConnection != null) inboundConnection!};
 
-  Connection? connectFrom(
-    OutputPort outputPort, {
+  Connection<T>? connectFrom(
+    OutputPort<T> outputPort, {
     bool wireless = false,
   }) {
     if (inboundConnection != null) {
       return wireless
-          ? Connection.wireless(from: outputPort, to: this)
-          : Connection(from: outputPort, to: this);
+          ? Connection<T>.wireless(from: outputPort, to: this)
+          : Connection<T>(from: outputPort, to: this);
     }
   }
 }
 
-mixin _MultiInboundInputPortHandler<T extends BakeContext> on InputPort {
+mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
   final allowMultipleInboundConnections = true;
 
-  Set<Connection> get connections => inboundConnections;
+  Set<Connection<T>> get connections => inboundConnections;
 
-  final inboundConnections = <Connection>{};
+  final inboundConnections = <Connection<T>>{};
 
-  Connection connectFrom(
-    OutputPort outputPort, {
+  @override
+  Connection<T> connectFrom(
+    OutputPort<T> outputPort, {
     bool wireless = false,
   }) {
     return wireless
-        ? Connection.wireless(from: outputPort, to: this)
-        : Connection(from: outputPort, to: this);
+        ? Connection<T>.wireless(from: outputPort, to: this)
+        : Connection<T>(from: outputPort, to: this);
   }
 }
 
-class SingleInboundInputPort = InputPort with _SingleInboundInputPortHandler;
-class MultiInboundInputPort = InputPort with _MultiInboundInputPortHandler;
+class SingleInboundInputPort<T extends Object> = InputPort<T>
+    with _SingleInboundInputPortHandler<T>;
+class MultiInboundInputPort<T extends Object> = InputPort<T>
+    with _MultiInboundInputPortHandler<T>;
