@@ -1,5 +1,6 @@
 import 'package:recipe/recipe.dart';
 import 'package:recipe/src/ports/ports.dart';
+import 'package:recipe/src/recipe.dart';
 
 void main() async {
   FrameworkUtils.loggingLevel = LogLevels.verbose;
@@ -8,20 +9,15 @@ void main() async {
   // bake(MyRecipe()).listen(FrameworkUtils.log);
 }
 
-class MyRecipe extends Recipe {
-  late final InputPort<double> theta;
+class MySimpleRecipe extends Recipe<int, String> {
+  MySimpleRecipe()
+      : super(
+          inputPort: MultiInboundInputPort('value'),
+          outputPort: OutputPort('asString'),
+        );
 
   @override
-  void initialize() {
-    // Temperory solution until meta is fixed. Try on dart not from flutter-sdk.
-    final theta = inputPort<double>('theta');
-    this.theta = theta;
-
-    super.initialize();
-  }
-
-  @override
-  Future<void> bake(BakeContext<Object> context) {
-    throw UnimplementedError();
+  Stream<String> bake(BakeContext<int> context) async* {
+    yield context.data.toString();
   }
 }
