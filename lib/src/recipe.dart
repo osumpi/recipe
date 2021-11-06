@@ -8,12 +8,41 @@ import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/utils.dart';
 
-abstract class Recipe with FrameworkEntity, EntityLogging {
-  Recipe();
+abstract class Recipe<I extends Object, O extends Object>
+    with FrameworkEntity, EntityLogging {
+  Recipe({
+    required this.inputPort,
+    required this.outputPort,
+  });
+
+  final InputPort<I> inputPort;
+  final OutputPort<O> outputPort;
 
   @mustCallSuper
   @protected
   void initialize() {}
+
+  @mustCallSuper
+  @internal
+  Stream<O> bake(BakeContext<I> context);
+
+  @override
+  JsonMap toJson() {
+    return {
+      ...super.toJson(),
+    };
+  }
+}
+
+typedef MuxedInputs = UnmodifiableMapView<InputPort, Object>;
+typedef MuxedOutput = UnmodifiableMapView<OutputPort, Object>;
+
+abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
+  MultiIORecipe()
+      : super(
+          inputPort: SingleInboundInputPort<MuxedInputs>(uuid.v4()),
+          outputPort: OutputPort<MuxedOutput>(uuid.v4()),
+        );
 
   final Set<InputPort> _inputPorts = {};
 
@@ -56,7 +85,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   @protected
   @nonVirtual
   @useResult
-  SingleInboundInputPort<T> singleInboundInputPort<T extends Object>(
+  SingleInboundInputPort<T> hookSingleInboundInputPort<T extends Object>(
       String label) {
     ensureUniqueInputPortLabel(label);
     final result = SingleInboundInputPort<T>(label);
@@ -67,7 +96,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   @protected
   @nonVirtual
   @useResult
-  MultiInboundInputPort<T> inputPort<T extends Object>(String label) {
+  MultiInboundInputPort<T> hookInputPort<T extends Object>(String label) {
     ensureUniqueInputPortLabel(label);
     final result = MultiInboundInputPort<T>(label);
     _inputPorts.add(result);
@@ -77,7 +106,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   @protected
   @nonVirtual
   @useResult
-  OutputPort<T> outputPort<T extends Object>(String label) {
+  OutputPort<T> hookOutputPort<T extends Object>(String label) {
     ensureUniqueOutputPortLabel(label);
     final result = OutputPort<T>(label);
     _outputPorts.add(result);
@@ -86,12 +115,5 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
 
   @mustCallSuper
   @internal
-  Future<void> bake(BakeContext context);
-
-  @override
-  JsonMap toJson() {
-    return {
-      ...super.toJson(),
-    };
-  }
+  Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context);
 }
