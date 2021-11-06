@@ -53,8 +53,8 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   @nonVirtual
   bool canBake = true;
 
-  Error get bakeRejectionReason => StateError(
-      'Bake request rejected. $runtimeType does not allow more than one bake request.');
+  String get bakeRejectionReason =>
+      'Bake request rejected. $runtimeType does not allow more than one bake request.';
 
   @override
   void requestBake(BakeContext inputContext) {
@@ -62,7 +62,10 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
       bake(inputContext);
       canBake = false;
     } else {
-      if (bakerOptions.shouldThrowWhenBakeRejected) throw bakeRejectionReason;
+      if (bakerOptions.shouldThrowWhenBakeRejected)
+        throw StateError(bakeRejectionReason);
+      else
+        error(bakeRejectionReason);
     }
   }
 }
