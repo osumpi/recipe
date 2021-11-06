@@ -62,10 +62,11 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
       bake(inputContext);
       canBake = false;
     } else {
-      if (bakerOptions.shouldThrowWhenBakeRejected)
+      if (bakerOptions.shouldThrowWhenBakeRejected) {
         throw StateError(bakeRejectionReason);
-      else
+      } else {
         error(bakeRejectionReason);
+      }
     }
   }
 }
