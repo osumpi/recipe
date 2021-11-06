@@ -1,49 +1,49 @@
 part of recipe.ports;
 
 abstract class InputPort<T extends Object> extends Port<T> {
-  // ignore: unused_element
-  InputPort._(String name) : super(name);
+  InputPort(String name) : super(name);
 
-  factory InputPort(
-    String name, {
-    bool allowMultipleConnections = true,
-  }) =>
-      allowMultipleConnections
-          ? MultiInboundInputPort<T>._(name)
-          : SingleInboundInputPort<T>._(name);
+  @visibleForOverriding
+  Connection<T> connectFrom(OutputPort<T> outputPort, {bool wireless});
 
-  bool get allowMultipleInboundConnections;
-
-  Connection<T>? connectFrom(OutputPort<T> outputPort, {bool wireless});
-
+  @internal
   final events = StreamController<BakeContext<T>>();
 }
 
 mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
-  final allowMultipleInboundConnections = false;
-
   Connection<T>? inboundConnection;
 
-  Set<Connection<T>> get connections =>
-      {if (inboundConnection != null) inboundConnection!};
+  UnmodifiableSetView<Connection<T>> get connections {
+    return UnmodifiableSetView({
+      if (inboundConnection != null) inboundConnection!,
+    });
+  }
 
-  Connection<T>? connectFrom(
+  Connection<T> connectFrom(
     OutputPort<T> outputPort, {
     bool wireless = false,
   }) {
-    if (inboundConnection != null) {
-      return wireless
-          ? Connection<T>.wireless(from: outputPort, to: this)
-          : Connection<T>(from: outputPort, to: this);
+    if (inboundConnection is Connection<T>) {
+      throw StateError(
+        'Cannot connect to $runtimeType when already an inbound connection exists.',
+      );
     }
+
+    final connection = wireless
+        ? WirelessConnection<T>(from: outputPort, to: this)
+        : WiredConnection<T>(from: outputPort, to: this);
+
+    inboundConnection = connection;
+
+    return connection;
   }
 }
 
 mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
-  final allowMultipleInboundConnections = true;
+  UnmodifiableSetView<Connection<T>> get connections =>
+      UnmodifiableSetView(inboundConnections);
 
-  Set<Connection<T>> get connections => inboundConnections;
-
+  @internal
   final inboundConnections = <Connection<T>>{};
 
   @override
@@ -51,13 +51,18 @@ mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
     OutputPort<T> outputPort, {
     bool wireless = false,
   }) {
-    return wireless
-        ? Connection<T>.wireless(from: outputPort, to: this)
-        : Connection<T>(from: outputPort, to: this);
+    final connection = wireless
+        ? WirelessConnection<T>(from: outputPort, to: this)
+        : WiredConnection<T>(from: outputPort, to: this);
+
+    inboundConnections.add(connection);
+
+    return connection;
   }
 }
 
 class SingleInboundInputPort<T extends Object> = InputPort<T>
     with _SingleInboundInputPortHandler<T>;
+
 class MultiInboundInputPort<T extends Object> = InputPort<T>
     with _MultiInboundInputPortHandler<T>;
