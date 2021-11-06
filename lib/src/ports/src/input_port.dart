@@ -9,8 +9,18 @@ abstract class InputPort<T extends Object> extends Port<T> {
   @useResult
   WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort);
 
-  @internal
-  final events = StreamController<BakeContext<T>>();
+  final _events = StreamController<BakeContext<T>>();
+
+  Stream<BakeContext<T>> get stream => _events.stream;
+
+  late T _data;
+
+  T get data => _data;
+
+  void _write(BakeContext<T> inputContext) {
+    _data = inputContext.data;
+    _events.sink.add(inputContext);
+  }
 }
 
 mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
