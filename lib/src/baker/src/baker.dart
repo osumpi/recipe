@@ -2,7 +2,8 @@ part of recipe.baker;
 
 enum BakerStatus { baking, idle }
 
-abstract class Baker<T extends BakerOptions> with FrameworkEntity {
+abstract class Baker<T extends BakerOptions>
+    with FrameworkEntity, EntityLogging {
   Baker(
     this.recipe, {
     required this.bakerOptions,
