@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_context.dart';
@@ -9,7 +11,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
 
   @mustCallSuper
   @internal
-  Stream<BakeContext> bake(BakeContext context);
+  Future<void> bake(BakeContext context);
 
   @override
   JsonMap toJson() {
