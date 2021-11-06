@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/utils.dart';
 
 abstract class Recipe with FrameworkEntity, EntityLogging {
-  const Recipe();
+  Recipe();
+
+  @mustCallSuper
+  @protected
+  void initialize() {}
 
   @mustCallSuper
   @internal
