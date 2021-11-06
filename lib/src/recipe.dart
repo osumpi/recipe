@@ -66,6 +66,13 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
     return result;
   }
 
+  OutputPort<T> outputPort<T extends Object>(String label) {
+    ensureUniqueOutputPortLabel(label);
+    final result = OutputPort<T>(label);
+    _outputPorts.add(result);
+    return result;
+  }
+
   @mustCallSuper
   @internal
   Future<void> bake(BakeContext context);
