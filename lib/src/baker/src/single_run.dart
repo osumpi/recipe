@@ -54,7 +54,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   bool canBake = true;
 
   String get bakeRejectionReason =>
-      'Bake request rejected. $runtimeType does not allow more than one bake request.';
+      'Bake request rejected. $bakerType does not allow more than one bake request.';
 
   @override
   void requestBake(BakeContext inputContext) {
