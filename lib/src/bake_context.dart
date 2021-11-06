@@ -7,13 +7,16 @@ import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart' show Recipe;
 
 @immutable
-class BakeContext with FrameworkEntity, EntityLogging {
+class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
   @internal
   BakeContext({
     required Recipe of,
+    required this.data,
     required Map<InputPort, BakeContext> inputContexts,
   })  : recipe = of,
         parentContext = UnmodifiableMapView(inputContexts);
+
+  final T data;
 
   final Recipe recipe;
 

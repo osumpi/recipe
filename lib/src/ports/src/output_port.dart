@@ -1,13 +1,23 @@
 part of recipe.ports;
 
-class OutputPort extends Port {
+class OutputPort<T extends Object> extends Port<T> {
   OutputPort(String name) : super(name);
 
-  Set<Connection> get connections => outboundConnections;
+  UnmodifiableSetView<Connection<T>> get connections =>
+      UnmodifiableSetView(outboundConnections);
 
-  final outboundConnections = <Connection>{};
+  @internal
+  final outboundConnections = <Connection<T>>{};
 
-  Connection? connectTo(InputPort inputPort, {bool wireless = false}) {
-    return inputPort.connectFrom(this, wireless: wireless);
+  WiredConnection<T> connectTo(InputPort<T> inputPort) {
+    final connection = inputPort.connectFrom(this);
+    outboundConnections.add(connection);
+    return connection;
+  }
+
+  WirelessConnection<T> wirelesslyConnectTo(InputPort<T> inputPort) {
+    final connection = inputPort.wirelesslyConnectFrom(this);
+    outboundConnections.add(connection);
+    return connection;
   }
 }
