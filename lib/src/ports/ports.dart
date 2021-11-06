@@ -1,6 +1,9 @@
 library recipe.ports;
 
 import 'dart:async';
+import 'dart:collection';
+
+import 'package:meta/meta.dart';
 
 import 'package:recipe/src/framework_entity.dart'
     show FrameworkEntity, EntityLogging;

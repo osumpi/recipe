@@ -1,60 +1,75 @@
 part of recipe.ports;
 
-abstract class InputPort extends Port {
-  // ignore: unused_element
-  InputPort._(String name) : super(name);
+abstract class InputPort<T extends Object> extends Port<T> {
+  InputPort(String name) : super(name);
 
-  factory InputPort(
-    String name, {
-    bool allowMultipleConnections = true,
-  }) =>
-      allowMultipleConnections
-          ? MultiInboundInputPort._(name)
-          : SingleInboundInputPort._(name);
+  @visibleForOverriding
+  WiredConnection<T> connectFrom(OutputPort<T> outputPort);
 
-  bool get allowMultipleInboundConnections;
+  @visibleForOverriding
+  WirelessConnection<T> wirelesslyConnectFrom(OutputPort<T> outputPort);
 
-  Connection? connectFrom(OutputPort outputPort, {bool wireless});
-
-  final events = StreamController<BakeContext>();
+  @internal
+  final events = StreamController<BakeContext<T>>();
 }
 
-mixin _SingleInboundInputPortHandler<T extends BakeContext> on InputPort {
-  final allowMultipleInboundConnections = false;
+mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
+  Connection<T>? inboundConnection;
 
-  Connection? inboundConnection;
+  UnmodifiableSetView<Connection<T>> get connections {
+    return UnmodifiableSetView({
+      if (inboundConnection != null) inboundConnection!,
+    });
+  }
 
-  Set<Connection> get connections =>
-      {if (inboundConnection != null) inboundConnection!};
-
-  Connection? connectFrom(
-    OutputPort outputPort, {
-    bool wireless = false,
-  }) {
-    if (inboundConnection != null) {
-      return wireless
-          ? Connection.wireless(from: outputPort, to: this)
-          : Connection(from: outputPort, to: this);
+  @override
+  WiredConnection<T> connectFrom(OutputPort<T> outputPort) {
+    if (inboundConnection is Connection<T>) {
+      throw StateError(
+        'Cannot connect to $runtimeType when already an inbound connection exists.',
+      );
     }
+
+    return inboundConnection = WiredConnection<T>(from: outputPort, to: this);
+  }
+
+  @override
+  WirelessConnection<T> wirelesslyConnectFrom(OutputPort<T> outputPort) {
+    if (inboundConnection is Connection<T>) {
+      throw StateError(
+        'Cannot connect to $runtimeType when already an inbound connection exists.',
+      );
+    }
+
+    return inboundConnection =
+        WirelessConnection<T>(from: outputPort, to: this);
   }
 }
 
-mixin _MultiInboundInputPortHandler<T extends BakeContext> on InputPort {
-  final allowMultipleInboundConnections = true;
+mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
+  UnmodifiableSetView<Connection<T>> get connections =>
+      UnmodifiableSetView(inboundConnections);
 
-  Set<Connection> get connections => inboundConnections;
+  @internal
+  final inboundConnections = <Connection<T>>{};
 
-  final inboundConnections = <Connection>{};
+  @override
+  WiredConnection<T> connectFrom(OutputPort<T> outputPort) {
+    final connection = WiredConnection<T>(from: outputPort, to: this);
+    inboundConnections.add(connection);
+    return connection;
+  }
 
-  Connection connectFrom(
-    OutputPort outputPort, {
-    bool wireless = false,
-  }) {
-    return wireless
-        ? Connection.wireless(from: outputPort, to: this)
-        : Connection(from: outputPort, to: this);
+  @override
+  WirelessConnection<T> wirelesslyConnectFrom(OutputPort<T> outputPort) {
+    final connection = WirelessConnection<T>(from: outputPort, to: this);
+    inboundConnections.add(connection);
+    return connection;
   }
 }
 
-class SingleInboundInputPort = InputPort with _SingleInboundInputPortHandler;
-class MultiInboundInputPort = InputPort with _MultiInboundInputPortHandler;
+class SingleInboundInputPort<T extends Object> = InputPort<T>
+    with _SingleInboundInputPortHandler<T>;
+
+class MultiInboundInputPort<T extends Object> = InputPort<T>
+    with _MultiInboundInputPortHandler<T>;
