@@ -1,5 +1,6 @@
 part of recipe.ports;
 
+@immutable
 abstract class Connection<T extends Object> with FrameworkEntity {
   @literal
   const Connection({
@@ -12,10 +13,6 @@ abstract class Connection<T extends Object> with FrameworkEntity {
 
   @nonVirtual
   final InputPort<T> to;
-
-  void write(BakeContext<T> context) {
-    to.events.add(context);
-  }
 
   @override
   JsonMap toJson() {
