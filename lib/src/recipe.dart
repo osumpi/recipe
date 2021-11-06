@@ -16,7 +16,14 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   void initialize() {}
 
   final Set<InputPort> _inputPorts = {};
+
+  UnmodifiableSetView<InputPort> get inputPorts =>
+      UnmodifiableSetView(_inputPorts);
+
   final Set<OutputPort> _outputPorts = {};
+
+  UnmodifiableSetView<OutputPort> get outputPorts =>
+      UnmodifiableSetView(_outputPorts);
 
   @mustCallSuper
   @internal
