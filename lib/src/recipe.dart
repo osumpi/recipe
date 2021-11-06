@@ -25,6 +25,19 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   UnmodifiableSetView<OutputPort> get outputPorts =>
       UnmodifiableSetView(_outputPorts);
 
+  /// Disallows input ports with same label.
+  /// TODO: maybe conside disabling this check by overriding global parameters
+  @internal
+  @protected
+  void ensureUniqueInputPortLabel(String label) {
+    if (_inputPorts.any((element) => element.name == label)) {
+      throw ArgumentError(
+        '$runtimeType already has input port with label: $label.',
+        'label',
+      );
+    }
+  }
+
   @mustCallSuper
   @internal
   Future<void> bake(BakeContext context);
