@@ -1,11 +1,11 @@
 part of recipe.ports;
 
-class OutputPort extends Port {
+class OutputPort<T extends Object> extends Port<T> {
   OutputPort(String name) : super(name);
 
-  Set<Connection> get connections => outboundConnections;
+  Set<Connection<T>> get connections => outboundConnections;
 
-  final outboundConnections = <Connection>{};
+  final outboundConnections = <Connection<T>>{};
 
   Connection? connectTo(InputPort inputPort, {bool wireless = false}) {
     return inputPort.connectFrom(this, wireless: wireless);
