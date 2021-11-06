@@ -9,13 +9,15 @@ class OutputPort<T extends Object> extends Port<T> {
   @internal
   final outboundConnections = <Connection<T>>{};
 
-  Connection<T>? connectTo(InputPort<T> inputPort, {bool wireless = false}) {
-    final connection = inputPort.connectFrom(this, wireless: wireless);
+  WiredConnection<T> connectTo(InputPort<T> inputPort) {
+    final connection = inputPort.connectFrom(this);
+    outboundConnections.add(connection);
+    return connection;
+  }
 
-    if (connection != null) {
-      outboundConnections.add(connection);
-    }
-
+  WirelessConnection<T> wirelesslyConnectTo(InputPort<T> inputPort) {
+    final connection = inputPort.wirelesslyConnectFrom(this);
+    outboundConnections.add(connection);
     return connection;
   }
 }
