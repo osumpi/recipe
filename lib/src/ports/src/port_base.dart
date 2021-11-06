@@ -14,5 +14,5 @@ abstract class Port<T extends Object> with FrameworkEntity {
     };
   }
 
-  Set<Connection<T>> get connections;
+  UnmodifiableSetView<Connection<T>> get connections;
 }
