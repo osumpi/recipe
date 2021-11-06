@@ -7,7 +7,7 @@ class OutputPort<T extends Object> extends Port<T> {
 
   final outboundConnections = <Connection<T>>{};
 
-  Connection? connectTo(InputPort inputPort, {bool wireless = false}) {
+  Connection<T>? connectTo(InputPort<T> inputPort, {bool wireless = false}) {
     return inputPort.connectFrom(this, wireless: wireless);
   }
 }
