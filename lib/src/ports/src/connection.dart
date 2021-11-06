@@ -16,7 +16,7 @@ class Connection<T extends Object> with FrameworkEntity {
 
   final isWireless = false;
 
-  void write(BakeContext context) {
+  void write(BakeContext<T> context) {
     to.events.add(context);
   }
 
