@@ -29,6 +29,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
+  @nonVirtual
   void ensureUniqueInputPortLabel(String label) {
     if (_inputPorts.any((element) => element.name == label)) {
       throw ArgumentError(
@@ -42,6 +43,7 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
+  @nonVirtual
   void ensureUniqueOutputPortLabel(String label) {
     if (_outputPorts.any((element) => element.name == label)) {
       throw ArgumentError(
@@ -51,6 +53,9 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
     }
   }
 
+  @protected
+  @nonVirtual
+  @useResult
   SingleInboundInputPort<T> singleInboundInputPort<T extends Object>(
       String label) {
     ensureUniqueInputPortLabel(label);
@@ -59,6 +64,9 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
     return result;
   }
 
+  @protected
+  @nonVirtual
+  @useResult
   MultiInboundInputPort<T> inputPort<T extends Object>(String label) {
     ensureUniqueInputPortLabel(label);
     final result = MultiInboundInputPort<T>(label);
@@ -66,6 +74,9 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
     return result;
   }
 
+  @protected
+  @nonVirtual
+  @useResult
   OutputPort<T> outputPort<T extends Object>(String label) {
     ensureUniqueOutputPortLabel(label);
     final result = OutputPort<T>(label);
