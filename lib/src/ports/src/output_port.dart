@@ -20,4 +20,9 @@ class OutputPort<T extends Object> extends Port<T> {
     outboundConnections.add(connection);
     return connection;
   }
+
+  @nonVirtual
+  void write(BakeContext<T> context) {
+    connections.forEach((c) => c.to.events.add(context));
+  }
 }
