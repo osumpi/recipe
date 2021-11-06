@@ -51,6 +51,14 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
     }
   }
 
+  SingleInboundInputPort<T> singleInboundInputPort<T extends Object>(
+      String label) {
+    ensureUniqueInputPortLabel(label);
+    final result = SingleInboundInputPort<T>(label);
+    _inputPorts.add(result);
+    return result;
+  }
+
   @mustCallSuper
   @internal
   Future<void> bake(BakeContext context);
