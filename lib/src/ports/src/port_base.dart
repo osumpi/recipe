@@ -1,6 +1,6 @@
 part of recipe.ports;
 
-abstract class Port with FrameworkEntity {
+abstract class Port<T extends Object> with FrameworkEntity {
   const Port(this.name);
 
   final String name;
@@ -14,5 +14,5 @@ abstract class Port with FrameworkEntity {
     };
   }
 
-  Set<Connection> get connections;
+  Set<Connection<T>> get connections;
 }
