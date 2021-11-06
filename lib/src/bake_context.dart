@@ -1,20 +1,26 @@
+import 'dart:collection' show UnmodifiableMapView;
+
 import 'package:meta/meta.dart';
 import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart' show Recipe;
-import 'package:recipe/src/exceptions.dart';
 
 @immutable
 class BakeContext with FrameworkEntity, EntityLogging {
   @internal
-  BakeContext(this.recipe, this.parentContext);
+  BakeContext({
+    required Recipe of,
+    required Map<InputPort, BakeContext> inputContexts,
+  })  : recipe = of,
+        parentContext = UnmodifiableMapView(inputContexts);
 
   final Recipe recipe;
 
-  final BakeContext? parentContext;
+  final UnmodifiableMapView<InputPort, BakeContext> parentContext;
 
-  Recipe? get parent => parentContext?.recipe;
+  Iterable<Recipe> get parents => parentContext.values.map((e) => e.recipe);
 
-  bool get hasParent => parent != null;
+  bool get hasParent => parents.isNotEmpty;
 
   late final path = _findPath();
 
