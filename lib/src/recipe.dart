@@ -15,6 +15,9 @@ abstract class Recipe with FrameworkEntity, EntityLogging {
   @protected
   void initialize() {}
 
+  final Set<InputPort> _inputPorts = {};
+  final Set<OutputPort> _outputPorts = {};
+
   @mustCallSuper
   @internal
   Future<void> bake(BakeContext context);
