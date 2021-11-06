@@ -2,8 +2,14 @@ part of recipe.baker;
 
 enum BakerStatus { baking, idle }
 
-abstract class Baker {
-  Baker(this.recipe);
+abstract class Baker<T extends BakerOptions> {
+  Baker(
+    this.recipe, {
+    required this.bakerOptions,
+  });
+
+  @nonVirtual
+  final T bakerOptions;
 
   @nonVirtual
   final Recipe recipe;
