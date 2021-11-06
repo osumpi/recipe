@@ -1,17 +1,15 @@
 part of recipe.ports;
 
-class Connection with FrameworkEntity {
-  Connection({
+class Connection<T extends Object> with FrameworkEntity {
+  const Connection({
     required this.from,
     required this.to,
-  }) {
-    // SketchRegistry.registerConnection(this);
-  }
+  });
 
   factory Connection.wireless({
     required OutputPort from,
     required InputPort to,
-  }) = WirelessConnection;
+  }) = WirelessConnection<T>;
 
   final OutputPort from;
   final InputPort to;
@@ -36,7 +34,7 @@ class Connection with FrameworkEntity {
       Connection.wireless(from: from, to: to);
 }
 
-class WirelessConnection extends Connection {
+class WirelessConnection<T extends Object> extends Connection<T> {
   WirelessConnection({
     required OutputPort from,
     required InputPort to,
