@@ -2,8 +2,15 @@ part of recipe.baker;
 
 enum BakerStatus { baking, idle }
 
-abstract class Baker {
-  Baker(this.recipe);
+abstract class Baker<T extends BakerOptions>
+    with FrameworkEntity, EntityLogging {
+  Baker(
+    this.recipe, {
+    required this.bakerOptions,
+  });
+
+  @nonVirtual
+  final T bakerOptions;
 
   @nonVirtual
   final Recipe recipe;
@@ -38,6 +45,13 @@ abstract class Baker {
   @protected
   Future<BakeReport> bake(BakeContext inputContext);
 
+  /// Requests a bake on [recipe] for a given [inputContext].
+  ///
+  /// The request may be processed immediatley or be queued to be baked at a
+  /// later moment or can be rejected completley.
+  ///
+  /// Refer baker implementation docs to see how the [requestBake] is actually
+  /// handled.
   void requestBake(BakeContext inputContext);
 
   Type get bakerType => runtimeType;

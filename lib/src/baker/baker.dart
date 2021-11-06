@@ -5,18 +5,20 @@ import 'dart:collection' show ListQueue;
 import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_report.dart' show BakeReport;
+import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/recipe.dart' show Recipe;
 import 'package:recipe/src/bake_context.dart' show BakeContext;
 import 'package:recipe/src/utils.dart' show uuid;
 
 part 'src/baker.dart';
+part 'src/baker_options.dart';
 
 part 'src/single_run.dart';
 part 'src/concurrent.dart';
 part 'src/non_concurrent.dart';
 part 'src/fifo.dart';
 
-class SingleRunBaker = Baker with _SingleRunBakeHandler;
+class SingleRunBaker = Baker<SingleRunBakerOptions> with _SingleRunBakeHandler;
 
 class ConcurrentBaker = Baker with _ConcurrentBakeHandler;
 
