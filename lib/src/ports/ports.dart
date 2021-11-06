@@ -11,3 +11,4 @@ import 'package:recipe/src/utils.dart' show JsonMap;
 part 'src/port_base.dart';
 part 'src/connection.dart';
 part 'src/input_port.dart';
+part 'src/output_port.dart';
