@@ -1,6 +1,22 @@
 part of recipe.baker;
 
-mixin _SingleRunBakeHandler on Baker {
+class SingleRunBakerOptions implements BakerOptions {
+  const SingleRunBakerOptions({
+    this.shouldThrowWhenBakeRejected = false,
+  });
+
+  /// Whether the [SingleRunBaker] should throw when the requested bake was
+  /// rejected.
+  ///
+  /// If set to `true`, throws [StateError] if the input [BakeContext] was
+  /// rejected from being baked.
+  ///
+  /// If set to `false`, just logs an error if the input [BakeContext] was
+  /// rejected from being baked.
+  final bool shouldThrowWhenBakeRejected;
+}
+
+mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   @override
   @nonVirtual
   final concurrencyAllowed = false;
@@ -37,15 +53,16 @@ mixin _SingleRunBakeHandler on Baker {
   @nonVirtual
   bool canBake = true;
 
+  Error get bakeRejectionReason => StateError(
+      'Bake request rejected. $runtimeType does not allow more than one bake request.');
+
   @override
   void requestBake(BakeContext inputContext) {
     if (canBake) {
       bake(inputContext);
       canBake = false;
     } else {
-      throw StateError(
-        'Baker exhausted. This baker allows bake to be invoked only once.',
-      );
+      if (bakerOptions.shouldThrowWhenBakeRejected) throw bakeRejectionReason;
     }
   }
 }
