@@ -64,6 +64,7 @@ linter:
     - sort_constructors_first
     - sort_unnamed_constructors_first
     - type_annotate_public_apis
+    - unnecessary_await_in_return
 
 analyzer:
   language:
