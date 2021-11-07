@@ -135,7 +135,7 @@ mixin EntityLogging on FrameworkEntity {
       log(message, level: LogLevels.status, status: status);
 
   @protected
-  void info(String message) => log(message, level: LogLevels.info);
+  void info(final String message) => log(message, level: LogLevels.info);
 
   @protected
   void verbose(String message) => log(message, level: LogLevels.verbose);
