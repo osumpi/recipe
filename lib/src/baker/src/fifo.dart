@@ -25,7 +25,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
 
     uptimeStopwatch.stop();
 
-    tryCompletePendingRequests();
+    unawaited(tryCompletePendingRequests());
 
     return report;
   }
