@@ -46,6 +46,7 @@ linter:
     - package_api_docs # internal purpose only
     - prefer_asserts_in_initializer_lists
     - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
 
 analyzer:
   language:
