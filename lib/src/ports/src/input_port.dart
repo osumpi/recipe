@@ -4,7 +4,7 @@ abstract class InputPort<T extends Object> extends Port<T> {
   InputPort(final String name) : super(name);
 
   @useResult
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort);
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort);
 
   @useResult
   WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort);
