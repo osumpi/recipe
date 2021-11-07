@@ -25,6 +25,7 @@ linter:
     - unawaited_futures
     - avoid_type_to_string
     - avoid_bool_literals_in_conditional_expressions
+    - avoid_escaping_inner_quotes
 
 analyzer:
   language:
