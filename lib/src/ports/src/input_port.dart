@@ -1,7 +1,7 @@
 part of recipe.ports;
 
 abstract class InputPort<T extends Object> extends Port<T> {
-  InputPort(String name) : super(name);
+  InputPort(final String name) : super(name);
 
   @useResult
   WiredConnection<T> _connectFrom(OutputPort<T> outputPort);
