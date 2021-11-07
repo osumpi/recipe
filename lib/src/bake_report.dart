@@ -9,7 +9,7 @@ class BakeReport {
     required final this.bakeId,
     required final this.bakedBy,
     required final this.startedOn,
-    required this.stoppedOn,
+    required final this.stoppedOn,
     required this.inputContext,
   });
 
