@@ -57,6 +57,7 @@ linter:
     - prefer_if_elements_to_conditional_expressions
     - prefer_int_literals
     - prefer_interpolation_to_compose_strings
+    - prefer_mixin
 
 analyzer:
   language:
