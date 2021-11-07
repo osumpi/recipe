@@ -55,6 +55,7 @@ linter:
     - prefer_final_parameters
     - prefer_foreach
     - prefer_if_elements_to_conditional_expressions
+    - prefer_int_literals
 
 analyzer:
   language:
