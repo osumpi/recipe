@@ -77,6 +77,7 @@ linter:
     - use_setters_to_change_properties
     - use_string_buffers
     - use_to_and_as_if_applicable # Maybe revoke this later
+    - sort_pub_dependencies
 
 analyzer:
   language:
