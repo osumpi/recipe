@@ -128,7 +128,7 @@ abstract class FrameworkUtils {
   }) =>
       log(message, module: module, level: LogLevels.status, status: status);
 
-  static void verbose(String message, {String? module}) =>
+  static void verbose(final String message, {String? module}) =>
       log(message, module: module, level: LogLevels.verbose);
 
   static void trace(String message, {String? module}) =>
