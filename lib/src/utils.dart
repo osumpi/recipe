@@ -109,7 +109,7 @@ abstract class FrameworkUtils {
     stdout.writeln(message);
   }
 
-  static void fatal(String message, {final String? module}) =>
+  static void fatal(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.fatal);
 
   static void error(String message, {final String? module}) =>
