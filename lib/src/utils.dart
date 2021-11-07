@@ -131,7 +131,7 @@ abstract class FrameworkUtils {
   static void verbose(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.verbose);
 
-  static void trace(String message, {String? module}) =>
+  static void trace(final String message, {String? module}) =>
       log(message, module: module, level: LogLevels.trace);
 
   static void beep() => stdout.writeCharCode(0x07);
