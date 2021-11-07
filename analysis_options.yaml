@@ -21,6 +21,8 @@ linter:
     - prefer_collection_literals
     - avoid_shadowing_type_parameters
     - do_not_use_environment
+    - no_runtimeType_toString
+    - unawaited_futures
 
 analyzer:
   language:
