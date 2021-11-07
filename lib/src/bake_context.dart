@@ -2,9 +2,9 @@ import 'dart:collection' show UnmodifiableMapView;
 
 import 'package:meta/meta.dart';
 import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/utils.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart' show Recipe;
+import 'package:recipe/src/utils.dart';
 
 @immutable
 class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
