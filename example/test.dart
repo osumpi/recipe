@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:recipe/recipe.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart';
@@ -26,19 +28,17 @@ class MySimpleRecipe extends Recipe<int, String> {
 
 // Recipe block that takes two numbers, and yields their quotient and remainder.
 class BitComplexRecipe extends MultiIORecipe {
-  late final InputPort<int> numeratorPort, denominatorPort;
-  late final OutputPort<int> quotientPort, remainderPort;
+  final numeratorPort = MultiInboundInputPort('numerator');
+  final denominatorPort = MultiInboundInputPort('denominator');
+
+  final quotientPort = OutputPort<int>('quotient');
+  final remainderPort = OutputPort<int>('remainder');
 
   @override
-  void initialize() {
-    numeratorPort = hookSingleInboundInputPort<int>('numerator');
-    denominatorPort = hookSingleInboundInputPort<int>('denominator');
+  Set<InputPort> get inputPorts => {numeratorPort, denominatorPort};
 
-    quotientPort = hookOutputPort<int>('quotient');
-    remainderPort = hookOutputPort<int>('remainder');
-
-    super.initialize();
-  }
+  @override
+  Set<OutputPort> get outputPorts => {quotientPort, remainderPort};
 
   @override
   Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context) async* {
