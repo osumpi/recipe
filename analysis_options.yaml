@@ -75,6 +75,7 @@ linter:
     - use_is_even_rather_than_modulo
     - use_named_constants
     - use_setters_to_change_properties
+    - use_string_buffers
 
 analyzer:
   language:
