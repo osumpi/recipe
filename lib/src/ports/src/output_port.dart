@@ -18,7 +18,7 @@ class OutputPort<T extends Object> extends Port<T> {
   }
 
   @nonVirtual
-  WirelessConnection<T> wirelesslyConnectTo(InputPort<T> inputPort) {
+  WirelessConnection<T> wirelesslyConnectTo(final InputPort<T> inputPort) {
     final connection = inputPort._wirelesslyConnectFrom(this);
     outboundConnections.add(connection);
     return connection;
