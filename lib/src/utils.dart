@@ -73,7 +73,7 @@ abstract class FrameworkUtils {
 
     module ??= 'Anonymous';
 
-    String message = obj.toString();
+    var message = obj.toString();
 
     if (level == LogLevels.status) {
       status ??= Statuses.successful;
