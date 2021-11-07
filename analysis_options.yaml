@@ -53,6 +53,7 @@ linter:
     - prefer_final_in_for_each
     - prefer_final_locals
     - prefer_final_parameters
+    - prefer_foreach
 
 analyzer:
   language:
