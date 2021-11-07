@@ -47,6 +47,7 @@ linter:
     - prefer_asserts_in_initializer_lists
     - prefer_const_constructors
     - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
 
 analyzer:
   language:
