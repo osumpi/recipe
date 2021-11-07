@@ -46,7 +46,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 
   @override
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort) {
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
         'Cannot connect to $runtimeType when already an inbound connection exists.',
