@@ -70,6 +70,7 @@ linter:
     - unnecessary_null_checks
     - unnecessary_nullable_for_final_variable_declarations
     - unnecessary_parenthesis
+    - unnecessary_raw_strings
 
 analyzer:
   language:
