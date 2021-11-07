@@ -11,7 +11,7 @@ class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
   @internal
   BakeContext({
     required final Recipe of,
-    required this.data,
+    required final this.data,
     required Map<InputPort, BakeContext> inputContexts,
   })  : recipe = of,
         parentContext = UnmodifiableMapView(inputContexts);
