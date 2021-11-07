@@ -35,6 +35,7 @@ linter:
     - avoid_void_async
     - cascade_invocations
     - deprecated_consistency
+    - directives_ordering
 
 analyzer:
   language:
