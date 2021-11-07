@@ -8,7 +8,7 @@ class BakeReport {
   BakeReport({
     required final this.bakeId,
     required final this.bakedBy,
-    required this.startedOn,
+    required final this.startedOn,
     required this.stoppedOn,
     required this.inputContext,
   });
