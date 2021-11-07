@@ -38,7 +38,7 @@ mixin _ConcurrentBakeHandler on Baker {
   bool get canBake => true;
 
   @override
-  void requestBake(BakeContext inputContext) {
+  void requestBake(final BakeContext inputContext) {
     if (canBake) {
       bake(inputContext);
     } else {
