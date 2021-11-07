@@ -22,7 +22,8 @@ class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
 
   final UnmodifiableMapView<InputPort, BakeContext> parentContext;
 
-  Iterable<Recipe> get parents => parentContext.values.map((e) => e.recipe);
+  Iterable<Recipe> get parents =>
+      parentContext.values.map((final e) => e.recipe);
 
   bool get hasParent => parents.isNotEmpty;
 
