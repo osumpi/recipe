@@ -10,7 +10,7 @@ import 'package:recipe/src/utils.dart';
 class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
   @internal
   BakeContext({
-    required Recipe of,
+    required final Recipe of,
     required this.data,
     required Map<InputPort, BakeContext> inputContexts,
   })  : recipe = of,
