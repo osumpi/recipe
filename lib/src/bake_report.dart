@@ -7,7 +7,7 @@ import 'package:recipe/src/baker/baker.dart' show Baker;
 class BakeReport {
   BakeReport({
     required final this.bakeId,
-    required this.bakedBy,
+    required final this.bakedBy,
     required this.startedOn,
     required this.stoppedOn,
     required this.inputContext,
