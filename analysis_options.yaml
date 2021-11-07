@@ -76,6 +76,7 @@ linter:
     - use_named_constants
     - use_setters_to_change_properties
     - use_string_buffers
+    - use_to_and_as_if_applicable # Maybe revoke this later
 
 analyzer:
   language:
