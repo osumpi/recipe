@@ -47,8 +47,22 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   UnmodifiableSetView<InputPort> get inputPorts;
   UnmodifiableSetView<OutputPort> get outputPorts;
 
+  @override
+  void initialize() {
+    if (inputPorts.isEmpty && outputPorts.isEmpty) {
+      // TODO: describe this error in depth and give possible solutions
+      throw StateError(
+          "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.");
+    }
+
+    // TODO: maybe consider disabling this check by overriding global parameters
+    ensureUniqueInputPortLabels();
+    ensureUniqueOutputPortLabels();
+
+    super.initialize();
+  }
+
   /// Disallows input ports with same label.
-  /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
   @nonVirtual
@@ -66,7 +80,6 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   }
 
   /// Disallows output ports with same label.
-  /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
   @nonVirtual
