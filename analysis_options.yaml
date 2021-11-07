@@ -54,6 +54,7 @@ linter:
     - prefer_final_locals
     - prefer_final_parameters
     - prefer_foreach
+    - prefer_if_elements_to_conditional_expressions
 
 analyzer:
   language:
