@@ -4,7 +4,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   final requests = ListQueue<BakeContext>();
 
   @override
-  Future<BakeReport> bake(BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext inputContext) async {
     uptimeStopwatch.start();
 
     final startedOn = DateTime.now();
