@@ -61,6 +61,7 @@ linter:
     - prefer_null_aware_method_calls
     - public_member_api_docs
     - require_trailing_commas
+    - sort_constructors_first
 
 analyzer:
   language:
