@@ -1,7 +1,7 @@
 part of recipe.ports;
 
 class OutputPort<T extends Object> extends Port<T> {
-  OutputPort(String name) : super(name);
+  OutputPort(final String name) : super(name);
 
   UnmodifiableSetView<Connection<T>> get connections =>
       UnmodifiableSetView(outboundConnections);
