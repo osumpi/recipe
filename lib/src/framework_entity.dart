@@ -103,7 +103,7 @@ mixin EntityLogging on FrameworkEntity {
   /// See also:
   /// * [showHashCodeOfEntities] to include [hashCode] of entities.
   /// * [hideHashCodeOfEntities] to exclude [hashCode] of entities.
-  static get shouldIncludeHashCode => _shouldIncludeHashCode;
+  static bool get shouldIncludeHashCode => _shouldIncludeHashCode;
 
   @protected
   void log(
