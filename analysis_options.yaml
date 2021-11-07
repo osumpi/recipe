@@ -38,6 +38,7 @@ linter:
     - directives_ordering
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
+    - missing_whitespace_between_adjacent_strings
 
 analyzer:
   language:
