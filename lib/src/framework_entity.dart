@@ -81,7 +81,7 @@ mixin EntityLogging on FrameworkEntity {
 
   /// Includes [hashCode] in the `moduleName` of upcoming logs.
   /// See [hideHashCodeOfEntities] to exclude [hashCode].
-  static showHashCodeOfEntities() => _shouldIncludeHashCode = true;
+  static bool showHashCodeOfEntities() => _shouldIncludeHashCode = true;
 
   /// Excludes [hashCode] in the `moduleName` of upcoming logs.
   /// See [showHashCodeOfEntities] to exclude [hashCode].
