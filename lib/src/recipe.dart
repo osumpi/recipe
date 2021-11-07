@@ -12,7 +12,7 @@ abstract class Recipe<I extends Object, O extends Object>
     with FrameworkEntity, EntityLogging {
   Recipe({
     required final this.inputPort,
-    required this.outputPort,
+    required final this.outputPort,
   });
 
   final InputPort<I> inputPort;
