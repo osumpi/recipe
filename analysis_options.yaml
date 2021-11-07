@@ -43,6 +43,7 @@ linter:
     - omit_local_variable_types
     - one_member_abstracts
     - only_throw_errors
+    - package_api_docs # internal purpose only
 
 analyzer:
   language:
