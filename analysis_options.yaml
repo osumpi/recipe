@@ -44,6 +44,7 @@ linter:
     - one_member_abstracts
     - only_throw_errors
     - package_api_docs # internal purpose only
+    - prefer_asserts_in_initializer_lists
 
 analyzer:
   language:
