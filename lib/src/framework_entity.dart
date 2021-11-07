@@ -107,7 +107,7 @@ mixin EntityLogging on FrameworkEntity {
 
   @protected
   void log(
-    Object? object, {
+    final Object? object, {
     LogLevel level = LogLevels.info,
     Statuses? status,
   }) {
