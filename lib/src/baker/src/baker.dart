@@ -6,7 +6,7 @@ abstract class Baker<T extends BakerOptions>
     with FrameworkEntity, EntityLogging {
   Baker(
     this.recipe, {
-    required this.bakerOptions,
+    required final this.bakerOptions,
   });
 
   @nonVirtual
