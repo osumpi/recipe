@@ -72,6 +72,7 @@ linter:
     - unnecessary_parenthesis
     - unnecessary_raw_strings
     - use_if_null_to_convert_nulls_to_bools
+    - use_is_even_rather_than_modulo
 
 analyzer:
   language:
