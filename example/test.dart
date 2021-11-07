@@ -1,10 +1,10 @@
-import 'dart:collection';
+import 'dart:async';
 
 import 'package:recipe/recipe.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart';
 
-void main() async {
+Future<void> main() async {
   FrameworkUtils.loggingLevel = LogLevels.verbose;
   FrameworkUtils.showTimestampInLogs = true;
 
@@ -16,8 +16,8 @@ void main() async {
 class MySimpleRecipe extends Recipe<int, String> {
   MySimpleRecipe()
       : super(
-          inputPort: MultiInboundInputPort('value'),
-          outputPort: OutputPort('asString'),
+          inputPort: MultiInboundInputPort<int>('value'),
+          outputPort: OutputPort<String>('asString'),
         );
 
   @override
@@ -31,8 +31,8 @@ class BitComplexRecipe extends MultiIORecipe {
   final numeratorPort = MultiInboundInputPort('numerator');
   final denominatorPort = MultiInboundInputPort('denominator');
 
-  final quotientPort = OutputPort<int>('quotient');
-  final remainderPort = OutputPort<int>('remainder');
+  final quotientPort = OutputPort('quotient');
+  final remainderPort = OutputPort('remainder');
 
   @override
   Set<InputPort> get inputPorts => {numeratorPort, denominatorPort};
