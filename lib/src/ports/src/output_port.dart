@@ -11,7 +11,7 @@ class OutputPort<T extends Object> extends Port<T> {
   final outboundConnections = <Connection<T>>{};
 
   @nonVirtual
-  WiredConnection<T> connectTo(InputPort<T> inputPort) {
+  WiredConnection<T> connectTo(final InputPort<T> inputPort) {
     final connection = inputPort._connectFrom(this);
     outboundConnections.add(connection);
     return connection;
