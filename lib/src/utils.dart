@@ -20,7 +20,7 @@ class LogLevel implements Comparable<LogLevel> {
   final String name;
 
   @override
-  int compareTo(LogLevel other) => value.compareTo(other.value);
+  int compareTo(final LogLevel other) => value.compareTo(other.value);
 
   @override
   String toString() => name;
