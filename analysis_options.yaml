@@ -19,6 +19,7 @@ linter:
     - camel_case_types
     # - always_specify_types
     - prefer_collection_literals
+    - avoid_shadowing_type_parameters
 
 analyzer:
   language:
