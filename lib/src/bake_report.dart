@@ -10,7 +10,7 @@ class BakeReport {
     required final this.bakedBy,
     required final this.startedOn,
     required final this.stoppedOn,
-    required this.inputContext,
+    required final this.inputContext,
   });
 
   final String bakeId;
