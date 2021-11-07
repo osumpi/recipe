@@ -71,6 +71,7 @@ linter:
     - unnecessary_nullable_for_final_variable_declarations
     - unnecessary_parenthesis
     - unnecessary_raw_strings
+    - use_if_null_to_convert_nulls_to_bools
 
 analyzer:
   language:
