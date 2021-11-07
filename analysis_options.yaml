@@ -37,6 +37,7 @@ linter:
     - deprecated_consistency
     - directives_ordering
     - join_return_with_assignment
+    - leading_newlines_in_multiline_strings
 
 analyzer:
   language:
