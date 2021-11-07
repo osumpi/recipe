@@ -67,6 +67,7 @@ linter:
     - unnecessary_await_in_return
     - unnecessary_lambdas
     - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
 
 analyzer:
   language:
