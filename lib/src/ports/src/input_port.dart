@@ -7,7 +7,7 @@ abstract class InputPort<T extends Object> extends Port<T> {
   WiredConnection<T> _connectFrom(final OutputPort<T> outputPort);
 
   @useResult
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort);
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort);
 
   final _events = StreamController<BakeContext<T>>();
 
