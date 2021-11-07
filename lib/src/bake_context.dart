@@ -12,7 +12,7 @@ class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
   BakeContext({
     required final Recipe of,
     required final this.data,
-    required Map<InputPort, BakeContext> inputContexts,
+    required final Map<InputPort, BakeContext> inputContexts,
   })  : recipe = of,
         parentContext = UnmodifiableMapView(inputContexts);
 
