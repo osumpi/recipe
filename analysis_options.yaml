@@ -69,6 +69,7 @@ linter:
     - unnecessary_null_aware_assignments
     - unnecessary_null_checks
     - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_parenthesis
 
 analyzer:
   language:
