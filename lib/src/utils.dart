@@ -164,5 +164,5 @@ class Statuses {
     return '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
   }
 
-  String format(String message) => _format('$prefix $message');
+  String format(final String message) => _format('$prefix $message');
 }
