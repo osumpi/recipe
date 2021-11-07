@@ -62,6 +62,7 @@ linter:
     - public_member_api_docs
     - require_trailing_commas
     - sort_constructors_first
+    - sort_unnamed_constructors_first
 
 analyzer:
   language:
