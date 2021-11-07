@@ -17,7 +17,7 @@ abstract class InputPort<T extends Object> extends Port<T> {
 
   T get data => _data;
 
-  void _write(BakeContext<T> inputContext) {
+  void _write(final BakeContext<T> inputContext) {
     _data = inputContext.data;
     _events.sink.add(inputContext);
   }
