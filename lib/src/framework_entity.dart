@@ -125,7 +125,7 @@ mixin EntityLogging on FrameworkEntity {
   void fatal(final String message) => log(message, level: LogLevels.fatal);
 
   @protected
-  void error(String message) => log(message, level: LogLevels.error);
+  void error(final String message) => log(message, level: LogLevels.error);
 
   @protected
   void warn(String message) => log(message, level: LogLevels.warning);
