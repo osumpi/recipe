@@ -6,7 +6,7 @@ import 'package:recipe/src/baker/baker.dart' show Baker;
 @immutable
 class BakeReport {
   BakeReport({
-    required this.bakeId,
+    required final this.bakeId,
     required this.bakedBy,
     required this.startedOn,
     required this.stoppedOn,
