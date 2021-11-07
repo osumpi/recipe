@@ -2,17 +2,17 @@ import 'dart:collection' show UnmodifiableMapView;
 
 import 'package:meta/meta.dart';
 import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/utils.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart' show Recipe;
+import 'package:recipe/src/utils.dart';
 
 @immutable
 class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
   @internal
   BakeContext({
-    required Recipe of,
-    required this.data,
-    required Map<InputPort, BakeContext> inputContexts,
+    required final Recipe of,
+    required final this.data,
+    required final Map<InputPort, BakeContext> inputContexts,
   })  : recipe = of,
         parentContext = UnmodifiableMapView(inputContexts);
 
@@ -22,7 +22,8 @@ class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
 
   final UnmodifiableMapView<InputPort, BakeContext> parentContext;
 
-  Iterable<Recipe> get parents => parentContext.values.map((e) => e.recipe);
+  Iterable<Recipe> get parents =>
+      parentContext.values.map((final e) => e.recipe);
 
   bool get hasParent => parents.isNotEmpty;
 

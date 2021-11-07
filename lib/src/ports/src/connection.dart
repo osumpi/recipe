@@ -4,8 +4,8 @@ part of recipe.ports;
 abstract class Connection<T extends Object> with FrameworkEntity {
   @literal
   const Connection({
-    required this.from,
-    required this.to,
+    required final this.from,
+    required final this.to,
   });
 
   @nonVirtual

@@ -2,7 +2,7 @@ part of recipe.baker;
 
 class SingleRunBakerOptions implements BakerOptions {
   const SingleRunBakerOptions({
-    this.shouldThrowWhenBakeRejected = false,
+    final this.shouldThrowWhenBakeRejected = false,
   });
 
   /// Whether the [SingleRunBaker] should throw when the requested bake was
@@ -22,7 +22,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   final concurrencyAllowed = false;
 
   @override
-  Future<BakeReport> bake(BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext inputContext) async {
     uptimeStopwatch.start();
     canBake = false;
 
@@ -57,7 +57,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
       'Bake request rejected. $bakerType does not allow more than one bake request.';
 
   @override
-  void requestBake(BakeContext inputContext) {
+  void requestBake(final BakeContext inputContext) {
     if (canBake) {
       bake(inputContext);
       canBake = false;

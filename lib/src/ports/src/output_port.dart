@@ -1,8 +1,9 @@
 part of recipe.ports;
 
 class OutputPort<T extends Object> extends Port<T> {
-  OutputPort(String name) : super(name);
+  OutputPort(final String name) : super(name);
 
+  @override
   UnmodifiableSetView<Connection<T>> get connections =>
       UnmodifiableSetView(outboundConnections);
 
@@ -10,21 +11,22 @@ class OutputPort<T extends Object> extends Port<T> {
   final outboundConnections = <Connection<T>>{};
 
   @nonVirtual
-  WiredConnection<T> connectTo(InputPort<T> inputPort) {
+  WiredConnection<T> connectTo(final InputPort<T> inputPort) {
     final connection = inputPort._connectFrom(this);
     outboundConnections.add(connection);
     return connection;
   }
 
   @nonVirtual
-  WirelessConnection<T> wirelesslyConnectTo(InputPort<T> inputPort) {
+  WirelessConnection<T> wirelesslyConnectTo(final InputPort<T> inputPort) {
     final connection = inputPort._wirelesslyConnectFrom(this);
     outboundConnections.add(connection);
     return connection;
   }
 
   @nonVirtual
-  void write(BakeContext<T> context) {
-    connections.forEach((c) => c.to._write(context));
+  void write(final BakeContext<T> context) {
+    void _writeToConnection(final Connection<T> c) => c.to._write(context);
+    connections.forEach(_writeToConnection);
   }
 }

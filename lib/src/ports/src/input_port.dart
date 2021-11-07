@@ -1,13 +1,13 @@
 part of recipe.ports;
 
 abstract class InputPort<T extends Object> extends Port<T> {
-  InputPort(String name) : super(name);
+  InputPort(final String name) : super(name);
 
   @useResult
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort);
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort);
 
   @useResult
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort);
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort);
 
   final _events = StreamController<BakeContext<T>>();
 
@@ -17,7 +17,7 @@ abstract class InputPort<T extends Object> extends Port<T> {
 
   T get data => _data;
 
-  void _write(BakeContext<T> inputContext) {
+  void _write(final BakeContext<T> inputContext) {
     _data = inputContext.data;
     _events.sink.add(inputContext);
   }
@@ -35,7 +35,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 
   @override
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort) {
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
         'Cannot connect to $runtimeType when already an inbound connection exists.',
@@ -46,7 +46,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 
   @override
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort) {
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
         'Cannot connect to $runtimeType when already an inbound connection exists.',
@@ -67,14 +67,14 @@ mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
   final inboundConnections = <Connection<T>>{};
 
   @override
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort) {
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort) {
     final connection = WiredConnection<T>(from: outputPort, to: this);
     inboundConnections.add(connection);
     return connection;
   }
 
   @override
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort) {
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort) {
     final connection = WirelessConnection<T>(from: outputPort, to: this);
     inboundConnections.add(connection);
     return connection;

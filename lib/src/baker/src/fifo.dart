@@ -4,7 +4,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   final requests = ListQueue<BakeContext>();
 
   @override
-  Future<BakeReport> bake(BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext inputContext) async {
     uptimeStopwatch.start();
 
     final startedOn = DateTime.now();
@@ -25,13 +25,13 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
 
     uptimeStopwatch.stop();
 
-    tryCompletePendingRequests();
+    unawaited(tryCompletePendingRequests());
 
     return report;
   }
 
   @override
-  void handleBakeRequestWhenBaking(BakeContext inputContext) {
+  void handleBakeRequestWhenBaking(final BakeContext inputContext) {
     requests.add(inputContext);
   }
 
@@ -41,7 +41,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   /// Do not await this future inside [bake].
   Future<void> tryCompletePendingRequests() async {
     if (requests.isNotEmpty) {
-      bake(requests.removeFirst());
+      unawaited(bake(requests.removeFirst()));
     }
   }
 }

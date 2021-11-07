@@ -8,7 +8,7 @@ mixin _ConcurrentBakeHandler on Baker {
   final Map<String, DateTime> bakesInProgress = {};
 
   @override
-  Future<BakeReport> bake(BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext inputContext) async {
     uptimeStopwatch.start();
 
     final key = uuid.v4();
@@ -38,7 +38,7 @@ mixin _ConcurrentBakeHandler on Baker {
   bool get canBake => true;
 
   @override
-  void requestBake(BakeContext inputContext) {
+  void requestBake(final BakeContext inputContext) {
     if (canBake) {
       bake(inputContext);
     } else {

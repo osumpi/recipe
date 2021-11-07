@@ -11,8 +11,8 @@ import 'package:recipe/src/utils.dart';
 abstract class Recipe<I extends Object, O extends Object>
     with FrameworkEntity, EntityLogging {
   Recipe({
-    required this.inputPort,
-    required this.outputPort,
+    required final this.inputPort,
+    required final this.outputPort,
   });
 
   final InputPort<I> inputPort;
@@ -24,7 +24,7 @@ abstract class Recipe<I extends Object, O extends Object>
 
   @mustCallSuper
   @internal
-  Stream<O> bake(BakeContext<I> context);
+  Stream<O> bake(final BakeContext<I> context);
 
   @override
   JsonMap toJson() {
@@ -52,7 +52,8 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     if (inputPorts.isEmpty && outputPorts.isEmpty) {
       // TODO: describe this error in depth and give possible solutions
       throw StateError(
-          "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.");
+        "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.",
+      );
     }
 
     // TODO: maybe consider disabling this check by overriding global parameters
@@ -98,5 +99,6 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
 
   @mustCallSuper
   @internal
-  Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context);
+  @override
+  Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context);
 }

@@ -6,7 +6,7 @@ abstract class Baker<T extends BakerOptions>
     with FrameworkEntity, EntityLogging {
   Baker(
     this.recipe, {
-    required this.bakerOptions,
+    required final this.bakerOptions,
   });
 
   @nonVirtual
@@ -43,7 +43,7 @@ abstract class Baker<T extends BakerOptions>
   bool get canBake;
 
   @protected
-  Future<BakeReport> bake(BakeContext inputContext);
+  Future<BakeReport> bake(final BakeContext inputContext);
 
   /// Requests a bake on [recipe] for a given [inputContext].
   ///
@@ -52,7 +52,7 @@ abstract class Baker<T extends BakerOptions>
   ///
   /// Refer baker implementation docs to see how the [requestBake] is actually
   /// handled.
-  void requestBake(BakeContext inputContext);
+  void requestBake(final BakeContext inputContext);
 
   Type get bakerType => runtimeType;
 }

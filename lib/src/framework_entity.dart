@@ -1,5 +1,5 @@
-import 'package:meta/meta.dart';
 import 'package:fhir_yaml/fhir_yaml.dart' show json2yaml;
+import 'package:meta/meta.dart';
 
 import 'package:recipe/src/utils.dart';
 
@@ -81,11 +81,11 @@ mixin EntityLogging on FrameworkEntity {
 
   /// Includes [hashCode] in the `moduleName` of upcoming logs.
   /// See [hideHashCodeOfEntities] to exclude [hashCode].
-  static showHashCodeOfEntities() => _shouldIncludeHashCode = true;
+  static bool showHashCodeOfEntities() => _shouldIncludeHashCode = true;
 
   /// Excludes [hashCode] in the `moduleName` of upcoming logs.
   /// See [showHashCodeOfEntities] to exclude [hashCode].
-  static hideHashCodeOfEntities() => _shouldIncludeHashCode = false;
+  static bool hideHashCodeOfEntities() => _shouldIncludeHashCode = false;
 
   /// Whether [hashCode] should be included in the `moduleName` when logging.
   /// Is `false` by default.
@@ -103,13 +103,13 @@ mixin EntityLogging on FrameworkEntity {
   /// See also:
   /// * [showHashCodeOfEntities] to include [hashCode] of entities.
   /// * [hideHashCodeOfEntities] to exclude [hashCode] of entities.
-  static get shouldIncludeHashCode => _shouldIncludeHashCode;
+  static bool get shouldIncludeHashCode => _shouldIncludeHashCode;
 
   @protected
   void log(
-    Object? object, {
-    LogLevel level = LogLevels.info,
-    Statuses? status,
+    final Object? object, {
+    final LogLevel level = LogLevels.info,
+    final Statuses? status,
   }) {
     final moduleName = _shouldIncludeHashCode ? '$name#$hashCode' : name;
 
@@ -122,24 +122,24 @@ mixin EntityLogging on FrameworkEntity {
   }
 
   @protected
-  void fatal(String message) => log(message, level: LogLevels.fatal);
+  void fatal(final String message) => log(message, level: LogLevels.fatal);
 
   @protected
-  void error(String message) => log(message, level: LogLevels.error);
+  void error(final String message) => log(message, level: LogLevels.error);
 
   @protected
-  void warn(String message) => log(message, level: LogLevels.warning);
+  void warn(final String message) => log(message, level: LogLevels.warning);
 
   @protected
-  void statusUpdate(String message, {required Statuses status}) =>
+  void statusUpdate(final String message, {required final Statuses status}) =>
       log(message, level: LogLevels.status, status: status);
 
   @protected
-  void info(String message) => log(message, level: LogLevels.info);
+  void info(final String message) => log(message, level: LogLevels.info);
 
   @protected
-  void verbose(String message) => log(message, level: LogLevels.verbose);
+  void verbose(final String message) => log(message, level: LogLevels.verbose);
 
   @protected
-  void trace(String message) => log(message, level: LogLevels.trace);
+  void trace(final String message) => log(message, level: LogLevels.trace);
 }

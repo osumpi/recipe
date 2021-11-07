@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:recipe/recipe.dart';
-import 'package:tint/tint.dart';
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/recipe.dart';
+import 'package:tint/tint.dart';
 import 'package:uuid/uuid.dart';
 
 @internal
@@ -20,7 +20,7 @@ class LogLevel implements Comparable<LogLevel> {
   final String name;
 
   @override
-  int compareTo(LogLevel other) => value.compareTo(other.value);
+  int compareTo(final LogLevel other) => value.compareTo(other.value);
 
   @override
   String toString() => name;
@@ -55,13 +55,13 @@ const uuid = Uuid();
 
 @sealed
 abstract class FrameworkUtils {
-  static var loggingLevel = LogLevels.all;
-  static var showTimestampInLogs = true;
+  static LogLevel loggingLevel = LogLevels.all;
+  static bool showTimestampInLogs = true;
 
   static void log(
-    Object? obj, {
+    final Object? obj, {
     String? module,
-    LogLevel level = LogLevels.info,
+    final LogLevel level = LogLevels.info,
     Statuses? status,
   }) {
     if (level.value < loggingLevel.value) return;
@@ -73,7 +73,7 @@ abstract class FrameworkUtils {
 
     module ??= 'Anonymous';
 
-    String message = obj.toString();
+    var message = obj.toString();
 
     if (level == LogLevels.status) {
       status ??= Statuses.successful;
@@ -109,35 +109,35 @@ abstract class FrameworkUtils {
     stdout.writeln(message);
   }
 
-  static void fatal(String message, {String? module}) =>
+  static void fatal(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.fatal);
 
-  static void error(String message, {String? module}) =>
+  static void error(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.error);
 
-  static void warn(String message, {String? module}) =>
+  static void warn(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.warning);
 
-  static void info(String message, {String? module}) =>
+  static void info(final String message, {final String? module}) =>
       log(message, module: module);
 
   static void statusUpdate(
-    String message, {
-    String? module,
-    required Statuses status,
+    final String message, {
+    final String? module,
+    required final Statuses status,
   }) =>
       log(message, module: module, level: LogLevels.status, status: status);
 
-  static void verbose(String message, {String? module}) =>
+  static void verbose(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.verbose);
 
-  static void trace(String message, {String? module}) =>
+  static void trace(final String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.trace);
 
   static void beep() => stdout.writeCharCode(0x07);
 }
 
-Stream<BakeContext> bake(Recipe recipe) {
+Stream<BakeContext> bake(final Recipe recipe) {
   throw UnimplementedError();
   // return Baker.of(null).bake(recipe);
 }
@@ -156,13 +156,13 @@ class Statuses {
   static const warning = Statuses._('!', _warningFormatter);
   static const fatal = Statuses._('✗', _fatalFormatter);
 
-  static String _successfulFormatter(String message) => message.green();
-  static String _failedFormatter(String message) => message.red();
-  static String _warningFormatter(String message) => message.yellow();
-  static String _fatalFormatter(String message) {
+  static String _successfulFormatter(final String message) => message.green();
+  static String _failedFormatter(final String message) => message.red();
+  static String _warningFormatter(final String message) => message.yellow();
+  static String _fatalFormatter(final String message) {
     FrameworkUtils.beep();
     return '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
   }
 
-  String format(String message) => _format('$prefix $message');
+  String format(final String message) => _format('$prefix $message');
 }
