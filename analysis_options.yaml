@@ -58,6 +58,7 @@ linter:
     - prefer_int_literals
     - prefer_interpolation_to_compose_strings
     - prefer_mixin
+    - prefer_null_aware_method_calls
 
 analyzer:
   language:
