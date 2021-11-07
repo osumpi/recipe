@@ -33,6 +33,7 @@ linter:
     - avoid_types_on_closure_parameters
     - avoid_unused_constructor_parameters
     - avoid_void_async
+    - cascade_invocations
 
 analyzer:
   language:
