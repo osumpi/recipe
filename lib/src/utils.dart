@@ -59,7 +59,7 @@ abstract class FrameworkUtils {
   static var showTimestampInLogs = true;
 
   static void log(
-    Object? obj, {
+    final Object? obj, {
     String? module,
     final LogLevel level = LogLevels.info,
     Statuses? status,
