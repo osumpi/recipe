@@ -2,7 +2,7 @@ part of recipe.baker;
 
 class SingleRunBakerOptions implements BakerOptions {
   const SingleRunBakerOptions({
-    this.shouldThrowWhenBakeRejected = false,
+    final this.shouldThrowWhenBakeRejected = false,
   });
 
   /// Whether the [SingleRunBaker] should throw when the requested bake was
