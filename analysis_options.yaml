@@ -41,6 +41,7 @@ linter:
     - missing_whitespace_between_adjacent_strings
     - noop_primitive_operations
     - omit_local_variable_types
+    - one_member_abstracts
 
 analyzer:
   language:
