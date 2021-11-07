@@ -131,7 +131,7 @@ mixin EntityLogging on FrameworkEntity {
   void warn(final String message) => log(message, level: LogLevels.warning);
 
   @protected
-  void statusUpdate(String message, {required Statuses status}) =>
+  void statusUpdate(final String message, {required final Statuses status}) =>
       log(message, level: LogLevels.status, status: status);
 
   @protected
