@@ -124,7 +124,7 @@ abstract class FrameworkUtils {
   static void statusUpdate(
     final String message, {
     final String? module,
-    required Statuses status,
+    required final Statuses status,
   }) =>
       log(message, module: module, level: LogLevels.status, status: status);
 
