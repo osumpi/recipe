@@ -23,6 +23,7 @@ linter:
     - do_not_use_environment
     - no_runtimeType_toString
     - unawaited_futures
+    - avoid_type_to_string
 
 analyzer:
   language:
