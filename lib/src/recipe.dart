@@ -11,7 +11,7 @@ import 'package:recipe/src/utils.dart';
 abstract class Recipe<I extends Object, O extends Object>
     with FrameworkEntity, EntityLogging {
   Recipe({
-    required this.inputPort,
+    required final this.inputPort,
     required this.outputPort,
   });
 
