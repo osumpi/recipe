@@ -5,11 +5,11 @@ import 'dart:collection' show ListQueue;
 
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/bake_context.dart' show BakeContext;
-import 'package:recipe/src/bake_report.dart' show BakeReport;
+import 'package:recipe/src/bake_context.dart';
+import 'package:recipe/src/bake_report.dart';
 import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/recipe.dart' show Recipe;
-import 'package:recipe/src/utils.dart' show uuid;
+import 'package:recipe/src/recipe.dart';
+import 'package:recipe/src/utils.dart';
 
 part 'src/baker.dart';
 part 'src/baker_options.dart';
