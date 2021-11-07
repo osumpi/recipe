@@ -158,7 +158,7 @@ class Statuses {
 
   static String _successfulFormatter(final String message) => message.green();
   static String _failedFormatter(final String message) => message.red();
-  static String _warningFormatter(String message) => message.yellow();
+  static String _warningFormatter(final String message) => message.yellow();
   static String _fatalFormatter(String message) {
     FrameworkUtils.beep();
     return '${' FATAL '.bold().white().onRed().blink()} ${message.toUpperCase().bold().red()}';
