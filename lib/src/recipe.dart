@@ -52,7 +52,8 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     if (inputPorts.isEmpty && outputPorts.isEmpty) {
       // TODO: describe this error in depth and give possible solutions
       throw StateError(
-          "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.");
+        "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.",
+      );
     }
 
     // TODO: maybe consider disabling this check by overriding global parameters
