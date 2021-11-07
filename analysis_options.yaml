@@ -40,6 +40,7 @@ linter:
     - leading_newlines_in_multiline_strings
     - missing_whitespace_between_adjacent_strings
     - noop_primitive_operations
+    - omit_local_variable_types
 
 analyzer:
   language:
