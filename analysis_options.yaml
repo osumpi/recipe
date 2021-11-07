@@ -36,6 +36,7 @@ linter:
     - cascade_invocations
     - deprecated_consistency
     - directives_ordering
+    - join_return_with_assignment
 
 analyzer:
   language:
