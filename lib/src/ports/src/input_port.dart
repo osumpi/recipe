@@ -67,7 +67,7 @@ mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
   final inboundConnections = <Connection<T>>{};
 
   @override
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort) {
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort) {
     final connection = WiredConnection<T>(from: outputPort, to: this);
     inboundConnections.add(connection);
     return connection;
