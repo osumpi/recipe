@@ -74,7 +74,7 @@ mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 
   @override
-  WirelessConnection<T> _wirelesslyConnectFrom(OutputPort<T> outputPort) {
+  WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort) {
     final connection = WirelessConnection<T>(from: outputPort, to: this);
     inboundConnections.add(connection);
     return connection;
