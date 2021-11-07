@@ -27,6 +27,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   @nonVirtual
   Connection<T>? inboundConnection;
 
+  @override
   UnmodifiableSetView<Connection<T>> get connections {
     return UnmodifiableSetView({
       if (inboundConnection != null) inboundConnection!,
@@ -58,6 +59,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
 }
 
 mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
+  @override
   UnmodifiableSetView<Connection<T>> get connections =>
       UnmodifiableSetView(inboundConnections);
 

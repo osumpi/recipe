@@ -9,12 +9,13 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  fhir_yaml: ^0.5.1
   duration: 3.0.7
+  fhir_yaml: ^0.5.1
   tint:
     git: https://github.com/rithviknishad/tint.git
   uuid: ^3.0.5
 
 dev_dependencies:
-  meta: ^1.7.0
   build_runner: ^1.12.2
+  lints: ^1.0.1
+  meta: ^1.7.0

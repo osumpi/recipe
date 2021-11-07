@@ -3,6 +3,7 @@ part of recipe.ports;
 abstract class Port<T extends Object> with FrameworkEntity {
   const Port(this.name);
 
+  @override
   final String name;
 
   @override

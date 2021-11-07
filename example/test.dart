@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:recipe/recipe.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/recipe.dart';
 
-void main() async {
+Future<void> main() async {
   FrameworkUtils.loggingLevel = LogLevels.verbose;
   FrameworkUtils.showTimestampInLogs = true;
 
@@ -14,8 +16,8 @@ void main() async {
 class MySimpleRecipe extends Recipe<int, String> {
   MySimpleRecipe()
       : super(
-          inputPort: MultiInboundInputPort('value'),
-          outputPort: OutputPort('asString'),
+          inputPort: MultiInboundInputPort<int>('value'),
+          outputPort: OutputPort<String>('asString'),
         );
 
   @override
@@ -26,19 +28,17 @@ class MySimpleRecipe extends Recipe<int, String> {
 
 // Recipe block that takes two numbers, and yields their quotient and remainder.
 class BitComplexRecipe extends MultiIORecipe {
-  late final InputPort<int> numeratorPort, denominatorPort;
-  late final OutputPort<int> quotientPort, remainderPort;
+  final numeratorPort = MultiInboundInputPort('numerator');
+  final denominatorPort = MultiInboundInputPort('denominator');
+
+  final quotientPort = OutputPort('quotient');
+  final remainderPort = OutputPort('remainder');
 
   @override
-  void initialize() {
-    numeratorPort = hookSingleInboundInputPort<int>('numerator');
-    denominatorPort = hookSingleInboundInputPort<int>('denominator');
+  Set<InputPort> get inputPorts => {numeratorPort, denominatorPort};
 
-    quotientPort = hookOutputPort<int>('quotient');
-    remainderPort = hookOutputPort<int>('remainder');
-
-    super.initialize();
-  }
+  @override
+  Set<OutputPort> get outputPorts => {quotientPort, remainderPort};
 
   @override
   Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context) async* {

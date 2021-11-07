@@ -44,73 +44,56 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
           outputPort: OutputPort<MuxedOutput>(uuid.v4()),
         );
 
-  final Set<InputPort> _inputPorts = {};
+  Set<InputPort> get inputPorts;
+  Set<OutputPort> get outputPorts;
 
-  UnmodifiableSetView<InputPort> get inputPorts =>
-      UnmodifiableSetView(_inputPorts);
+  @override
+  void initialize() {
+    if (inputPorts.isEmpty && outputPorts.isEmpty) {
+      // TODO: describe this error in depth and give possible solutions
+      throw StateError(
+          "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.");
+    }
 
-  final Set<OutputPort> _outputPorts = {};
+    // TODO: maybe consider disabling this check by overriding global parameters
+    ensureUniqueInputPortLabels();
+    ensureUniqueOutputPortLabels();
 
-  UnmodifiableSetView<OutputPort> get outputPorts =>
-      UnmodifiableSetView(_outputPorts);
+    super.initialize();
+  }
 
   /// Disallows input ports with same label.
-  /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
   @nonVirtual
-  void ensureUniqueInputPortLabel(String label) {
-    if (_inputPorts.any((element) => element.name == label)) {
-      throw ArgumentError(
-        '$runtimeType already has input port with label: $label.',
-        'label',
-      );
+  void ensureUniqueInputPortLabels() {
+    final names = <String>{};
+
+    for (final port in inputPorts) {
+      if (!names.add(port.name)) {
+        throw ArgumentError(
+          '$runtimeType already has input port with label: ${port.name}.',
+          'label',
+        );
+      }
     }
   }
 
   /// Disallows output ports with same label.
-  /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
   @nonVirtual
-  void ensureUniqueOutputPortLabel(String label) {
-    if (_outputPorts.any((element) => element.name == label)) {
-      throw ArgumentError(
-        '$runtimeType already has output port with label: $label.',
-        'label',
-      );
+  void ensureUniqueOutputPortLabels() {
+    final names = <String>{};
+
+    for (final port in outputPorts) {
+      if (!names.add(port.name)) {
+        throw ArgumentError(
+          '$runtimeType already has output port with label: ${port.name}.',
+          'label',
+        );
+      }
     }
-  }
-
-  @protected
-  @nonVirtual
-  @useResult
-  SingleInboundInputPort<T> hookSingleInboundInputPort<T extends Object>(
-      String label) {
-    ensureUniqueInputPortLabel(label);
-    final result = SingleInboundInputPort<T>(label);
-    _inputPorts.add(result);
-    return result;
-  }
-
-  @protected
-  @nonVirtual
-  @useResult
-  MultiInboundInputPort<T> hookInputPort<T extends Object>(String label) {
-    ensureUniqueInputPortLabel(label);
-    final result = MultiInboundInputPort<T>(label);
-    _inputPorts.add(result);
-    return result;
-  }
-
-  @protected
-  @nonVirtual
-  @useResult
-  OutputPort<T> hookOutputPort<T extends Object>(String label) {
-    ensureUniqueOutputPortLabel(label);
-    final result = OutputPort<T>(label);
-    _outputPorts.add(result);
-    return result;
   }
 
   @mustCallSuper
