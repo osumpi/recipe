@@ -3,6 +3,7 @@ part of recipe.ports;
 class OutputPort<T extends Object> extends Port<T> {
   OutputPort(final String name) : super(name);
 
+  @override
   UnmodifiableSetView<Connection<T>> get connections =>
       UnmodifiableSetView(outboundConnections);
 
