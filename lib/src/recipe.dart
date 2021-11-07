@@ -83,37 +83,6 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     }
   }
 
-  @protected
-  @nonVirtual
-  @useResult
-  SingleInboundInputPort<T> hookSingleInboundInputPort<T extends Object>(
-      String label) {
-    ensureUniqueInputPortLabel(label);
-    final result = SingleInboundInputPort<T>(label);
-    _inputPorts.add(result);
-    return result;
-  }
-
-  @protected
-  @nonVirtual
-  @useResult
-  MultiInboundInputPort<T> hookInputPort<T extends Object>(String label) {
-    ensureUniqueInputPortLabel(label);
-    final result = MultiInboundInputPort<T>(label);
-    _inputPorts.add(result);
-    return result;
-  }
-
-  @protected
-  @nonVirtual
-  @useResult
-  OutputPort<T> hookOutputPort<T extends Object>(String label) {
-    ensureUniqueOutputPortLabel(label);
-    final result = OutputPort<T>(label);
-    _outputPorts.add(result);
-    return result;
-  }
-
   @mustCallSuper
   @internal
   Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context);
