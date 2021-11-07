@@ -100,5 +100,5 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   @mustCallSuper
   @internal
   @override
-  Stream<MuxedOutput> bake(BakeContext<MuxedInputs> context);
+  Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context);
 }
