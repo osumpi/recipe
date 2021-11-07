@@ -55,7 +55,7 @@ const uuid = Uuid();
 
 @sealed
 abstract class FrameworkUtils {
-  static var loggingLevel = LogLevels.all;
+  static LogLevel loggingLevel = LogLevels.all;
   static bool showTimestampInLogs = true;
 
   static void log(
