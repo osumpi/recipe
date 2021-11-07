@@ -17,6 +17,8 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     - camel_case_types
+    # - always_specify_types
+    - prefer_collection_literals
 
 analyzer:
   language:
