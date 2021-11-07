@@ -35,7 +35,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 
   @override
-  WiredConnection<T> _connectFrom(OutputPort<T> outputPort) {
+  WiredConnection<T> _connectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
         'Cannot connect to $runtimeType when already an inbound connection exists.',
