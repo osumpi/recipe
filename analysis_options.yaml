@@ -39,6 +39,7 @@ linter:
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - missing_whitespace_between_adjacent_strings
+    - noop_primitive_operations
 
 analyzer:
   language:
