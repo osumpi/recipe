@@ -20,6 +20,7 @@ linter:
     # - always_specify_types
     - prefer_collection_literals
     - avoid_shadowing_type_parameters
+    - do_not_use_environment
 
 analyzer:
   language:
