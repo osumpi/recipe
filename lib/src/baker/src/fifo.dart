@@ -31,7 +31,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   }
 
   @override
-  void handleBakeRequestWhenBaking(BakeContext inputContext) {
+  void handleBakeRequestWhenBaking(final BakeContext inputContext) {
     requests.add(inputContext);
   }
 
