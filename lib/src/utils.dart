@@ -122,7 +122,7 @@ abstract class FrameworkUtils {
       log(message, module: module);
 
   static void statusUpdate(
-    String message, {
+    final String message, {
     String? module,
     required Statuses status,
   }) =>
