@@ -44,27 +44,24 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
           outputPort: OutputPort<MuxedOutput>(uuid.v4()),
         );
 
-  final Set<InputPort> _inputPorts = {};
-
-  UnmodifiableSetView<InputPort> get inputPorts =>
-      UnmodifiableSetView(_inputPorts);
-
-  final Set<OutputPort> _outputPorts = {};
-
-  UnmodifiableSetView<OutputPort> get outputPorts =>
-      UnmodifiableSetView(_outputPorts);
+  UnmodifiableSetView<InputPort> get inputPorts;
+  UnmodifiableSetView<OutputPort> get outputPorts;
 
   /// Disallows input ports with same label.
   /// TODO: maybe conside disabling this check by overriding global parameters
   @internal
   @protected
   @nonVirtual
-  void ensureUniqueInputPortLabel(String label) {
-    if (_inputPorts.any((element) => element.name == label)) {
-      throw ArgumentError(
-        '$runtimeType already has input port with label: $label.',
-        'label',
-      );
+  void ensureUniqueInputPortLabels() {
+    final names = <String>{};
+
+    for (final port in inputPorts) {
+      if (!names.add(port.name)) {
+        throw ArgumentError(
+          '$runtimeType already has input port with label: ${port.name}.',
+          'label',
+        );
+      }
     }
   }
 
@@ -73,12 +70,16 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   @internal
   @protected
   @nonVirtual
-  void ensureUniqueOutputPortLabel(String label) {
-    if (_outputPorts.any((element) => element.name == label)) {
-      throw ArgumentError(
-        '$runtimeType already has output port with label: $label.',
-        'label',
-      );
+  void ensureUniqueOutputPortLabels() {
+    final names = <String>{};
+
+    for (final port in outputPorts) {
+      if (!names.add(port.name)) {
+        throw ArgumentError(
+          '$runtimeType already has output port with label: ${port.name}.',
+          'label',
+        );
+      }
     }
   }
 
