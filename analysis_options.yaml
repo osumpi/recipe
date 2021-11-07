@@ -34,6 +34,7 @@ linter:
     - avoid_unused_constructor_parameters
     - avoid_void_async
     - cascade_invocations
+    - deprecated_consistency
 
 analyzer:
   language:
