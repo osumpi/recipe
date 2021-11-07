@@ -61,7 +61,7 @@ abstract class FrameworkUtils {
   static void log(
     Object? obj, {
     String? module,
-    LogLevel level = LogLevels.info,
+    final LogLevel level = LogLevels.info,
     Statuses? status,
   }) {
     if (level.value < loggingLevel.value) return;
