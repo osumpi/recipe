@@ -24,7 +24,7 @@ abstract class Recipe<I extends Object, O extends Object>
 
   @mustCallSuper
   @internal
-  Stream<O> bake(BakeContext<I> context);
+  Stream<O> bake(final BakeContext<I> context);
 
   @override
   JsonMap toJson() {
