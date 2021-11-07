@@ -41,7 +41,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   /// Do not await this future inside [bake].
   Future<void> tryCompletePendingRequests() async {
     if (requests.isNotEmpty) {
-      bake(requests.removeFirst());
+      unawaited(bake(requests.removeFirst()));
     }
   }
 }
