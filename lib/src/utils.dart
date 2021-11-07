@@ -156,7 +156,7 @@ class Statuses {
   static const warning = Statuses._('!', _warningFormatter);
   static const fatal = Statuses._('✗', _fatalFormatter);
 
-  static String _successfulFormatter(String message) => message.green();
+  static String _successfulFormatter(final String message) => message.green();
   static String _failedFormatter(String message) => message.red();
   static String _warningFormatter(String message) => message.yellow();
   static String _fatalFormatter(String message) {
