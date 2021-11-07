@@ -108,8 +108,8 @@ mixin EntityLogging on FrameworkEntity {
   @protected
   void log(
     final Object? object, {
-    LogLevel level = LogLevels.info,
-    Statuses? status,
+    final LogLevel level = LogLevels.info,
+    final Statuses? status,
   }) {
     final moduleName = _shouldIncludeHashCode ? '$name#$hashCode' : name;
 
