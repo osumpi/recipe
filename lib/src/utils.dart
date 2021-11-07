@@ -112,7 +112,7 @@ abstract class FrameworkUtils {
   static void fatal(String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.fatal);
 
-  static void error(String message, {String? module}) =>
+  static void error(String message, {final String? module}) =>
       log(message, module: module, level: LogLevels.error);
 
   static void warn(String message, {String? module}) =>
