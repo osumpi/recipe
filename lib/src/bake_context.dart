@@ -7,7 +7,7 @@ import 'package:recipe/src/recipe.dart' show Recipe;
 import 'package:recipe/src/utils.dart';
 
 @immutable
-class BakeContext<T extends Object> with FrameworkEntity, EntityLogging {
+class BakeContext<T> with FrameworkEntity, EntityLogging {
   @internal
   BakeContext({
     required final Recipe of,
