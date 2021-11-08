@@ -1,6 +1,6 @@
 part of recipe.ports;
 
-class OutputPort<T extends Object> extends Port<T> {
+class OutputPort<T> extends Port<T> {
   OutputPort(final String name) : super(name);
 
   @override
