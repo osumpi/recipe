@@ -1,6 +1,6 @@
 part of recipe.ports;
 
-abstract class InputPort<T extends Object> extends Port<T> {
+abstract class InputPort<T> extends Port<T> {
   InputPort(final String name) : super(name);
 
   @useResult
@@ -23,7 +23,7 @@ abstract class InputPort<T extends Object> extends Port<T> {
   }
 }
 
-mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
+mixin _SingleInboundInputPortHandler<T> on InputPort<T> {
   @nonVirtual
   Connection<T>? inboundConnection;
 
@@ -58,7 +58,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 }
 
-mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
+mixin _MultiInboundInputPortHandler<T> on InputPort<T> {
   @override
   UnmodifiableSetView<Connection<T>> get connections =>
       UnmodifiableSetView(inboundConnections);
@@ -81,8 +81,8 @@ mixin _MultiInboundInputPortHandler<T extends Object> on InputPort<T> {
   }
 }
 
-class SingleInboundInputPort<T extends Object> = InputPort<T>
+class SingleInboundInputPort<T> = InputPort<T>
     with _SingleInboundInputPortHandler<T>;
 
-class MultiInboundInputPort<T extends Object> = InputPort<T>
+class MultiInboundInputPort<T> = InputPort<T>
     with _MultiInboundInputPortHandler<T>;

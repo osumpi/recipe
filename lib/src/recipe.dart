@@ -8,8 +8,7 @@ import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/utils.dart';
 
-abstract class Recipe<I extends Object, O extends Object>
-    with FrameworkEntity, EntityLogging {
+abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
   Recipe({
     required final this.inputPort,
     required final this.outputPort,
