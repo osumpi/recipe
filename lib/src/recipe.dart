@@ -33,8 +33,8 @@ abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
   }
 }
 
-typedef MuxedInputs = UnmodifiableMapView<InputPort, Object>;
-typedef MuxedOutput = UnmodifiableMapView<OutputPort, Object>;
+typedef MuxedInputs = UnmodifiableMapView<InputPort, dynamic>;
+typedef MuxedOutput = List<MapEntry<OutputPort, dynamic>>;
 
 abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   MultiIORecipe()
