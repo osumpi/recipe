@@ -1,7 +1,7 @@
 part of recipe.ports;
 
 @immutable
-abstract class Connection<T extends Object> with FrameworkEntity {
+abstract class Connection<T> with FrameworkEntity {
   @literal
   const Connection({
     required final this.from,
@@ -24,11 +24,9 @@ abstract class Connection<T extends Object> with FrameworkEntity {
   }
 }
 
-mixin _WiredConnectionHandler<T extends Object> on Connection<T> {}
-mixin _WirelessConnectionHandler<T extends Object> on Connection<T> {}
+mixin _WiredConnectionHandler<T> on Connection<T> {}
+mixin _WirelessConnectionHandler<T> on Connection<T> {}
 
-class WiredConnection<T extends Object> = Connection<T>
-    with _WiredConnectionHandler;
+class WiredConnection<T> = Connection<T> with _WiredConnectionHandler<T>;
 
-class WirelessConnection<T extends Object> = Connection<T>
-    with _WirelessConnectionHandler<T>;
+class WirelessConnection<T> = Connection<T> with _WirelessConnectionHandler<T>;
