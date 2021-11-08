@@ -46,7 +46,7 @@ class BitComplexRecipe extends MultiIORecipe {
     final quotient = (numerator / denominator).truncate();
     final remainder = numerator % denominator;
 
-    yield* MuxedOutputAdapter.of(context)
+    yield MuxedOutputAdapter.of(context)
       ..writeTo(quotientPort, data: quotient)
       ..writeTo(remainderPort, data: remainder);
   }
