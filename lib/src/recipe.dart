@@ -73,7 +73,7 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     for (final port in inputPorts) {
       if (!names.add(port.name)) {
         throw ArgumentError(
-          '$runtimeType already has input port with label: ${port.name}.',
+          '$name already has input port with label: ${port.name}.',
           'label',
         );
       }
@@ -90,7 +90,7 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     for (final port in outputPorts) {
       if (!names.add(port.name)) {
         throw ArgumentError(
-          '$runtimeType already has output port with label: ${port.name}.',
+          '$name already has output port with label: ${port.name}.',
           'label',
         );
       }

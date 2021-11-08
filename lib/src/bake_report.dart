@@ -5,7 +5,7 @@ import 'package:recipe/src/baker/baker.dart' show Baker;
 
 @immutable
 class BakeReport {
-  BakeReport({
+  const BakeReport({
     required final this.bakeId,
     required final this.bakedBy,
     required final this.startedOn,

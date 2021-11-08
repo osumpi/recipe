@@ -43,7 +43,7 @@ mixin _ConcurrentBakeHandler on Baker {
       bake(inputContext);
     } else {
       throw UnimplementedError(
-        '[$runtimeType.canBake] was evaluated to false. However no implementation was given to handle this condition.',
+        '[$bakerType.canBake] was evaluated to false. However no implementation was given to handle this condition.',
       );
     }
   }

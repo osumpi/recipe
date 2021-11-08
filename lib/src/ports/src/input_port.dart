@@ -38,7 +38,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   WiredConnection<T> _connectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
-        'Cannot connect to $runtimeType when already an inbound connection exists.',
+        'Cannot connect to $name ($runtimeType) when already an inbound connection exists.',
       );
     }
 
@@ -49,7 +49,7 @@ mixin _SingleInboundInputPortHandler<T extends Object> on InputPort<T> {
   WirelessConnection<T> _wirelesslyConnectFrom(final OutputPort<T> outputPort) {
     if (inboundConnection is Connection<T>) {
       throw StateError(
-        'Cannot connect to $runtimeType when already an inbound connection exists.',
+        'Cannot connect to $name ($runtimeType) when already an inbound connection exists.',
       );
     }
 

@@ -27,7 +27,6 @@ linter:
     - avoid_bool_literals_in_conditional_expressions
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
-    - avoid_multiple_declarations_per_line
     - avoid_private_typedef_functions
     - avoid_setters_without_getters
     - avoid_types_on_closure_parameters
