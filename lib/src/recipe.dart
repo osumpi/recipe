@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/muxed_io.dart';
 import 'package:recipe/src/ports/ports.dart';
 import 'package:recipe/src/utils.dart';
 
@@ -33,9 +33,6 @@ abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
   }
 }
 
-typedef MuxedInputs = UnmodifiableMapView<InputPort, dynamic>;
-typedef MuxedOutput = List<MapEntry<OutputPort, dynamic>>;
-
 abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   MultiIORecipe()
       : super(
@@ -43,8 +40,8 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
           outputPort: OutputPort<MuxedOutput>(uuid.v4()),
         );
 
-  Set<InputPort> get inputPorts;
-  Set<OutputPort> get outputPorts;
+  Set<InputPort<dynamic>> get inputPorts;
+  Set<OutputPort<dynamic>> get outputPorts;
 
   @override
   void initialize() {

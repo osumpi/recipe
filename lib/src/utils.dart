@@ -137,7 +137,8 @@ abstract class FrameworkUtils {
   static void beep() => stdout.writeCharCode(0x07);
 }
 
-Stream<BakeContext> bake(final Recipe recipe) {
+// TODO: make it as Recipe<RecipeRun
+void bake(final Recipe<dynamic, dynamic> recipe) {
   throw UnimplementedError();
   // return Baker.of(null).bake(recipe);
 }
