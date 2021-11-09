@@ -9,7 +9,7 @@ mixin _NonConcurrentBakerMixin on Baker {
   bool get canBake => isIdle;
 
   @override
-  void requestBake(final BakeContext inputContext) {
+  void requestBake(final BakeContext<dynamic> inputContext) {
     if (canBake) {
       bake(inputContext);
     } else {
@@ -17,5 +17,5 @@ mixin _NonConcurrentBakerMixin on Baker {
     }
   }
 
-  void handleBakeRequestWhenBaking(final BakeContext inputContext);
+  void handleBakeRequestWhenBaking(final BakeContext<dynamic> inputContext);
 }
