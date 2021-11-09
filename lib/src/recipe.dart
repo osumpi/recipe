@@ -4,8 +4,8 @@ import 'package:meta/meta.dart';
 
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/muxed_io.dart';
 import 'package:recipe/src/ports/ports.dart';
-import 'package:recipe/src/typedefs.dart';
 import 'package:recipe/src/utils.dart';
 
 abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
