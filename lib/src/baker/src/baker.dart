@@ -43,7 +43,7 @@ abstract class Baker<T extends BakerOptions>
   bool get canBake;
 
   @protected
-  Future<BakeReport> bake(final BakeContext inputContext);
+  Future<BakeReport> bake(final BakeContext<dynamic> inputContext);
 
   /// Requests a bake on [recipe] for a given [inputContext].
   ///
@@ -52,7 +52,7 @@ abstract class Baker<T extends BakerOptions>
   ///
   /// Refer baker implementation docs to see how the [requestBake] is actually
   /// handled.
-  void requestBake(final BakeContext inputContext);
+  void requestBake(final BakeContext<dynamic> inputContext);
 
   Type get bakerType => runtimeType;
 }
