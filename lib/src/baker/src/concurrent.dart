@@ -11,7 +11,7 @@ mixin _ConcurrentBakeHandler on Baker {
   Future<BakeReport> bake(final BakeContext<dynamic> inputContext) async {
     uptimeStopwatch.start();
 
-    final key = uuid.v4();
+    final key = FrameworkUtils.uuid.v4();
     bakesInProgress[key] = DateTime.now();
 
     // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
