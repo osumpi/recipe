@@ -1,13 +1,30 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:recipe/recipe.dart';
+import 'package:recipe/src/log.dart';
+import 'package:tint/tint.dart';
 
 Future<void> main() async {
-  FrameworkUtils.loggingLevel = LogLevels.verbose;
-  FrameworkUtils.showTimestampInLogs = true;
+  // stdout.writeln(
+  //   "",
+  // );
 
-  bake(MySimpleRecipe());
-  bake(BitComplexRecipe());
+  var result = ' ✗ Error | Module'.red().reset();
+
+  // result = jsonEncode(result);
+
+  stdout.writeln(result);
+
+  // FrameworkUtils.loggingLevel = LogLevels.trace;
+  // FrameworkUtils.showTimestampInLogs = true;
+
+  // Log.error('object');
+  // Log.trace('object');
+
+  // bake(MySimpleRecipe());
+  // bake(BitComplexRecipe());
 }
 
 // Recipe that converts integer to string.
