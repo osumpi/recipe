@@ -8,7 +8,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
     uptimeStopwatch.start();
 
     final startedOn = DateTime.now();
-    final key = uuid.v4();
+    final key = FrameworkUtils.uuid.v4();
 
     // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
     await recipe.bake(inputContext);
