@@ -1,11 +1,12 @@
 import 'dart:collection' show UnmodifiableMapView;
 
 import 'package:meta/meta.dart';
-import 'package:recipe/recipe.dart';
-import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/muxed_io.dart';
-import 'package:recipe/src/recipe.dart';
-import 'package:recipe/src/utils.dart';
+
+import 'framework_entity.dart';
+import 'muxed_io.dart';
+import 'ports/ports.dart';
+import 'recipe.dart';
+import 'utils.dart';
 
 @immutable
 class BakeContext<T> with FrameworkEntity, EntityLogging {

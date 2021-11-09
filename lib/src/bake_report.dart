@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/bake_context.dart' show BakeContext;
-import 'package:recipe/src/baker/baker.dart' show Baker;
+import 'bake_context.dart';
+import 'baker/baker.dart';
 
 @immutable
 class BakeReport {

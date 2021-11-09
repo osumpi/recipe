@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
-import 'package:recipe/recipe.dart';
-import 'package:recipe/src/bake_context.dart';
-import 'package:recipe/src/recipe.dart';
 import 'package:tint/tint.dart';
 import 'package:uuid/uuid.dart';
+
+import 'recipe.dart';
 
 @internal
 @immutable

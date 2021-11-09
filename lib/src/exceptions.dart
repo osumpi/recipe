@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/recipe.dart' show Recipe;
+import 'recipe.dart';
 
 /// Recipe of type [T] was not found in the [visitedRecipes].
 @immutable

@@ -1,6 +1,7 @@
 import 'dart:collection';
 
-import 'package:recipe/recipe.dart';
+import 'bake_context.dart';
+import 'ports/ports.dart';
 
 typedef MuxedInputs = UnmodifiableMapView<InputPort<dynamic>, dynamic>;
 typedef MuxedOutput = List<MapEntry<OutputPort<dynamic>, dynamic>>;
