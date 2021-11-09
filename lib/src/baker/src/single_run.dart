@@ -22,7 +22,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   final concurrencyAllowed = false;
 
   @override
-  Future<BakeReport> bake(final BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext<dynamic> inputContext) async {
     uptimeStopwatch.start();
     canBake = false;
 
@@ -54,7 +54,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   bool canBake = true;
 
   @override
-  void requestBake(final BakeContext inputContext) {
+  void requestBake(final BakeContext<dynamic> inputContext) {
     if (canBake) {
       bake(inputContext);
       canBake = false;

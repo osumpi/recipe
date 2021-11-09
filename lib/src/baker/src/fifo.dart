@@ -1,10 +1,10 @@
 part of recipe.baker;
 
 mixin _FIFOBakeHandler on NonConcurrentBaker {
-  final requests = ListQueue<BakeContext>();
+  final requests = ListQueue<BakeContext<dynamic>>();
 
   @override
-  Future<BakeReport> bake(final BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext<dynamic> inputContext) async {
     uptimeStopwatch.start();
 
     final startedOn = DateTime.now();
@@ -31,7 +31,7 @@ mixin _FIFOBakeHandler on NonConcurrentBaker {
   }
 
   @override
-  void handleBakeRequestWhenBaking(final BakeContext inputContext) {
+  void handleBakeRequestWhenBaking(final BakeContext<dynamic> inputContext) {
     requests.add(inputContext);
   }
 
