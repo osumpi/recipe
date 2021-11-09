@@ -40,8 +40,8 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
           outputPort: OutputPort<MuxedOutput>(uuid.v4()),
         );
 
-  Set<InputPort> get inputPorts;
-  Set<OutputPort> get outputPorts;
+  Set<InputPort<dynamic>> get inputPorts;
+  Set<OutputPort<dynamic>> get outputPorts;
 
   @override
   void initialize() {
