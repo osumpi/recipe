@@ -36,8 +36,8 @@ abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
 abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   MultiIORecipe()
       : super(
-          inputPort: SingleInboundInputPort<MuxedInputs>(uuid.v4()),
-          outputPort: OutputPort<MuxedOutput>(uuid.v4()),
+          inputPort: SingleInboundInputPort(FrameworkUtils.uuid.v4()),
+          outputPort: OutputPort(FrameworkUtils.uuid.v4()),
         );
 
   Set<InputPort<dynamic>> get inputPorts;

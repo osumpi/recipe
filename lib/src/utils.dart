@@ -6,6 +6,9 @@ import 'package:uuid/uuid.dart';
 
 import 'recipe.dart';
 
+/// Log level that is used for logging.
+///
+/// See [LogLevels] for all available levels.
 @internal
 @immutable
 class LogLevel implements Comparable<LogLevel> {
@@ -13,9 +16,11 @@ class LogLevel implements Comparable<LogLevel> {
   @literal
   const LogLevel(this.name, this.value);
 
+  /// A value to compare between all [LogLevels].
   @internal
   final int value;
 
+  /// The name of this [LogLevel].
   final String name;
 
   @override
@@ -25,18 +30,40 @@ class LogLevel implements Comparable<LogLevel> {
   String toString() => name;
 }
 
+/// All available [LogLevel]s.
 @sealed
 abstract class LogLevels {
+  /// The log level that disables logging. Use this level only for setting
+  /// logging level.
+  /// TODO: improve docs
   static const off = LogLevel('off', 100);
+
+  /// Log level to log fatal events.
   static const fatal = LogLevel('fatal', 80);
+
+  /// Log level to log errors.
   static const error = LogLevel('error', 70);
+
+  /// Log level to log warnings.
   static const warning = LogLevel('warning', 60);
-  static const status = LogLevel('status', 50);
+
+  static const status = LogLevel('status', 50); // TODO: remove this.
+
+  /// Log level to log infos.
   static const info = LogLevel('info', 40);
+
+  /// Log level to log verbose events.
   static const verbose = LogLevel('verbose', 20);
+
+  /// Log level to trace events. Use this level to report that you inhaled and
+  /// exhaled.
   static const trace = LogLevel('trace', 10);
+
+  /// The log level that enables all levels to be logged. Use this level only
+  /// for setting logging level.
   static const all = LogLevel('all', 0);
 
+  /// All available [LogLevel]s in this framework.
   static const values = [
     off,
     fatal,
@@ -50,10 +77,19 @@ abstract class LogLevels {
   ];
 }
 
-const uuid = Uuid();
-
+/// Abstract class that contains all utility tools for use in recipe framework
+/// as static members.
+///
+/// This class is not intended to be used as a super type or have instances.
 @sealed
 abstract class FrameworkUtils {
+  /// Provides an instance of [Uuid].
+  ///
+  /// Used by:
+  /// * [Baker]s for [BakeReport]s and other relevant tasks.
+  /// * [MultiIORecipe] to allocate random label for the the masked IO ports.
+  static const uuid = Uuid();
+
   static LogLevel loggingLevel = LogLevels.all;
   static bool showTimestampInLogs = true;
 
