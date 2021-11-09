@@ -6,4 +6,5 @@ export 'src/baker/baker.dart';
 export 'src/output_adapter.dart';
 export 'src/ports/ports.dart';
 export 'src/recipe.dart';
+export 'src/typedefs.dart' show MuxedInputs, MuxedOutput;
 export 'src/utils.dart' show bake, FrameworkUtils, LogLevels, Statuses;
