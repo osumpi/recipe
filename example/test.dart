@@ -19,7 +19,7 @@ class MySimpleRecipe extends Recipe<int, String> {
         );
 
   @override
-  Stream<String> bake(BakeContext<int> context) async* {
+  Stream<String> bake(final BakeContext<int> context) async* {
     yield context.data.toString();
   }
 }
@@ -33,10 +33,10 @@ class BitComplexRecipe extends MultiIORecipe {
   final remainderPort = OutputPort('remainder');
 
   @override
-  Set<InputPort> get inputPorts => {numeratorPort, denominatorPort};
+  Set<InputPort<dynamic>> get inputPorts => {numeratorPort, denominatorPort};
 
   @override
-  Set<OutputPort> get outputPorts => {quotientPort, remainderPort};
+  Set<OutputPort<dynamic>> get outputPorts => {quotientPort, remainderPort};
 
   @override
   Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context) async* {
