@@ -77,8 +77,17 @@ abstract class LogLevels {
   ];
 }
 
+/// Abstract class that contains all utility tools for use in recipe framework
+/// as static members.
+///
+/// This class is not intended to be used as a super type or have instances.
 @sealed
 abstract class FrameworkUtils {
+  /// Provides an instance of [Uuid].
+  ///
+  /// Used by:
+  /// * [Baker]s for [BakeReport]s and other relevant tasks.
+  /// * [MultiIORecipe] to allocate random label for the the masked IO ports.
   static const uuid = Uuid();
 
   static LogLevel loggingLevel = LogLevels.all;
