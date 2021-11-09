@@ -13,7 +13,7 @@ abstract class Baker<T extends BakerOptions>
   final T bakerOptions;
 
   @nonVirtual
-  final Recipe recipe;
+  final Recipe<dynamic, dynamic> recipe;
 
   bool get concurrencyAllowed;
 
