@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/bake_context.dart';
-import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/muxed_io.dart';
-import 'package:recipe/src/ports/ports.dart';
-import 'package:recipe/src/utils.dart';
+import 'bake_context.dart';
+import 'framework_entity.dart';
+import 'muxed_io.dart';
+import 'ports/ports.dart';
+import 'utils.dart';
 
 abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
   Recipe({
