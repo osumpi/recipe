@@ -29,13 +29,16 @@ class LogLevel implements Comparable<LogLevel> {
 @sealed
 abstract class LogLevels {
   static const off = LogLevel('off', 100);
-  static const fatal = LogLevel('fatal', 80);
-  static const error = LogLevel('error', 70);
-  static const warning = LogLevel('warning', 60);
-  static const status = LogLevel('status', 50);
-  static const info = LogLevel('info', 40);
-  static const verbose = LogLevel('verbose', 20);
-  static const trace = LogLevel('trace', 10);
+  static const fatal = LogLevel(
+    "\u001b[5m\u001b[41m\u001b[37m\u001b[1m FATAL \u001b[22m\u001b[39m\u001b[49m\u001b[25m",
+    80,
+  );
+  static const error = LogLevel('ERROR', 70);
+  static const warning = LogLevel('WARNING', 60);
+  static const status = LogLevel('status', 50); // TODO: remove
+  static const info = LogLevel('I', 40);
+  static const verbose = LogLevel('V', 20);
+  static const trace = LogLevel('t', 10);
   static const all = LogLevel('all', 0);
 
   static const values = [
