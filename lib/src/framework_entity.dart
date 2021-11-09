@@ -1,7 +1,7 @@
 import 'package:fhir_yaml/fhir_yaml.dart' show json2yaml;
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/utils.dart';
+import 'utils.dart';
 
 /// This mixin provides basic functionallities required by entities of the
 /// recipe framework.
