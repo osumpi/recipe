@@ -1,8 +1,10 @@
 import 'dart:collection' show UnmodifiableMapView;
 
 import 'package:meta/meta.dart';
-import 'package:recipe/src/typedefs.dart';
+import 'package:recipe/recipe.dart';
 import 'package:recipe/src/framework_entity.dart';
+import 'package:recipe/src/muxed_io.dart';
+import 'package:recipe/src/recipe.dart';
 import 'package:recipe/src/utils.dart';
 
 @immutable
@@ -11,16 +13,29 @@ class BakeContext<T> with FrameworkEntity, EntityLogging {
   BakeContext({
     required final this.recipe,
     required final this.data,
-    required final Map<AnyInputPort, AnyBakeContext> parentContexts,
+    required final Map<InputPort<dynamic>, BakeContext<dynamic>> parentContexts,
   }) : parentContexts = UnmodifiableMapView(parentContexts);
+
+  @internal
+  static BakeContext<MuxedInputs> muxFrom(
+    final Map<InputPort<dynamic>, BakeContext<dynamic>> contexts, {
+    required final Recipe<MuxedInputs, dynamic> recipe,
+  }) {
+    final data = MuxedInputs({
+      for (final inputPort in contexts.keys)
+        inputPort: contexts[inputPort]?.data,
+    });
+
+    return BakeContext(recipe: recipe, data: data, parentContexts: contexts);
+  }
 
   final T data;
 
-  final AnyRecipe recipe;
+  final Recipe<T, dynamic> recipe;
 
-  final Map<AnyInputPort, AnyBakeContext> parentContexts;
+  final Map<InputPort<dynamic>, BakeContext<dynamic>> parentContexts;
 
-  Iterable<AnyRecipe> get parents =>
+  Iterable<Recipe<dynamic, dynamic>> get parents =>
       parentContexts.values.map((final e) => e.recipe);
 
   bool get hasParent => parents.isNotEmpty;
