@@ -1,9 +1,9 @@
 import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/ports/ports.dart';
-import 'package:recipe/src/recipe.dart';
+import 'package:recipe/src/typedefs.dart';
 
 abstract class MuxedOutputAdapter {
-  static MuxedOutput of(BakeContext context) => [];
+  static MuxedOutput of(final AnyBakeContext context) => [];
 }
 
 extension MuxedOutputExtension on MuxedOutput {
