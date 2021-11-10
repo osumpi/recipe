@@ -12,11 +12,11 @@ Future<void> main() async {
 
 // Recipe that converts integer to string.
 class MySimpleRecipe extends Recipe<int, String> {
-  MySimpleRecipe()
-      : super(
-          inputPort: MultiInboundInputPort<int>('value'),
-          outputPort: OutputPort<String>('asString'),
-        );
+  @override
+  final inputPort = MultiInboundInputPort('value');
+
+  @override
+  final outputPort = OutputPort('asString');
 
   @override
   Stream<String> bake(final BakeContext<int> context) async* {
