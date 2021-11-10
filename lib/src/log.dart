@@ -7,6 +7,14 @@ import 'framework_entity.dart';
 
 @doNotStore
 class Log {
+  factory Log(
+    final Object? object, {
+    required final LogLevel level,
+    final FrameworkEntity module = anonymous,
+    final LogOptions? logOptions,
+  }) =>
+      Log._(level, module, object, logOptions);
+
   Log._(
     final this.level,
     final this.module,
@@ -110,10 +118,8 @@ const anonymous = _AnonymousModule('Anonymous');
 /// Log level that is used for logging.
 ///
 /// See [LogLevels] for all available levels.
-@internal
 @immutable
 class LogLevel implements Comparable<LogLevel> {
-  @internal
   @literal
   const LogLevel({
     required final this.label,
@@ -124,7 +130,6 @@ class LogLevel implements Comparable<LogLevel> {
   });
 
   /// A value to compare between all [LogLevels].
-  @internal
   final int value;
 
   /// The short symbolic representation of [label].
