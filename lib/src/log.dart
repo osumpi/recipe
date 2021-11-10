@@ -4,15 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/utils.dart';
 
-class _AnonymousModule with FrameworkEntity {
-  const _AnonymousModule(this.name);
-
-  @override
-  final String name;
-}
-
-const anonymous = _AnonymousModule('Anonymous');
-
 @doNotStore
 class Log {
   Log._(
@@ -105,3 +96,12 @@ class LogOptions {
     );
   }
 }
+
+class _AnonymousModule with FrameworkEntity {
+  const _AnonymousModule(this.name);
+
+  @override
+  final String name;
+}
+
+const anonymous = _AnonymousModule('Anonymous');
