@@ -9,13 +9,11 @@ import 'ports/ports.dart';
 import 'utils.dart';
 
 abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
-  Recipe({
-    required final this.inputPort,
-    required final this.outputPort,
-  });
+  const Recipe();
 
-  final InputPort<I> inputPort;
-  final OutputPort<O> outputPort;
+  InputPort<I> get inputPort;
+
+  OutputPort<O> get outputPort;
 
   @mustCallSuper
   @protected
@@ -34,11 +32,13 @@ abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
 }
 
 abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
-  MultiIORecipe()
-      : super(
-          inputPort: SingleInboundInputPort(FrameworkUtils.uuid.v4()),
-          outputPort: OutputPort(FrameworkUtils.uuid.v4()),
-        );
+  MultiIORecipe();
+
+  @override
+  final inputPort = SingleInboundInputPort(FrameworkUtils.uuid.v4());
+
+  @override
+  final outputPort = OutputPort(FrameworkUtils.uuid.v4());
 
   Set<InputPort<dynamic>> get inputPorts;
   Set<OutputPort<dynamic>> get outputPorts;
