@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:recipe/recipe.dart';
-import 'package:recipe/src/log.dart';
 import 'package:tint/tint.dart';
 
 Future<void> main() async {
@@ -11,11 +10,11 @@ Future<void> main() async {
   //   "",
   // );
 
-  var result = ' ✗ Error | Module'.red().reset();
+  final result = jsonEncode(' success '.brightGreen().reset());
 
-  // result = jsonEncode(result);
-
-  stdout.writeln(result);
+  stdout
+    ..writeln(result)
+    ..writeln(jsonDecode(result));
 
   // FrameworkUtils.loggingLevel = LogLevels.trace;
   // FrameworkUtils.showTimestampInLogs = true;
