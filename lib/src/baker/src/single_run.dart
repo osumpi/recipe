@@ -27,7 +27,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
     canBake = false;
 
     final startedOn = DateTime.now();
-    final key = FrameworkUtils.uuid.v4();
+    final key = uuid.v4();
 
     // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
     await recipe.bake(inputContext);
