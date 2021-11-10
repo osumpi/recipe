@@ -1,5 +1,6 @@
 import 'package:fhir_yaml/fhir_yaml.dart' show json2yaml;
 import 'package:meta/meta.dart';
+import 'package:recipe/src/log.dart';
 
 import 'utils.dart';
 
@@ -109,37 +110,31 @@ mixin EntityLogging on FrameworkEntity {
   void log(
     final Object? object, {
     final LogLevel level = LogLevels.info,
-    final Statuses? status,
-  }) {
-    final moduleName = _shouldIncludeHashCode ? '$name#$hashCode' : name;
-
-    return FrameworkUtils.log(
-      object,
-      module: moduleName,
-      level: level,
-      status: status,
-    );
-  }
+    final LogOptions? logOptions,
+  }) =>
+      Log(object, level: level, module: this, logOptions: logOptions);
 
   @protected
-  void fatal(final String message) => log(message, level: LogLevels.fatal);
+  void fatal(final Object? object, {final LogOptions? logOptions}) =>
+      Log.fatal(object, module: this, logOptions: logOptions);
 
   @protected
-  void error(final String message) => log(message, level: LogLevels.error);
+  void error(final Object? object, {final LogOptions? logOptions}) =>
+      Log.error(object, module: this, logOptions: logOptions);
 
   @protected
-  void warn(final String message) => log(message, level: LogLevels.warning);
+  void warn(final Object? object, {final LogOptions? logOptions}) =>
+      Log.warn(object, module: this, logOptions: logOptions);
 
   @protected
-  void statusUpdate(final String message, {required final Statuses status}) =>
-      log(message, level: LogLevels.status, status: status);
+  void info(final Object? object, {final LogOptions? logOptions}) =>
+      Log.info(object, module: this, logOptions: logOptions);
 
   @protected
-  void info(final String message) => log(message, level: LogLevels.info);
+  void verbose(final Object? object, {final LogOptions? logOptions}) =>
+      Log.verbose(object, module: this, logOptions: logOptions);
 
   @protected
-  void verbose(final String message) => log(message, level: LogLevels.verbose);
-
-  @protected
-  void trace(final String message) => log(message, level: LogLevels.trace);
+  void trace(final Object? object, {final LogOptions? logOptions}) =>
+      Log.trace(object, module: this, logOptions: logOptions);
 }
