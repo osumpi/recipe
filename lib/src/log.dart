@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
-import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/utils.dart';
+import 'package:tint/tint.dart';
+
+import 'framework_entity.dart';
 
 @doNotStore
 class Log {
@@ -105,3 +106,40 @@ class _AnonymousModule with FrameworkEntity {
 }
 
 const anonymous = _AnonymousModule('Anonymous');
+
+/// Log level that is used for logging.
+///
+/// See [LogLevels] for all available levels.
+@internal
+@immutable
+class LogLevel implements Comparable<LogLevel> {
+  @internal
+  @literal
+  const LogLevel({
+    required final this.label,
+    required final this.labelAsSymbol,
+    required final this.value,
+    required final this.moduleNameFormatter,
+    required final this.messageFormatter,
+  });
+
+  /// A value to compare between all [LogLevels].
+  @internal
+  final int value;
+
+  /// The short symbolic representation of [label].
+  final String labelAsSymbol;
+
+  /// The name of this [LogLevel].
+  final String label;
+
+  final String Function(FrameworkEntity module) moduleNameFormatter;
+
+  final String Function(Object? object) messageFormatter;
+
+  @override
+  int compareTo(final LogLevel other) => value.compareTo(other.value);
+
+  @override
+  String toString() => label.strip();
+}
