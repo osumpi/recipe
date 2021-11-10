@@ -1,21 +1,19 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:meta/meta.dart';
 
-import 'package:recipe/src/bake_context.dart';
-import 'package:recipe/src/framework_entity.dart';
-import 'package:recipe/src/ports/ports.dart';
-import 'package:recipe/src/utils.dart';
+import 'bake_context.dart';
+import 'framework_entity.dart';
+import 'muxed_io.dart';
+import 'ports/ports.dart';
+import 'utils.dart';
 
 abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
-  Recipe({
-    required final this.inputPort,
-    required final this.outputPort,
-  });
+  const Recipe();
 
-  final InputPort<I> inputPort;
-  final OutputPort<O> outputPort;
+  InputPort<I> get inputPort;
+
+  OutputPort<O> get outputPort;
 
   @mustCallSuper
   @protected
@@ -33,18 +31,17 @@ abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
   }
 }
 
-typedef MuxedInputs = UnmodifiableMapView<InputPort, dynamic>;
-typedef MuxedOutput = List<MapEntry<OutputPort, dynamic>>;
-
 abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
-  MultiIORecipe()
-      : super(
-          inputPort: SingleInboundInputPort<MuxedInputs>(uuid.v4()),
-          outputPort: OutputPort<MuxedOutput>(uuid.v4()),
-        );
+  MultiIORecipe();
 
-  Set<InputPort> get inputPorts;
-  Set<OutputPort> get outputPorts;
+  @override
+  final inputPort = SingleInboundInputPort(FrameworkUtils.uuid.v4());
+
+  @override
+  final outputPort = OutputPort(FrameworkUtils.uuid.v4());
+
+  Set<InputPort<dynamic>> get inputPorts;
+  Set<OutputPort<dynamic>> get outputPorts;
 
   @override
   void initialize() {

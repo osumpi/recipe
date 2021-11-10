@@ -8,10 +8,10 @@ mixin _ConcurrentBakeHandler on Baker {
   final Map<String, DateTime> bakesInProgress = {};
 
   @override
-  Future<BakeReport> bake(final BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext<dynamic> inputContext) async {
     uptimeStopwatch.start();
 
-    final key = uuid.v4();
+    final key = FrameworkUtils.uuid.v4();
     bakesInProgress[key] = DateTime.now();
 
     // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
@@ -38,7 +38,7 @@ mixin _ConcurrentBakeHandler on Baker {
   bool get canBake => true;
 
   @override
-  void requestBake(final BakeContext inputContext) {
+  void requestBake(final BakeContext<dynamic> inputContext) {
     if (canBake) {
       bake(inputContext);
     } else {

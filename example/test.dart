@@ -29,14 +29,14 @@ Future<void> main() async {
 
 // Recipe that converts integer to string.
 class MySimpleRecipe extends Recipe<int, String> {
-  MySimpleRecipe()
-      : super(
-          inputPort: MultiInboundInputPort<int>('value'),
-          outputPort: OutputPort<String>('asString'),
-        );
+  @override
+  final inputPort = MultiInboundInputPort('value');
 
   @override
-  Stream<String> bake(BakeContext<int> context) async* {
+  final outputPort = OutputPort('asString');
+
+  @override
+  Stream<String> bake(final BakeContext<int> context) async* {
     yield context.data.toString();
   }
 }
@@ -50,10 +50,10 @@ class BitComplexRecipe extends MultiIORecipe {
   final remainderPort = OutputPort('remainder');
 
   @override
-  Set<InputPort> get inputPorts => {numeratorPort, denominatorPort};
+  Set<InputPort<dynamic>> get inputPorts => {numeratorPort, denominatorPort};
 
   @override
-  Set<OutputPort> get outputPorts => {quotientPort, remainderPort};
+  Set<OutputPort<dynamic>> get outputPorts => {quotientPort, remainderPort};
 
   @override
   Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context) async* {

@@ -22,12 +22,12 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   final concurrencyAllowed = false;
 
   @override
-  Future<BakeReport> bake(final BakeContext inputContext) async {
+  Future<BakeReport> bake(final BakeContext<dynamic> inputContext) async {
     uptimeStopwatch.start();
     canBake = false;
 
     final startedOn = DateTime.now();
-    final key = uuid.v4();
+    final key = FrameworkUtils.uuid.v4();
 
     // TODO: listen and report recipe.bakeCompletedWithContext / hook to output
     await recipe.bake(inputContext);
@@ -54,7 +54,7 @@ mixin _SingleRunBakeHandler on Baker<SingleRunBakerOptions> {
   bool canBake = true;
 
   @override
-  void requestBake(final BakeContext inputContext) {
+  void requestBake(final BakeContext<dynamic> inputContext) {
     if (canBake) {
       bake(inputContext);
       canBake = false;
