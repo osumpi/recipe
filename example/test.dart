@@ -1,20 +1,24 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:recipe/recipe.dart';
-import 'package:tint/tint.dart';
+import 'package:recipe/src/log.dart';
 
 Future<void> main() async {
-  // stdout.writeln(
-  //   "",
-  // );
+  Log.loggingLevel = LogLevels.all;
+  Log.showLevelSymbolInsteadOfLabel = true;
+  // Log.showTimestamp = true;
 
-  final result = jsonEncode(' success '.brightGreen().reset());
+  const message = "This is a log message";
 
-  stdout
-    ..writeln(result)
-    ..writeln(jsonDecode(result));
+  for (final level in LogLevels.values) {
+    Log(message, level: level);
+  }
+
+  // final result = jsonEncode(' success '.brightGreen().reset());
+
+  // stdout
+  //   ..writeln(result)
+  //   ..writeln(jsonDecode(result));
 
   // FrameworkUtils.loggingLevel = LogLevels.trace;
   // FrameworkUtils.showTimestampInLogs = true;
@@ -39,6 +43,8 @@ class MySimpleRecipe extends Recipe<int, String> {
     yield context.data.toString();
   }
 }
+
+// TODO: PREFER num OVER int / double FOR COMPATABILITY
 
 // Recipe block that takes two numbers, and yields their quotient and remainder.
 class BitComplexRecipe extends MultiIORecipe {
