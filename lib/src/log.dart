@@ -23,9 +23,14 @@ class Log {
 
     if (level == LogLevels.fatal) stdout.writeCharCode(0x07);
 
-    stdout.writeln(
-      "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module.name)} $_seperator ${level.messageFormatter(object)}",
-    );
+    var logMessage =
+        "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module.name)} $_seperator ${level.messageFormatter(object)}";
+
+    if (!applyColors) {
+      logMessage = logMessage.strip();
+    }
+
+    stdout.writeln(logMessage);
   }
 
   factory Log.fatal(
@@ -71,6 +76,10 @@ class Log {
   static bool showLevelSymbolInsteadOfLabel = false;
 
   static bool showTimestamp = false;
+
+  /// If `false`, all ANSI sequences will be stripped when logging.
+  /// If `true`, all ANSI sequences will be preserved when logging.
+  static bool applyColors = true;
 }
 
 class _AnonymousModule with FrameworkEntity {
