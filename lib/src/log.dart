@@ -20,14 +20,16 @@ class Log {
     final this.module,
     final this.object,
     final LogOptions? _logOptions,
-  )   : logOptions = _logOptions ?? Log.defaultOptions,
+  )   : logOptions = _logOptions ?? Log.defaultOption,
         shouldBeep = level == LogLevels.fatal {
     // Skip remaining if it's not going to be logged.
     if (level.value < Log.loggingLevel.value) return;
 
     if (shouldBeep) stdout.writeCharCode(0x07);
 
-    // TODO : format and print the message
+    stdout.writeln(
+      "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module.name)} $_seperator ${level.messageFormatter(object)}",
+    );
   }
 
   factory Log.fatal(
@@ -72,8 +74,15 @@ class Log {
   }) =>
       Log._(LogLevels.trace, module, object, logOptions);
 
-  static LogOptions defaultOptions = LogOptions.defaults();
+  static const _seperator = "•";
+
+  static LogOptions defaultOption = const LogOptions.defaults();
+
   static LogLevel loggingLevel = LogLevels.info;
+
+  static bool showLevelSymbolInsteadOfLabel = false;
+
+  static bool showTimestamp = false;
 
   final Object? object;
   final FrameworkEntity module;
@@ -138,7 +147,7 @@ class LogLevel implements Comparable<LogLevel> {
   /// The name of this [LogLevel].
   final String label;
 
-  final String Function(FrameworkEntity module) moduleNameFormatter;
+  final String Function(Object module) moduleNameFormatter;
 
   final String Function(Object? object) messageFormatter;
 
@@ -223,7 +232,7 @@ abstract class LogLevels {
   /// exhaled.
   static const trace = LogLevel(
     label: _traceLabel,
-    labelAsSymbol: _traceSymbolicLabel,
+    labelAsSymbol: ' ',
     value: 10,
     moduleNameFormatter: _noFormatting,
     messageFormatter: _traceFormatting,
@@ -253,7 +262,7 @@ abstract class LogLevels {
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' FATAL '.bold().brightRed().blink().reset());
+  /// jsonEncode('  FATAL'.bold().brightRed().blink().reset());
   /// ```
   static const _fatalLabel =
       "\u001b[0m\u001b[5m\u001b[91m\u001b[1m  FATAL\u001b[22m\u001b[39m\u001b[25m\u001b[0m";
@@ -261,98 +270,91 @@ abstract class LogLevels {
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' ✘ '.brightRed().blink().reset());
+  /// jsonEncode(_fatalLabel);
   /// ```
-  static const _fatalSymbolicLabel =
-      "\u001b[0m\u001b[5m\u001b[91m ✘\u001b[39m\u001b[25m\u001b[0m";
+  static const _fatalSymbolicLabel = _fatalLabel;
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' error '.red().reset());
+  /// jsonEncode('  error'.red().reset());
   /// ```
   static const _errorLabel = "\u001b[0m\u001b[31m  error\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' ✗ '.brightRed().reset());
+  /// jsonEncode('✗'.brightRed().reset());
   /// ```
-  static const _errorSymbolicLabel = "\u001b[0m\u001b[91m ✗\u001b[39m\u001b[0m";
+  static const _errorSymbolicLabel = "\u001b[0m\u001b[91m✗\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' warning '.brightYellow().reset());
+  /// jsonEncode('warning'.brightYellow().reset());
   /// ```
   static const _warningLabel = "\u001b[0m\u001b[93mwarning\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode('[!]'.brightYellow().reset());
+  /// jsonEncode('!'.bold().brightYellow().reset());
   /// ```
   static const _warningSymbolicLabel =
-      "\u001b[0m\u001b[93m !\u001b[39m\u001b[0m";
+      "\u001b[0m\u001b[93m\u001b[1m!\u001b[22m\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' success '.brightGreen().reset());
+  /// jsonEncode('success'.brightGreen().reset());
   /// ```
   static const _successLabel = "\u001b[0m\u001b[92msuccess\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' ✔ '.brightGreen().reset());
+  /// jsonEncode('✔'.brightGreen().reset());
   /// ```
   static const _successSymbolicLabel =
-      "\u001b[0m\u001b[92m ✔\u001b[39m\u001b[0m";
+      "\u001b[0m\u001b[92m✔\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' info '.brightCyan().reset());
+  /// jsonEncode('   info'.brightCyan().reset());
   /// ```
   static const _infoLabel = "\u001b[0m\u001b[96m   info\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' i '.italic().bold().brightCyan().reset());
+  /// jsonEncode('i'.italic().bold().brightCyan().reset());
   /// ```
   static const _infoSymbolicLabel =
-      "\u001b[0m\u001b[96m\u001b[1m\u001b[3m i\u001b[23m\u001b[22m\u001b[39m\u001b[0m";
+      "\u001b[0m\u001b[96m\u001b[1m\u001b[3mi\u001b[23m\u001b[22m\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
   /// jsonEncode(' info '.brightCyan().reset());
   /// ```
+  ///
+  /// TODO: fix this stupid doc.
   static const _verboseLabel = "\u001b[0m\u001b[2mverbose\u001b[22m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' v '.dim().reset());
+  /// jsonEncode('v'.dim().reset());
   /// ```
-  static const _verboseSymbolicLabel =
-      "\u001b[0m\u001b[2m v\u001b[22m\u001b[0m";
+  static const _verboseSymbolicLabel = "\u001b[0m\u001b[2mv\u001b[22m\u001b[0m";
 
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode(' trace '.dim().reset());
+  /// jsonEncode('  trace'.dim().reset());
   /// ```
   static const _traceLabel = "\u001b[0m\u001b[2m  trace\u001b[22m\u001b[0m";
-
-  /// Obtained by the following:
-  ///
-  /// ```dart
-  /// jsonEncode('   ');
-  /// ```
-  static const _traceSymbolicLabel = "  ";
 
   /// This formatter does not allow formatting to occur and throws
   /// [UnimplementedError] when invoked.
