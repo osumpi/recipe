@@ -35,10 +35,10 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
   MultiIORecipe();
 
   @override
-  final inputPort = SingleInboundInputPort(FrameworkUtils.uuid.v4());
+  final inputPort = SingleInboundInputPort(uuid.v4());
 
   @override
-  final outputPort = OutputPort(FrameworkUtils.uuid.v4());
+  final outputPort = OutputPort(uuid.v4());
 
   Set<InputPort<dynamic>> get inputPorts;
   Set<OutputPort<dynamic>> get outputPorts;

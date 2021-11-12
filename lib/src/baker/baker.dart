@@ -9,7 +9,7 @@ import 'package:recipe/src/bake_context.dart';
 import 'package:recipe/src/bake_report.dart';
 import 'package:recipe/src/framework_entity.dart';
 import 'package:recipe/src/recipe.dart';
-import 'package:recipe/src/utils.dart' show FrameworkUtils;
+import 'package:recipe/src/utils.dart' show uuid;
 
 part 'src/baker.dart';
 part 'src/baker_options.dart';
