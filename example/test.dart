@@ -1,30 +1,7 @@
 import 'dart:async';
 import 'package:recipe/recipe.dart';
-import 'package:recipe/src/log.dart';
 
 Future<void> main() async {
-  Log.loggingLevel = LogLevels.all;
-  Log.showLevelSymbolInsteadOfLabel = true;
-  // Log.showTimestamp = true;
-
-  const message = "This is a log message";
-
-  for (final level in LogLevels.values) {
-    Log(message, level: level);
-  }
-
-  // final result = jsonEncode(' success '.brightGreen().reset());
-
-  // stdout
-  //   ..writeln(result)
-  //   ..writeln(jsonDecode(result));
-
-  // FrameworkUtils.loggingLevel = LogLevels.trace;
-  // FrameworkUtils.showTimestampInLogs = true;
-
-  // Log.error('object');
-  // Log.trace('object');
-
   // bake(MySimpleRecipe());
   // bake(BitComplexRecipe());
 }
