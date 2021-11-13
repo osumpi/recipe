@@ -7,4 +7,4 @@ export 'src/log.dart' hide anonymous;
 export 'src/muxed_io.dart';
 export 'src/ports/ports.dart';
 export 'src/recipe.dart';
-export 'src/utils.dart' show bake, FrameworkUtils;
+export 'src/utils.dart' show bake;
