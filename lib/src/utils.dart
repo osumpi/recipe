@@ -3,15 +3,6 @@ import 'package:uuid/uuid.dart';
 
 import 'recipe.dart';
 
-/// Abstract class that contains all utility tools for use in recipe framework
-/// as static members.
-///
-/// This class is not intended to be used as a super type or have instances.
-@sealed
-abstract class FrameworkUtils {
-  // TODO: remove this class if not required by alpha.
-}
-
 /// Provides an instance of [Uuid].
 ///
 /// Used by:
