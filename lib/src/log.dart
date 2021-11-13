@@ -24,7 +24,7 @@ class Log {
     if (level == LogLevels.fatal) stdout.writeCharCode(0x07);
 
     var logMessage =
-        "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module.name)} $_seperator ${level.messageFormatter(object)}";
+        "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module)} $_seperator ${level.messageFormatter(object)}";
 
     if (!applyColors) {
       logMessage = logMessage.strip();
@@ -71,14 +71,29 @@ class Log {
 
   static const _seperator = "•";
 
+  /// The minimum logging level that is
   static LogLevel loggingLevel = LogLevels.info;
 
+  /// Whether to show [LogLevel.labelAsSymbol] instead of [LogLevel.label].
+  ///
+  /// If `false` (default), shows the descriptive label of the log level.
+  /// If `true`, shows the short symbol representation of the log level.
+  ///
+  /// However, this setting has no affect for [LogLevels.fatal] as this level
+  /// is meant to convey very critical faults and hence the descriptive label is
+  /// used to prevent confusion.
   static bool showLevelSymbolInsteadOfLabel = false;
 
+  /// Whether to prefix timestamps along with the log message.
+  ///
+  /// If `false` (default), does not include timestamp in the log message.
+  /// If `true`, includes timestamp in the log message.
   static bool showTimestamp = false;
 
+  /// Whether to apply colors when logging based on log level.
+  ///
+  /// If `true` (default), all ANSI sequences will be preserved when logging.
   /// If `false`, all ANSI sequences will be stripped when logging.
-  /// If `true`, all ANSI sequences will be preserved when logging.
   static bool applyColors = true;
 }
 
@@ -114,7 +129,7 @@ class LogLevel implements Comparable<LogLevel> {
   /// The name of this [LogLevel].
   final String label;
 
-  final String Function(Object module) moduleNameFormatter;
+  final String Function(FrameworkEntity module) moduleNameFormatter;
 
   final String Function(Object? object) messageFormatter;
 
@@ -146,7 +161,7 @@ abstract class LogLevels {
     label: _fatalLabel,
     labelAsSymbol: _fatalSymbolicLabel,
     value: 80,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _fatalMessageFormatter,
   );
 
@@ -155,7 +170,7 @@ abstract class LogLevels {
     label: _errorLabel,
     labelAsSymbol: _errorSymbolicLabel,
     value: 70,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _errorMessageFormatter,
   );
 
@@ -164,7 +179,7 @@ abstract class LogLevels {
     label: _warningLabel,
     labelAsSymbol: _warningSymbolicLabel,
     value: 60,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _warningMessageFormatter,
   );
 
@@ -173,7 +188,7 @@ abstract class LogLevels {
     label: _successLabel,
     labelAsSymbol: _successSymbolicLabel,
     value: 60,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _successMessageFormatter,
   );
 
@@ -182,7 +197,7 @@ abstract class LogLevels {
     label: _infoLabel,
     labelAsSymbol: _infoSymbolicLabel,
     value: 40,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _noFormatting,
   );
 
@@ -191,7 +206,7 @@ abstract class LogLevels {
     label: _verboseLabel,
     labelAsSymbol: _verboseSymbolicLabel,
     value: 20,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _verboseFormatting,
   );
 
@@ -201,7 +216,7 @@ abstract class LogLevels {
     label: _traceLabel,
     labelAsSymbol: ' ',
     value: 10,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _traceFormatting,
   );
 
@@ -334,6 +349,10 @@ abstract class LogLevels {
   /// Applies no formatting to [object.toString].
   static String _noFormatting(final Object? object) =>
       object.toString().reset();
+
+  /// Formats the value of [module.name] as dimmed text.
+  static String _moduleNameFormatter(final FrameworkEntity module) =>
+      module.name.dim().reset();
 
   /// Formats the result of [object.toString] as per fatal message style.
   ///
