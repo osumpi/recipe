@@ -110,31 +110,24 @@ mixin EntityLogging on FrameworkEntity {
   void log(
     final Object? object, {
     final LogLevel level = LogLevels.info,
-    final LogOptions? logOptions,
   }) =>
-      Log(object, level: level, module: this, logOptions: logOptions);
+      Log(object, level: level, module: this);
 
   @protected
-  void fatal(final Object? object, {final LogOptions? logOptions}) =>
-      Log.fatal(object, module: this, logOptions: logOptions);
+  void fatal(final Object? object) => Log.fatal(object, module: this);
 
   @protected
-  void error(final Object? object, {final LogOptions? logOptions}) =>
-      Log.error(object, module: this, logOptions: logOptions);
+  void error(final Object? object) => Log.error(object, module: this);
 
   @protected
-  void warn(final Object? object, {final LogOptions? logOptions}) =>
-      Log.warn(object, module: this, logOptions: logOptions);
+  void warn(final Object? object) => Log.warn(object, module: this);
 
   @protected
-  void info(final Object? object, {final LogOptions? logOptions}) =>
-      Log.info(object, module: this, logOptions: logOptions);
+  void info(final Object? object) => Log.info(object, module: this);
 
   @protected
-  void verbose(final Object? object, {final LogOptions? logOptions}) =>
-      Log.verbose(object, module: this, logOptions: logOptions);
+  void verbose(final Object? object) => Log.verbose(object, module: this);
 
   @protected
-  void trace(final Object? object, {final LogOptions? logOptions}) =>
-      Log.trace(object, module: this, logOptions: logOptions);
+  void trace(final Object? object) => Log.trace(object, module: this);
 }

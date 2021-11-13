@@ -11,108 +11,108 @@ class Log {
     final Object? object, {
     required final LogLevel level,
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(level, module, object, logOptions);
+      Log._(level, module, object);
 
   Log._(
-    final this.level,
-    final this.module,
-    final this.object,
-    final LogOptions? _logOptions,
-  )   : logOptions = _logOptions ?? Log.defaultOption,
-        shouldBeep = level == LogLevels.fatal {
-    // Skip remaining if it's not going to be logged.
+    final LogLevel level,
+    final FrameworkEntity module,
+    final Object? object,
+  ) {
     if (level.value < Log.loggingLevel.value) return;
 
-    if (shouldBeep) stdout.writeCharCode(0x07);
+    if (level == LogLevels.fatal) stdout.writeCharCode(0x07);
 
-    stdout.writeln(
-      "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module.name)} $_seperator ${level.messageFormatter(object)}",
-    );
+    var logMessage =
+        "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module)} $_seperator ${level.messageFormatter(object)}";
+
+    if (!applyColors) {
+      logMessage = logMessage.strip();
+    }
+
+    stdout.writeln(logMessage);
   }
 
   factory Log.fatal(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.fatal, module, object, logOptions);
+      Log._(LogLevels.fatal, module, object);
 
   factory Log.error(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.error, module, object, logOptions);
+      Log._(LogLevels.error, module, object);
 
   factory Log.warn(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.warning, module, object, logOptions);
+      Log._(LogLevels.warning, module, object);
 
   factory Log.info(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.info, module, object, logOptions);
+      Log._(LogLevels.info, module, object);
 
   factory Log.verbose(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.verbose, module, object, logOptions);
+      Log._(LogLevels.verbose, module, object);
 
   factory Log.trace(
     final Object? object, {
     final FrameworkEntity module = anonymous,
-    final LogOptions? logOptions,
   }) =>
-      Log._(LogLevels.trace, module, object, logOptions);
+      Log._(LogLevels.trace, module, object);
 
-  static const _seperator = "•";
+  /// The seperator between elements of a log message.
+  ///
+  /// Obtained by:
+  /// ```dart
+  /// jsonEncode("•".dim().reset());
+  /// ```
+  static const _seperator = "\u001b[0m\u001b[2m•\u001b[22m\u001b[0m";
 
-  static LogOptions defaultOption = const LogOptions.defaults();
-
+  /// The minimum logging level to be used.
+  ///
+  /// All log messages with severity equal and above the specified level is
+  /// logged to the output.
+  ///
+  /// Example:
+  /// ```dart
+  /// Log.loggingLevel = LogLevels.info;
+  ///
+  /// Log.warn("I'm hungry."); // Works
+  /// Log.info("I'm having pizza."); // Works
+  /// Log.verbose("I'm breathing hehe."); // Will be ignored
+  /// ```
   static LogLevel loggingLevel = LogLevels.info;
 
+  /// Whether to show [LogLevel.labelAsSymbol] instead of [LogLevel.label].
+  ///
+  /// If `false` (default), shows the descriptive label of the log level.
+  /// If `true`, shows the short symbol representation of the log level.
+  ///
+  /// However, this setting has no affect for [LogLevels.fatal] as this level
+  /// is meant to convey very critical faults and hence the descriptive label is
+  /// used to prevent confusion.
   static bool showLevelSymbolInsteadOfLabel = false;
 
+  /// Whether to prefix timestamps along with the log message.
+  ///
+  /// If `false` (default), does not include timestamp in the log message.
+  /// If `true`, includes timestamp in the log message.
   static bool showTimestamp = false;
 
-  final Object? object;
-  final FrameworkEntity module;
-  final LogLevel level;
-  final LogOptions logOptions;
-  final bool shouldBeep;
-}
-
-@immutable
-class LogOptions {
-  const LogOptions({
-    final this.includeTimestamps = true,
-    final this.applyColors = true,
-  });
-
-  const factory LogOptions.defaults() = LogOptions;
-
-  final bool includeTimestamps;
-
-  final bool applyColors;
-
-  LogOptions copyWith({
-    final bool? includeTimestamps,
-    final bool? applyColors,
-  }) {
-    return LogOptions(
-      includeTimestamps: includeTimestamps ?? this.includeTimestamps,
-      applyColors: applyColors ?? this.applyColors,
-    );
-  }
+  /// Whether to apply colors when logging based on log level.
+  ///
+  /// If `true` (default), all ANSI sequences will be preserved when logging.
+  /// If `false`, all ANSI sequences will be stripped when logging.
+  static bool applyColors = true;
 }
 
 class _AnonymousModule with FrameworkEntity {
@@ -147,7 +147,7 @@ class LogLevel implements Comparable<LogLevel> {
   /// The name of this [LogLevel].
   final String label;
 
-  final String Function(Object module) moduleNameFormatter;
+  final String Function(FrameworkEntity module) moduleNameFormatter;
 
   final String Function(Object? object) messageFormatter;
 
@@ -179,7 +179,7 @@ abstract class LogLevels {
     label: _fatalLabel,
     labelAsSymbol: _fatalSymbolicLabel,
     value: 80,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _fatalMessageFormatter,
   );
 
@@ -188,7 +188,7 @@ abstract class LogLevels {
     label: _errorLabel,
     labelAsSymbol: _errorSymbolicLabel,
     value: 70,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _errorMessageFormatter,
   );
 
@@ -197,7 +197,7 @@ abstract class LogLevels {
     label: _warningLabel,
     labelAsSymbol: _warningSymbolicLabel,
     value: 60,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _warningMessageFormatter,
   );
 
@@ -206,7 +206,7 @@ abstract class LogLevels {
     label: _successLabel,
     labelAsSymbol: _successSymbolicLabel,
     value: 60,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _successMessageFormatter,
   );
 
@@ -215,7 +215,7 @@ abstract class LogLevels {
     label: _infoLabel,
     labelAsSymbol: _infoSymbolicLabel,
     value: 40,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _noFormatting,
   );
 
@@ -224,7 +224,7 @@ abstract class LogLevels {
     label: _verboseLabel,
     labelAsSymbol: _verboseSymbolicLabel,
     value: 20,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _verboseFormatting,
   );
 
@@ -234,7 +234,7 @@ abstract class LogLevels {
     label: _traceLabel,
     labelAsSymbol: ' ',
     value: 10,
-    moduleNameFormatter: _noFormatting,
+    moduleNameFormatter: _moduleNameFormatter,
     messageFormatter: _traceFormatting,
   );
 
@@ -367,6 +367,10 @@ abstract class LogLevels {
   /// Applies no formatting to [object.toString].
   static String _noFormatting(final Object? object) =>
       object.toString().reset();
+
+  /// Formats the value of [module.name] as dimmed text.
+  static String _moduleNameFormatter(final FrameworkEntity module) =>
+      module.name.dim().reset();
 
   /// Formats the result of [object.toString] as per fatal message style.
   ///

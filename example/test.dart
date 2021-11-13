@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:recipe/recipe.dart';
 import 'package:recipe/src/log.dart';
 
