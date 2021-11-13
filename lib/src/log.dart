@@ -69,9 +69,27 @@ class Log {
   }) =>
       Log._(LogLevels.trace, module, object);
 
-  static const _seperator = "•";
+  /// The seperator between elements of a log message.
+  ///
+  /// Obtained by:
+  /// ```dart
+  /// jsonEncode("•".dim().reset());
+  /// ```
+  static const _seperator = "\u001b[0m\u001b[2m•\u001b[22m\u001b[0m";
 
-  /// The minimum logging level that is
+  /// The minimum logging level to be used.
+  ///
+  /// All log messages with severity equal and above the specified level is
+  /// logged to the output.
+  ///
+  /// Example:
+  /// ```dart
+  /// Log.loggingLevel = LogLevels.info;
+  ///
+  /// Log.warn("I'm hungry."); // Works
+  /// Log.info("I'm having pizza."); // Works
+  /// Log.verbose("I'm breathing hehe."); // Will be ignored
+  /// ```
   static LogLevel loggingLevel = LogLevels.info;
 
   /// Whether to show [LogLevel.labelAsSymbol] instead of [LogLevel.label].
