@@ -1,6 +1,15 @@
 import 'dart:async';
 import 'package:recipe/recipe.dart';
 
+///
+/// TODO: make it as:
+///
+/// ```dart
+/// class MyRecipe extends Recipe with SingleInputProvider, SingleOutputProvider {
+///   ...
+/// }
+/// ```
+
 Future<void> main() async {
   // bake(MySimpleRecipe());
   // bake(BitComplexRecipe());
