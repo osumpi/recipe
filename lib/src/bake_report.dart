@@ -23,7 +23,7 @@ class BakeReport {
 
   Duration get duration => stoppedOn.difference(startedOn);
 
-  final BakeContext<dynamic> inputContext;
+  final BakeContext inputContext;
 
   Map<String, dynamic> toJson() {
     return {
