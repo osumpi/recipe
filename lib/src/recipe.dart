@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:recipe/src/bake_state.dart';
 
 import 'bake_context.dart';
 import 'framework_entity.dart';
@@ -8,45 +9,17 @@ import 'muxed_io.dart';
 import 'ports/ports.dart';
 import 'utils.dart';
 
-abstract class Recipe<I, O> with FrameworkEntity, EntityLogging {
+abstract class Recipe with FrameworkEntity, EntityLogging {
   const Recipe();
-
-  InputPort<I> get inputPort;
-
-  OutputPort<O> get outputPort;
-
-  @mustCallSuper
-  @protected
-  void initialize() {}
-
-  @mustCallSuper
-  @internal
-  Stream<O> bake(final BakeContext<I> context);
-
-  @override
-  JsonMap toJson() {
-    return {
-      ...super.toJson(),
-    };
-  }
-}
-
-abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
-  MultiIORecipe();
-
-  @override
-  final inputPort = SingleInboundInputPort(uuid.v4());
-
-  @override
-  final outputPort = OutputPort(uuid.v4());
 
   Set<InputPort<dynamic>> get inputPorts;
   Set<OutputPort<dynamic>> get outputPorts;
 
-  @override
-  void initialize() {
+  @mustCallSuper
+  @protected
+  Future<void> initialize() async {
     if (inputPorts.isEmpty && outputPorts.isEmpty) {
-      // TODO: describe this error in depth and give possible solutions
+      // TODO: describe this error in depth and give possible solutions like call super.initialize after initilizting ports.
       throw StateError(
         "`inputPorts.isEmpty && outputPorts.isEmpty` was evaluated to true.",
       );
@@ -55,8 +28,6 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
     // TODO: maybe consider disabling this check by overriding global parameters
     ensureUniqueInputPortLabels();
     ensureUniqueOutputPortLabels();
-
-    super.initialize();
   }
 
   /// Disallows input ports with same label.
@@ -95,6 +66,12 @@ abstract class MultiIORecipe extends Recipe<MuxedInputs, MuxedOutput> {
 
   @mustCallSuper
   @internal
+  Stream<BakeState> bake(final BakeContext context);
+
   @override
-  Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context);
+  JsonMap toJson() {
+    return {
+      ...super.toJson(),
+    };
+  }
 }
