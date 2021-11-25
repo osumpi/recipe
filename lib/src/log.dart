@@ -328,10 +328,9 @@ abstract class LogLevels {
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode('i'.italic().bold().brightCyan().reset());
+  /// jsonEncode('ℹ'.brightCyan().reset());
   /// ```
-  static const _infoSymbolicLabel =
-      "\u001b[0m\u001b[96m\u001b[1m\u001b[3mi\u001b[23m\u001b[22m\u001b[39m\u001b[0m";
+  static const _infoSymbolicLabel = "\u001b[0m\u001b[96mℹ\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
