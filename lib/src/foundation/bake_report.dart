@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import 'bake_context.dart';
-import 'baker/baker.dart';
+import 'baker.dart';
 
 @immutable
 class BakeReport {
