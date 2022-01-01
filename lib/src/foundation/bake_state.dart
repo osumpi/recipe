@@ -14,7 +14,7 @@ abstract class BakeState {
     final Duration? estimatedTimeToComplete,
   }) = _Baking;
 
-  const factory BakeState.completed() = _Completed;
+  static const completed = _Completed();
 
   // TODO: add more states like: prematurely completed etc...
 
