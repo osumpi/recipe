@@ -1,60 +1,47 @@
-import 'dart:async';
+import 'dart:math';
+
 import 'package:recipe/recipe.dart';
 
-///
-/// TODO: make it as:
-///
-/// ```dart
-/// class MyRecipe extends Recipe with SingleInputProvider, SingleOutputProvider {
-///   ...
-/// }
-/// ```
+void main() {
+  final testInput = 2.0;
 
-Future<void> main() async {
-  // bake(MySimpleRecipe());
-  // bake(BitComplexRecipe());
+  final recipe1 = SineRecipe();
+  final recipe2 = SineInverseRecipe();
+
+  recipe1.yOutput.connectTo(recipe2.yInput);
+
+  final root = RootRecipe();
+
+  root.outputPort.connectTo(recipe1.thetaInput);
+
+  bake(root, BakeContext(data: {'input': testInput}));
 }
 
-// Recipe that converts integer to string.
-class MySimpleRecipe extends Recipe<int, String> {
-  @override
-  final inputPort = MultiInboundInputPort('value');
+class RootRecipe extends Recipe {
+  final outputPort = OutputPort<double>('output');
 
   @override
-  final outputPort = OutputPort('asString');
-
-  @override
-  Stream<String> bake(final BakeContext<int> context) async* {
-    yield context.data.toString();
+  Stream<BakeState> bake(final BakeContext context) async* {
+    outputPort.write(context.data['input'] as double);
   }
 }
 
-// TODO: PREFER num OVER int / double FOR COMPATABILITY
-
-// Recipe block that takes two numbers, and yields their quotient and remainder.
-class BitComplexRecipe extends MultiIORecipe {
-  final numeratorPort = MultiInboundInputPort<int>('numerator');
-  final denominatorPort = MultiInboundInputPort<int>('denominator');
-
-  final quotientPort = OutputPort('quotient');
-  final remainderPort = OutputPort('remainder');
+class SineRecipe extends Recipe {
+  final thetaInput = SingleInboundInputPort<double>('theta');
+  final yOutput = OutputPort<double>('y');
 
   @override
-  Set<InputPort<dynamic>> get inputPorts => {numeratorPort, denominatorPort};
-
-  @override
-  Set<OutputPort<dynamic>> get outputPorts => {quotientPort, remainderPort};
-
-  @override
-  Stream<MuxedOutput> bake(final BakeContext<MuxedInputs> context) async* {
-    final numerator = numeratorPort.data;
-    final denominator = denominatorPort.data;
-
-    final quotient = (numerator / denominator).truncate();
-    final remainder = numerator % denominator;
-
-    yield MuxedOutputAdapter.of(context)
-      ..writeTo(quotientPort, data: quotient)
-      ..writeTo(remainderPort, data: remainder);
+  Stream<BakeState> bake(final BakeContext context) async* {
+    warn('got ${thetaInput.data}');
+    await Future.delayed(const Duration(seconds: 2));
+    yOutput.write(sin(thetaInput.data));
   }
+}
+
+class SineInverseRecipe extends Recipe {
+  final yInput = SingleInboundInputPort<double>('y');
+  final thetaOutput = OutputPort<double>('theta');
+
+  @override
+  Stream<BakeState> bake(final BakeContext context) async* {}
 }
