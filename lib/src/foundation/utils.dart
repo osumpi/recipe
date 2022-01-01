@@ -1,30 +1,95 @@
 import 'dart:io';
 
+import 'package:fhir_yaml/fhir_yaml.dart' show json2yaml;
 import 'package:meta/meta.dart';
 import 'package:tint/tint.dart';
+import 'package:uuid/uuid.dart';
 
-import 'framework_entity.dart';
+/// Provides an instance of [Uuid].
+///
+/// Used by:
+/// * [Baker]s for [BakeReport]s and other relevant tasks.
+/// * [MultiIORecipe] to allocate random label for the the masked IO ports.
+const uuid = Uuid();
+
+// TODO: make it as Recipe<RecipeRun
+
+typedef JsonMap = Map<String, dynamic>;
+
+/// This mixin provides basic functionallities required by entities of the
+/// recipe framework.
+///
+/// See more:
+/// * [name] of the entity (defaults to [runtimeType]).
+/// * [toJson] includes [name], [runtimeType], [hashCode] by default.
+///
+mixin FrameworkEntity {
+  /// The name of this entity. Is [runtimeType] by default. However sub-classes
+  /// may override to represent a different name.
+  ///
+  /// TODO: include examples of consumers, and why Ports have different.
+  String get name => runtimeType.toString();
+
+  /// Export this entity as a [JsonMap]. Includes [name], [runtimeType] and
+  /// [hashCode] of this instance by default.
+  ///
+  /// Sub-classes [mustCallSuper] as shown in the example:
+  /// ```dart
+  /// class DataAcquisition with FrameworkEntity, EntityLogging {
+  ///   @override
+  ///   JsonMap toJson() {
+  ///     return {
+  ///       ...super.toJson(), // Include this to import all entries filled by super class.
+  ///       'temperature': temperature,
+  ///       'voltage': voltage,
+  ///     };
+  ///   }
+  /// }
+  /// ```
+  @mustCallSuper
+  JsonMap toJson() {
+    return {
+      'name': name,
+      'runtime type': runtimeType.toString(),
+      'ref': hashCode,
+    };
+  }
+
+  /// Export this entity as a YAML formatted Map. This method is not intended
+  /// to be overriden. Simply converts the result of [toJson] to YAML format.
+  @nonVirtual
+  String toYaml() => json2yaml(toJson());
+
+  /// The [runtimeType] of this entity as [String].
+  @override
+  String toString() => runtimeType.toString();
+}
 
 @doNotStore
 class Log {
   factory Log(
     final Object? object, {
     required final LogLevel level,
-    final FrameworkEntity module = anonymous,
   }) =>
-      Log._(level, module, object);
+      Log._(level, null, object);
 
   Log._(
     final LogLevel level,
-    final FrameworkEntity module,
+    final FrameworkEntity? module,
     final Object? object,
   ) {
     if (level.value < Log.loggingLevel.value) return;
 
     if (level == LogLevels.fatal) stdout.writeCharCode(0x07);
 
-    var logMessage =
-        "${showTimestamp ? DateTime.now().toString().dim().reset() : ''} ${showLevelSymbolInsteadOfLabel ? level.labelAsSymbol : level.label} $_seperator ${level.moduleNameFormatter(module)} $_seperator ${level.messageFormatter(object)}";
+    var logMessage = [
+      if (showTimestamp) DateTime.now().toString().dim().reset(),
+      if (showLevelSymbolInsteadOfLabel) level.labelAsSymbol else level.label,
+      _seperator,
+      if (module != null) level.moduleNameFormatter(module),
+      _seperator,
+      level.messageFormatter(object),
+    ].join(' ');
 
     if (!applyColors) {
       logMessage = logMessage.strip();
@@ -33,41 +98,22 @@ class Log {
     stdout.writeln(logMessage);
   }
 
-  factory Log.fatal(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.fatal, module, object);
+  factory Log.fatal(final Object? object) =>
+      Log._(LogLevels.fatal, null, object);
 
-  factory Log.error(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.error, module, object);
+  factory Log.error(final Object? object) =>
+      Log._(LogLevels.error, null, object);
 
-  factory Log.warn(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.warning, module, object);
+  factory Log.warn(final Object? object) =>
+      Log._(LogLevels.warning, null, object);
 
-  factory Log.info(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.info, module, object);
+  factory Log.info(final Object? object) => Log._(LogLevels.info, null, object);
 
-  factory Log.verbose(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.verbose, module, object);
+  factory Log.verbose(final Object? object) =>
+      Log._(LogLevels.verbose, null, object);
 
-  factory Log.trace(
-    final Object? object, {
-    final FrameworkEntity module = anonymous,
-  }) =>
-      Log._(LogLevels.trace, module, object);
+  factory Log.trace(final Object? object) =>
+      Log._(LogLevels.trace, null, object);
 
   /// The seperator between elements of a log message.
   ///
@@ -114,15 +160,6 @@ class Log {
   /// If `false`, all ANSI sequences will be stripped when logging.
   static bool applyColors = true;
 }
-
-class _AnonymousModule with FrameworkEntity {
-  const _AnonymousModule(this.name);
-
-  @override
-  final String name;
-}
-
-const anonymous = _AnonymousModule('Anonymous');
 
 /// Log level that is used for logging.
 ///
@@ -328,10 +365,9 @@ abstract class LogLevels {
   /// Obtained by the following:
   ///
   /// ```dart
-  /// jsonEncode('i'.italic().bold().brightCyan().reset());
+  /// jsonEncode('ℹ'.brightCyan().reset());
   /// ```
-  static const _infoSymbolicLabel =
-      "\u001b[0m\u001b[96m\u001b[1m\u001b[3mi\u001b[23m\u001b[22m\u001b[39m\u001b[0m";
+  static const _infoSymbolicLabel = "\u001b[0m\u001b[96mℹ\u001b[39m\u001b[0m";
 
   /// Obtained by the following:
   ///
@@ -407,4 +443,83 @@ abstract class LogLevels {
   /// See implementation for exact styles applied.
   static String _traceFormatting(final Object? object) =>
       object.toString().dim().italic().reset();
+}
+
+/// Allows an entity that mixins [FrameworkEntity] to inherit logging methods.
+/// This simplifies invocation of logging methods as opposed to invoking
+/// [FrameworkUtils.log] or other log methods included in [FrameworkUtils].
+///
+/// Entities using this mixin implicitly has their `moduleName` set as [name]
+/// or [name] with [hashCode] in logging. See [showHashCodeOfEntities],
+/// [hideHashCodeOfEntities], [shouldIncludeHashCode] for more on controlling
+/// what is used as the module name.
+///
+/// See also:
+/// * [log] allows logging on any [LogLevel]. See [LogLevels] for various
+/// available [LogLevel]s.
+/// * [error] to log errors.
+/// * [warn] to log warnings.
+/// * [statusUpdate] to log status updates. See [Statuses] for various available
+/// status.
+/// * [info] to log using [LogLevels.info]
+/// * [verbose] to log using [LogLevels.verbose].
+/// * [trace] to log using [LogLevels.trace].
+mixin EntityLogging on FrameworkEntity {
+  /// Whether [hashCode] should be included in the `moduleName` when logging.
+  /// Set to `true` to include [hashCode].
+  /// Set to `false` to exclude [hashCode].
+  ///
+  /// Is `false` by default.
+  static bool _shouldIncludeHashCode = false;
+
+  /// Includes [hashCode] in the `moduleName` of upcoming logs.
+  /// See [hideHashCodeOfEntities] to exclude [hashCode].
+  static bool showHashCodeOfEntities() => _shouldIncludeHashCode = true;
+
+  /// Excludes [hashCode] in the `moduleName` of upcoming logs.
+  /// See [showHashCodeOfEntities] to exclude [hashCode].
+  static bool hideHashCodeOfEntities() => _shouldIncludeHashCode = false;
+
+  /// Whether [hashCode] should be included in the `moduleName` when logging.
+  /// Is `false` by default.
+  ///
+  /// To hide [hashCode] of entities of future logs:
+  /// ```dart
+  /// EntityLogging.hideHashCodeOfEntities();
+  /// ```
+  ///
+  /// To show [hashCode] of entities of future logs:
+  /// ```dart
+  /// EntityLogging.showHashCodeOfEntities();
+  /// ```
+  ///
+  /// See also:
+  /// * [showHashCodeOfEntities] to include [hashCode] of entities.
+  /// * [hideHashCodeOfEntities] to exclude [hashCode] of entities.
+  static bool get shouldIncludeHashCode => _shouldIncludeHashCode;
+
+  @protected
+  void log(
+    final Object? object, {
+    final LogLevel level = LogLevels.info,
+  }) =>
+      Log._(level, this, object);
+
+  @protected
+  void fatal(final Object? object) => log(object, level: LogLevels.fatal);
+
+  @protected
+  void error(final Object? object) => log(object, level: LogLevels.error);
+
+  @protected
+  void warn(final Object? object) => log(object, level: LogLevels.warning);
+
+  @protected
+  void info(final Object? object) => log(object, level: LogLevels.info);
+
+  @protected
+  void verbose(final Object? object) => log(object, level: LogLevels.verbose);
+
+  @protected
+  void trace(final Object? object) => log(object, level: LogLevels.trace);
 }
